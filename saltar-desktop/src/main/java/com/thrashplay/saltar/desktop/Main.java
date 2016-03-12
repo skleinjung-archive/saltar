@@ -1,6 +1,7 @@
 package com.thrashplay.saltar.desktop;
 
 import com.thrashplay.luna.desktop.LunaWindow;
+import com.thrashplay.saltar.SaltarScreenManager;
 
 /**
  * TODO: Add class documentation
@@ -9,6 +10,6 @@ import com.thrashplay.luna.desktop.LunaWindow;
  */
 public class Main {
     public static void main(String[] args) {
-        new LunaWindow("Saltar", 640, 480);
+        new LunaWindow("Saltar", new SaltarScreenManager(), 640, 480);
     }
 }

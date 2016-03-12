@@ -25,6 +25,7 @@
     </scm>
 
     <modules>
+        <module>saltar-core</module>
         <module>saltar-app</module>
         <module>saltar-desktop</module>
     </modules>

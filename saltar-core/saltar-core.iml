@@ -9,7 +9,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="saltar-core" />
     <orderEntry type="module" module-name="luna-desktop" />
     <orderEntry type="module" module-name="luna-core" />
     <orderEntry type="module" module-name="luna-api" />
