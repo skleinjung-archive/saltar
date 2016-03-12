@@ -26,4 +26,14 @@
             <version>1.1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
+
+    <build>
+        <resources>
+            <!-- set our resources directory to be the assets directory of the android version, so that resources only
+                 have to be deployed once -->
+            <resource>
+                <directory>../saltar-app/src/main/assets</directory>
+            </resource>
+        </resources>
+    </build>
 </project>
