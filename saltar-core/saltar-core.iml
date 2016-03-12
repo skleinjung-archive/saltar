@@ -12,5 +12,6 @@
     <orderEntry type="module" module-name="luna-desktop" />
     <orderEntry type="module" module-name="luna-core" />
     <orderEntry type="module" module-name="luna-api" />
+    <orderEntry type="library" name="Maven: javazoom:jlayer:1.0.1" level="project" />
   </component>
 </module>
