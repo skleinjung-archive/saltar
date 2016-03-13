@@ -21,8 +21,8 @@ public class TestScreen extends EntityManagerScreen {
 
         VirtualKeyboard virtualKeyboard = new VirtualKeyboard(touchManager);
 
-        VirtualKey leftKey = new TextVirtualKey(touchManager, KeyCode.KEY_S, "B8C jy", 50, 50, 25);
-        VirtualKey rightKey = new TextVirtualKey(touchManager, KeyCode.KEY_F, ">", 150, 50, 25);
+        VirtualKey leftKey = new TextVirtualKey(touchManager, KeyCode.KEY_S, "B8C jy", 50, 50, 50);
+        VirtualKey rightKey = new TextVirtualKey(touchManager, KeyCode.KEY_F, ">", 175, 50, 50);
 
         virtualKeyboard.addKey(leftKey);
         virtualKeyboard.addKey(rightKey);
