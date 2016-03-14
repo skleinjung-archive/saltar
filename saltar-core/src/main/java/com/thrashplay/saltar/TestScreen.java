@@ -44,8 +44,8 @@ public class TestScreen extends EntityManagerScreen {
         Button leftButton = new TextButton(multiTouchManager, "<", 60, screenBounds.getBottom() - 160, 100, 100);
         Button rightButton = new TextButton(multiTouchManager, ">", 195, screenBounds.getBottom() - 160, 100, 100);
         Button jumpButton = new TextButton(multiTouchManager, "^", screenBounds.getRight() - 160, screenBounds.getBottom() - 160, 100, 100);
-        virtualKeyboard.registerButtonForKey(leftButton, KeyCode.KEY_S);
-        virtualKeyboard.registerButtonForKey(rightButton, KeyCode.KEY_F);
+        virtualKeyboard.registerButtonForKey(leftButton, KeyCode.KEY_LEFT_ARROW);
+        virtualKeyboard.registerButtonForKey(rightButton, KeyCode.KEY_RIGHT_ARROW);
         virtualKeyboard.registerButtonForKey(jumpButton, KeyCode.KEY_SPACE);
         entityManager.addEntity(virtualKeyboard);
 
@@ -57,37 +57,6 @@ public class TestScreen extends EntityManagerScreen {
         filledBoxSprite.addComponent(new FilledBlockRenderer());
         filledBoxSprite.addComponent(new KeyboardMovementController(inputManager));
         entityManager.addEntity(filledBoxSprite);
-
-        entityManager.addEntity(new Updateable() {
-            @Override
-            public void update(Graphics graphics) {
-                boolean leftDown = inputManager.isKeyDown(KeyCode.KEY_S);
-                boolean rightDown = inputManager.isKeyDown(KeyCode.KEY_F);
-                boolean spaceDown = inputManager.isKeyDown(KeyCode.KEY_SPACE);
-
-                if (leftDown) {
-                    System.out.print("KEY LEFT");
-                }
-
-                if (rightDown) {
-                    if (leftDown) {
-                        System.out.print(", ");
-                    }
-                    System.out.print("KEY RIGHT");
-                }
-
-                if (spaceDown) {
-                    if (leftDown || rightDown) {
-                        System.out.print(", ");
-                    }
-                    System.out.print("KEY JUMP");
-                }
-
-                if (leftDown || rightDown || spaceDown) {
-                    System.out.println();
-                }
-            }
-        });
     }
 
     @Override

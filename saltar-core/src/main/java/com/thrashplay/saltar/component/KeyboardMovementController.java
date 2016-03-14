@@ -27,14 +27,14 @@ public class KeyboardMovementController implements UpdateableComponent {
         Movement movement = gameObject.getComponent(Movement.class);
 
         boolean horizontalKeyDown = false;
-        if (inputManager.isKeyDown(KeyCode.KEY_S)) {
+        if (inputManager.isKeyDown(KeyCode.KEY_LEFT_ARROW)) {
 //            position.setX(position.getX() - 5);
             //movement.setAccelerationX(-1);
             movement.setVelocityX(-10);
             horizontalKeyDown = true;
         }
 
-        if (inputManager.isKeyDown(KeyCode.KEY_F)) {
+        if (inputManager.isKeyDown(KeyCode.KEY_RIGHT_ARROW)) {
 //            position.setX(position.getX() + 5);
 //            movement.setAccelerationX(1);
             movement.setVelocityX(10);
