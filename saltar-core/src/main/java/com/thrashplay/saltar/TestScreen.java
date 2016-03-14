@@ -36,9 +36,9 @@ public class TestScreen extends EntityManagerScreen {
 //        Button leftButton = new TextButton(touchManager, "<", 25, 25, 50, 50);
 //        Button rightButton = new TextButton(touchManager, ">", 80, 25, 50, 50);
 
-        Button leftButton = new TextButton(multiTouchManager, "<", 25, screenBounds.getBottom() - 100, 75, 75);
-        Button rightButton = new TextButton(multiTouchManager, ">", 115, screenBounds.getBottom() - 100, 75, 75);
-        Button jumpButton = new TextButton(multiTouchManager, "^", screenBounds.getRight() - 100, screenBounds.getBottom() - 100, 75, 75);
+        Button leftButton = new TextButton(multiTouchManager, "<", 60, screenBounds.getBottom() - 160, 100, 100);
+        Button rightButton = new TextButton(multiTouchManager, ">", 195, screenBounds.getBottom() - 160, 100, 100);
+        Button jumpButton = new TextButton(multiTouchManager, "^", screenBounds.getRight() - 160, screenBounds.getBottom() - 160, 100, 100);
         virtualKeyboard.registerButtonForKey(leftButton, KeyCode.KEY_S);
         virtualKeyboard.registerButtonForKey(rightButton, KeyCode.KEY_F);
         virtualKeyboard.registerButtonForKey(jumpButton, KeyCode.KEY_SPACE);
