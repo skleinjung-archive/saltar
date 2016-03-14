@@ -1,5 +1,8 @@
 package com.thrashplay.saltar;
 
+import com.thrashplay.luna.api.component.GameObject;
+import com.thrashplay.luna.api.component.Movement;
+import com.thrashplay.luna.api.component.Position;
 import com.thrashplay.luna.api.engine.EntityManagerScreen;
 import com.thrashplay.luna.api.engine.Updateable;
 import com.thrashplay.luna.api.geom.Rectangle;
@@ -12,6 +15,8 @@ import com.thrashplay.luna.input.VirtualKeyboard;
 import com.thrashplay.luna.renderable.ClearScreen;
 import com.thrashplay.luna.renderable.FpsDisplay;
 import com.thrashplay.luna.ui.TextButton;
+import com.thrashplay.saltar.component.FilledBlockRenderer;
+import com.thrashplay.saltar.component.KeyboardMovementController;
 
 /**
  * TODO: Add class documentation
@@ -45,6 +50,13 @@ public class TestScreen extends EntityManagerScreen {
         entityManager.addEntity(virtualKeyboard);
 
         inputManager.addKeyboard(virtualKeyboard);
+
+        GameObject filledBoxSprite = new GameObject();
+        filledBoxSprite.addComponent(new Position(200, 200));
+        filledBoxSprite.addComponent(new Movement());
+        filledBoxSprite.addComponent(new FilledBlockRenderer());
+        filledBoxSprite.addComponent(new KeyboardMovementController(inputManager));
+        entityManager.addEntity(filledBoxSprite);
 
         entityManager.addEntity(new Updateable() {
             @Override
