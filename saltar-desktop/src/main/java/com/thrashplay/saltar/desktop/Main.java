@@ -17,7 +17,7 @@ public class Main {
             @Override
             protected LunaGameConfig createGameConfig(LunaCanvas canvas, Luna luna) {
                 LunaGameConfig gameConfig = new LunaGameConfig();
-                gameConfig.setScreenManager(new SaltarScreenManager(luna.getTouchManager(), luna.getInputManager()));
+                gameConfig.setScreenManager(new SaltarScreenManager(luna.getMultiTouchManager(), luna.getInputManager()));
                 gameConfig.setDefaultScreen("test");
                 return gameConfig;
             }

@@ -14,7 +14,7 @@ public class MainActivity extends LunaGame {
     @Override
     protected LunaGameConfig getGameConfig(Luna luna) {
         LunaGameConfig gameConfig = new LunaGameConfig();
-        gameConfig.setScreenManager(new SaltarScreenManager(luna.getTouchManager(), luna.getInputManager()));
+        gameConfig.setScreenManager(new SaltarScreenManager(luna.getMultiTouchManager(), luna.getInputManager()));
         gameConfig.setDefaultScreen("test");
         return gameConfig;
     }
