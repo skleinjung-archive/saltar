@@ -6,7 +6,7 @@ import com.thrashplay.luna.api.component.Position;
 import com.thrashplay.luna.api.component.UpdateableComponent;
 import com.thrashplay.luna.api.input.InputManager;
 import com.thrashplay.luna.api.input.KeyCode;
-import com.thrashplay.luna.math.MathUtils;
+import com.thrashplay.luna.api.math.MathUtils;
 
 /**
  * TODO: Add class documentation
