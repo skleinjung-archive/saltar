@@ -13,11 +13,14 @@ import com.thrashplay.saltar.SaltarScreenManager;
  */
 public class Main {
     public static void main(String[] args) {
+
+//        Config.renderImageBoundaries = true;
+
         new LunaWindow("Saltar", 960, 540) {
             @Override
             protected LunaGameConfig createGameConfig(LunaCanvas canvas, Luna luna) {
                 LunaGameConfig gameConfig = new LunaGameConfig();
-                gameConfig.setScreenManager(new SaltarScreenManager(luna.getMultiTouchManager(), luna.getInputManager()));
+                gameConfig.setScreenManager(new SaltarScreenManager(luna.getImageManager(), luna.getAnimationConfigManager(), luna.getMultiTouchManager(), luna.getInputManager()));
                 gameConfig.setDefaultScreen("test");
                 return gameConfig;
             }

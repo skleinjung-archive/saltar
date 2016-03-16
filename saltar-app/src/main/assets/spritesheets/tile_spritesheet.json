@@ -1,0 +1,12 @@
+{
+    "image":"graphics/space_merc.png",
+    "sprites":[
+        {
+            "id": 1,
+            "x": 808,
+            "y": 264,
+            "width": 64,
+            "height": 64
+        }
+    ]
+}

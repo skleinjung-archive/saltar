@@ -11,10 +11,14 @@ import com.thrashplay.luna.engine.LunaGameConfig;
  */
 public class MainActivity extends LunaGame {
 
+    public MainActivity() {
+//        Config.renderImageBoundaries = true;
+    }
+
     @Override
     protected LunaGameConfig getGameConfig(Luna luna) {
         LunaGameConfig gameConfig = new LunaGameConfig();
-        gameConfig.setScreenManager(new SaltarScreenManager(luna.getMultiTouchManager(), luna.getInputManager()));
+        gameConfig.setScreenManager(new SaltarScreenManager(luna.getImageManager(), luna.getAnimationConfigManager(), luna.getMultiTouchManager(), luna.getInputManager()));
         gameConfig.setDefaultScreen("test");
         return gameConfig;
     }
