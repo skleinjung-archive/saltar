@@ -1,6 +1,7 @@
 package com.thrashplay.saltar.desktop;
 
 import com.thrashplay.luna.api.engine.Luna;
+import com.thrashplay.luna.api.geom.Rectangle;
 import com.thrashplay.luna.desktop.LunaCanvas;
 import com.thrashplay.luna.desktop.LunaWindow;
 import com.thrashplay.luna.engine.LunaGameConfig;
@@ -20,7 +21,12 @@ public class Main {
             @Override
             protected LunaGameConfig createGameConfig(LunaCanvas canvas, Luna luna) {
                 LunaGameConfig gameConfig = new LunaGameConfig();
-                gameConfig.setScreenManager(new SaltarScreenManager(luna.getImageManager(), luna.getAnimationConfigManager(), luna.getMultiTouchManager(), luna.getInputManager()));
+                gameConfig.setScreenManager(new SaltarScreenManager(
+                        new Rectangle(0, 0, canvas.getWidth(), canvas.getHeight()),
+                        luna.getImageManager(),
+                        luna.getAnimationConfigManager(),
+                        luna.getMultiTouchManager(),
+                        luna.getInputManager()));
                 gameConfig.setDefaultScreen("test");
                 return gameConfig;
             }
