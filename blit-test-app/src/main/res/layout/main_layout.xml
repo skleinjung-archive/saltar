@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+        >
+
+    <!--<LinearLayout android:layout_width="fill_parent" android:layout_height="fill_parent" android:orientation="horizontal">-->
+        <!--<TextView-->
+                <!--android:id="@+id/date_view"-->
+                <!--android:layout_width="fill_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--/>-->
+        <!--<Button-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="@string/pick_date"-->
+                <!--android:onClick="showDatePickerDialog" />-->
+    <!--</LinearLayout>-->
+
+    <DatePicker
+            android:id="@+id/date_picker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:calendarViewShown="false"
+            android:spinnersShown="true"
+            android:layout_gravity="center"
+            onDateChanged="onDateSet"
+            />
+
+    <LinearLayout android:layout_width="wrap_content" android:layout_height="fill_parent" android:layout_gravity="center">
+        <TextView
+            android:id="@+id/page_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25px"
+            android:gravity="center_horizontal"
+            android:textAlignment="center"
+            android:textSize="24pt"
+            />
+    </LinearLayout>
+</LinearLayout>

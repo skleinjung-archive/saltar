@@ -25,6 +25,7 @@
     </scm>
 
     <modules>
+        <!--<module>blit-test-app</module>-->
         <module>saltar-core</module>
         <module>saltar-app</module>
         <module>saltar-desktop</module>

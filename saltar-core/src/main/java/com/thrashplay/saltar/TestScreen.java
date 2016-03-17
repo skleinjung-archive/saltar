@@ -45,13 +45,14 @@ public class TestScreen extends EntityManagerScreen {
         AnimationConfig animationConfig = animationConfigManager.getAnimationConfig("animations/player_animation.json");
         AnimationRenderer animation = new AnimationRenderer(animationConfig, imageManager.createSpriteSheet(animationConfig.getSpriteSheet()));
 
-        GameObject sprite = new GameObject("player");
-        sprite.addComponent(new Position(200, 200));
-        sprite.addComponent(new Movement());
-        sprite.addComponent(new Gravity(3));
-        sprite.addComponent(animation);
-        sprite.addComponent(new Collider(1, new Rectangle(0, 0, 30, 55)));
-        sprite.addComponent(CollisionHandler.class, new CollisionHandler() {
+//        final LunaImage image = imageManager.createSpriteSheet("spritesheets/player_spritesheet.json").getImage(1); // createImage("graphics/daxbotsheet.png");
+        GameObject player = new GameObject("player");
+        player.addComponent(new Position(200, 200));
+        player.addComponent(new Movement());
+        player.addComponent(new Gravity(3));
+        player.addComponent(animation);
+        player.addComponent(new Collider(1, true, new Rectangle(0, 0, 30, 55)));
+        player.addComponent(CollisionHandler.class, new CollisionHandler() {
             @Override
             public void handleCollision(GameObject ourObject, GameObject otherObject, Rectangle ourBoundingBox, Rectangle otherBoundingBox) {
                 Position position = ourObject.getComponent(Position.class);
@@ -61,37 +62,41 @@ public class TestScreen extends EntityManagerScreen {
                 movement.setVelocityY(0);
             }
         });
-        sprite.addComponent(new KeyboardMovementController(inputManager));
-        entityManager.addEntity(sprite);
+        player.addComponent(new KeyboardMovementController(inputManager));
+        entityManager.addEntity(player);
 
-        SpriteSheet spriteSheet = imageManager.createSpriteSheet("spritesheets/tile_spritesheet.json");
+        SpriteSheet spriteSheet = imageManager.createSpriteSheet("spritesheets/terrain_spritesheet.json");
         final LunaImage image1 = spriteSheet.getImage(1);
         final LunaImage image2 = spriteSheet.getImage(2);
         final LunaImage image3 = spriteSheet.getImage(3);
-        for (int y = screenBounds.getBottom() - 160; y <= screenBounds.getBottom() - 32; y += 32) {
-//        for (int y = 0; y <= screenBounds.getBottom() - 32; y += 32) {
-            for (int x = 0; x < screenBounds.getRight(); x += 32) {
-                GameObject block = new GameObject("block-" + x + "-" + y);
-                block.addComponent(new Position(x, y));
+        int blockCount = 0;
+        //for (int z = 0; z < 100; z++) {
+            for (int y = screenBounds.getBottom() - 160; y <= screenBounds.getBottom() - 32; y += 32) {
+//        for (int y = 0; y < screenBounds.getBottom() - 32; y += 32) {
+                for (int x = 0; x < screenBounds.getRight(); x += 32) {
+                    GameObject block = new GameObject("block-" + ++blockCount);
+                    block.addComponent(new Position(x, y));
 
-                LunaImage image;
-                if (y == screenBounds.getBottom() - 160) {
-                    image = image1;
-                } else if (Random.getInteger(2) == 0) {
-                    image = image2;
-                } else {
-                    image = image3;
+                    LunaImage image;
+                    if (y == screenBounds.getBottom() - 160) {
+                        image = image1;
+                    } else if (Random.getInteger(2) == 0) {
+                        image = image2;
+                    } else {
+                        image = image3;
+                    }
+
+                    block.addComponent(new ImageRenderer(image, true));
+
+                    if (y == screenBounds.getBottom() - 160) {
+                        block.addComponent(new Collider(2, false, new Rectangle(0, 0, 32, 32)));
+                    }
+
+                    System.out.println("Created " + blockCount + " blocks");
+                    entityManager.addEntity(block);
                 }
-
-                block.addComponent(new ImageRenderer(image, true));
-
-                if (y == screenBounds.getBottom() - 160) {
-                    block.addComponent(new Collider(2, new Rectangle(0, 0, 32, 32)));
-                }
-
-                entityManager.addEntity(block);
             }
-        }
+        //}
 
         Button leftButton = new TextButton(multiTouchManager, "<", 60, screenBounds.getBottom() - 130, 100, 100);
         Button rightButton = new TextButton(multiTouchManager, ">", 195, screenBounds.getBottom() - 130, 100, 100);
@@ -134,3 +139,4 @@ public class TestScreen extends EntityManagerScreen {
         entityManager.removeAll();
     }
 }
+
