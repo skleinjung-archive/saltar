@@ -39,7 +39,7 @@ public class TestScreen extends EntityManagerScreen {
     }
 
     @Override
-    protected void doInitialize(Rectangle screenBounds) {
+    protected void doInitialize() {
         entityManager.addEntity(new ClearScreen(0x7EC0EE));
 
         AnimationConfig animationConfig = animationConfigManager.getAnimationConfig("animations/player_animation.json");
@@ -47,7 +47,7 @@ public class TestScreen extends EntityManagerScreen {
 
 //        final LunaImage image = imageManager.createSpriteSheet("spritesheets/player_spritesheet.json").getImage(1); // createImage("graphics/daxbotsheet.png");
         GameObject player = new GameObject("player");
-        player.addComponent(new Position(200, 200));
+        player.addComponent(new Position(200, 50));
         player.addComponent(new Movement());
         player.addComponent(new Gravity(3));
         player.addComponent(animation);
@@ -71,14 +71,15 @@ public class TestScreen extends EntityManagerScreen {
         final LunaImage image3 = spriteSheet.getImage(3);
         int blockCount = 0;
         //for (int z = 0; z < 100; z++) {
-            for (int y = screenBounds.getBottom() - 160; y <= screenBounds.getBottom() - 32; y += 32) {
+        Rectangle screenBounds = new Rectangle(0, 0, Saltar.SCENE_WIDTH, Saltar.SCENE_HEIGHT);
+            for (int y = screenBounds.getBottom() - 64; y <= screenBounds.getBottom() - 32; y += 32) {
 //        for (int y = 0; y < screenBounds.getBottom() - 32; y += 32) {
                 for (int x = 0; x < screenBounds.getRight(); x += 32) {
                     GameObject block = new GameObject("block-" + ++blockCount);
                     block.addComponent(new Position(x, y));
 
                     LunaImage image;
-                    if (y == screenBounds.getBottom() - 160) {
+                    if (y == screenBounds.getBottom() - 64) {
                         image = image1;
                     } else if (Random.getInteger(2) == 0) {
                         image = image2;
@@ -88,7 +89,7 @@ public class TestScreen extends EntityManagerScreen {
 
                     block.addComponent(new ImageRenderer(image, true));
 
-                    if (y == screenBounds.getBottom() - 160) {
+                    if (y == screenBounds.getBottom() - 64) {
                         block.addComponent(new Collider(2, false, new Rectangle(0, 0, 32, 32)));
                     }
 
@@ -96,6 +97,7 @@ public class TestScreen extends EntityManagerScreen {
                     entityManager.addEntity(block);
                 }
             }
+
         //}
 
         Button leftButton = new TextButton(multiTouchManager, "<", 60, screenBounds.getBottom() - 130, 100, 100);
@@ -105,7 +107,7 @@ public class TestScreen extends EntityManagerScreen {
         virtualKeyboard.registerButtonForKey(leftButton, KeyCode.KEY_LEFT_ARROW);
         virtualKeyboard.registerButtonForKey(rightButton, KeyCode.KEY_RIGHT_ARROW);
         virtualKeyboard.registerButtonForKey(jumpButton, KeyCode.KEY_SPACE);
-        entityManager.addEntity(virtualKeyboard);
+//        entityManager.addEntity(virtualKeyboard);
 
         inputManager.addKeyboard(virtualKeyboard);
 

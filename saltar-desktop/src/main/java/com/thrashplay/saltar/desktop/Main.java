@@ -1,10 +1,10 @@
 package com.thrashplay.saltar.desktop;
 
 import com.thrashplay.luna.api.engine.Luna;
-import com.thrashplay.luna.api.geom.Rectangle;
 import com.thrashplay.luna.desktop.LunaCanvas;
 import com.thrashplay.luna.desktop.LunaWindow;
 import com.thrashplay.luna.engine.LunaGameConfig;
+import com.thrashplay.saltar.Saltar;
 import com.thrashplay.saltar.SaltarScreenManager;
 
 /**
@@ -17,12 +17,12 @@ public class Main {
 
 //        Config.renderImageBoundaries = true;
 
-        new LunaWindow("Saltar", 960, 540) {
+        new LunaWindow("Saltar", Saltar.SCENE_WIDTH, Saltar.SCENE_HEIGHT, 960, 540) {
             @Override
             protected LunaGameConfig createGameConfig(LunaCanvas canvas, Luna luna) {
                 LunaGameConfig gameConfig = new LunaGameConfig();
+                gameConfig.setSceneDimensions(Saltar.SCENE_WIDTH, Saltar.SCENE_HEIGHT);
                 gameConfig.setScreenManager(new SaltarScreenManager(
-                        new Rectangle(0, 0, canvas.getWidth(), canvas.getHeight()),
                         luna.getImageManager(),
                         luna.getAnimationConfigManager(),
                         luna.getMultiTouchManager(),

@@ -13,8 +13,7 @@ import com.thrashplay.luna.engine.DefaultScreenManager;
  * @author Sean Kleinjung
  */
 public class SaltarScreenManager extends DefaultScreenManager {
-    public SaltarScreenManager(Rectangle screenBounds, ImageManager imageManager, AnimationConfigManager animationConfigManager, MultiTouchManager multiTouchManager, InputManager inputManager) {
-        super(screenBounds);
+    public SaltarScreenManager(ImageManager imageManager, AnimationConfigManager animationConfigManager, MultiTouchManager multiTouchManager, InputManager inputManager) {
         registerScreen("test", new TestScreen(imageManager, animationConfigManager, multiTouchManager, inputManager));
     }
 }
