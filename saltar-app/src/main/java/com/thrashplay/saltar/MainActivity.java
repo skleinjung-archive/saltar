@@ -23,4 +23,14 @@ public class MainActivity extends LunaGame {
         gameConfig.setDefaultScreen("test");
         return gameConfig;
     }
+
+    @Override
+    protected int getSceneWidth() {
+        return 480;
+    }
+
+    @Override
+    protected int getSceneHeight() {
+        return 320;
+    }
 }
