@@ -100,14 +100,14 @@ public class TestScreen extends EntityManagerScreen {
 
         //}
 
-        Button leftButton = new TextButton(multiTouchManager, "<", 60, screenBounds.getBottom() - 130, 100, 100);
-        Button rightButton = new TextButton(multiTouchManager, ">", 195, screenBounds.getBottom() - 130, 100, 100);
-        Button jumpButton = new TextButton(multiTouchManager, "^", screenBounds.getRight() - 160, screenBounds.getBottom() - 130, 100, 100);
+        Button leftButton = new TextButton(multiTouchManager, "<", 32, screenBounds.getBottom() - 48, 32, 32);
+        Button rightButton = new TextButton(multiTouchManager, ">", 96, screenBounds.getBottom() - 48, 32, 32);
+        Button jumpButton = new TextButton(multiTouchManager, "^", screenBounds.getRight() - 64, screenBounds.getBottom() - 48, 32, 32);
         VirtualKeyboard virtualKeyboard = new VirtualKeyboard();
         virtualKeyboard.registerButtonForKey(leftButton, KeyCode.KEY_LEFT_ARROW);
         virtualKeyboard.registerButtonForKey(rightButton, KeyCode.KEY_RIGHT_ARROW);
         virtualKeyboard.registerButtonForKey(jumpButton, KeyCode.KEY_SPACE);
-//        entityManager.addEntity(virtualKeyboard);
+        entityManager.addEntity(virtualKeyboard);
 
         inputManager.addKeyboard(virtualKeyboard);
 
