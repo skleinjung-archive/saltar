@@ -47,7 +47,7 @@ public class KeyboardMovementController implements UpdateableComponent {
         }
 
         if (inputManager.isKeyDown(KeyCode.KEY_SPACE)) {
-            movement.setVelocityY(-50);
+            movement.setVelocityY(-10);
         }
     }
 }

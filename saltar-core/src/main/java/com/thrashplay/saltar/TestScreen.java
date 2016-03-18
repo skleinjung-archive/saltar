@@ -59,6 +59,7 @@ public class TestScreen extends DefaultScreen {
         AnimationRenderer walkingRightAnimation = new AnimationRenderer(animationConfig, playerAnimationSpriteSheet);
 
         AnimationStateBasedRenderer playerRenderer = new AnimationStateBasedRenderer();
+        playerRenderer.addRenderer(Player.AnimationState.Jumping, idleLeftImage);
         playerRenderer.addRenderer(Player.AnimationState.IdleFacingLeft, idleLeftImage);
         playerRenderer.addRenderer(Player.AnimationState.IdleFacingRight, idleRightImage);
         playerRenderer.addRenderer(Player.AnimationState.WalkingLeft, walkingLeftAnimation);
@@ -79,13 +80,15 @@ public class TestScreen extends DefaultScreen {
                 position.setY(otherBoundingBox.getY() - ourBoundingBox.getHeight());
 
                 Movement movement = ourObject.getComponent(Movement.class);
-                movement.setVelocityY(0);
+                if (movement.getVelocityY() > 0) {
+                    movement.setVelocityY(0);
+                }
             }
         });
         player.addComponent(new KeyboardMovementController(inputManager));
         gameObjectManager.register(player);
 
-        SpriteSheet spriteSheet = imageManager.createSpriteSheet("spritesheets/terrain_spritesheet.json");
+        SpriteSheet spriteSheet = imageManager.createSpriteSheet("spritesheets/level1_spritesheet.json");
         final LunaImage image1 = spriteSheet.getImage(1);
         final LunaImage image2 = spriteSheet.getImage(2);
         final LunaImage image3 = spriteSheet.getImage(3);
@@ -118,7 +121,28 @@ public class TestScreen extends DefaultScreen {
                 }
             }
 
-        //}
+        for (int tileIndex = 4; tileIndex <= 13; tileIndex++) {
+            int y = screenBounds.getBottom() - 64;
+            int tileRow = (tileIndex - 4) / 2;
+            int tileColumn = tileIndex % 2;
+            y -= (5 - tileRow) * 32;
+
+            GameObject block = new GameObject("fancyblock-" + (tileIndex - 3));
+            block.addComponent(new Position(32 * tileColumn, y));
+            block.addComponent(new ImageRenderer(spriteSheet.getImage(tileIndex), true));
+
+            if (tileColumn == 1) {
+                block.addComponent(new Collider(2, false, new Rectangle(0, 0, 32, 32)));
+            }
+
+            gameObjectManager.register(block);
+        }
+
+        GameObject platform = new GameObject("platform");
+        platform.addComponent(new Position(500, screenBounds.getBottom() - 64 - 32));
+        platform.addComponent(new Collider(2, false, new Rectangle(0, 0, 48, 32)));
+        platform.addComponent(new ImageRenderer(spriteSheet.getImage(14), true));
+        gameObjectManager.register(platform);
 
         Button leftButton = new TextButton(multiTouchManager, "<", 32, screenBounds.getBottom() - 48, 32, 32);
         Button rightButton = new TextButton(multiTouchManager, ">", 96, screenBounds.getBottom() - 48, 32, 32);
