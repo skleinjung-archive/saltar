@@ -1,6 +1,6 @@
 package com.thrashplay.saltar.component;
 
-import com.thrashplay.luna.api.component.GameObject;
+import com.thrashplay.luna.api.engine.GameObject;
 import com.thrashplay.luna.api.component.Movement;
 import com.thrashplay.luna.api.component.Position;
 import com.thrashplay.luna.api.component.UpdateableComponent;
@@ -22,7 +22,7 @@ public class KeyboardMovementController implements UpdateableComponent {
     }
 
     @Override
-    public void update(GameObject gameObject) {
+    public void update(GameObject gameObject, long delta) {
         Position position = gameObject.getComponent(Position.class);
         Movement movement = gameObject.getComponent(Movement.class);
 
@@ -30,14 +30,14 @@ public class KeyboardMovementController implements UpdateableComponent {
         if (inputManager.isKeyDown(KeyCode.KEY_LEFT_ARROW) || inputManager.isKeyDown(KeyCode.KEY_S)) {
 //            position.setX(position.getX() - 5);
             //movement.setAccelerationX(-1);
-            movement.setVelocityX(-10);
+            movement.setVelocityX(-5);
             horizontalKeyDown = true;
         }
 
         if (inputManager.isKeyDown(KeyCode.KEY_RIGHT_ARROW) || inputManager.isKeyDown(KeyCode.KEY_F)) {
 //            position.setX(position.getX() + 5);
 //            movement.setAccelerationX(1);
-            movement.setVelocityX(10);
+            movement.setVelocityX(5);
             horizontalKeyDown = true;
         }
 

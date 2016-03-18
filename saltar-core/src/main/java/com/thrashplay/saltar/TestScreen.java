@@ -1,7 +1,9 @@
 package com.thrashplay.saltar;
 
 import com.thrashplay.luna.api.component.*;
-import com.thrashplay.luna.api.engine.EntityManagerScreen;
+import com.thrashplay.luna.api.engine.DefaultScreen;
+import com.thrashplay.luna.api.engine.GameObject;
+import com.thrashplay.luna.api.engine.GameObjectIds;
 import com.thrashplay.luna.api.geom.Rectangle;
 import com.thrashplay.luna.api.graphics.AnimationConfigManager;
 import com.thrashplay.luna.api.graphics.ImageManager;
@@ -14,18 +16,20 @@ import com.thrashplay.luna.api.input.MultiTouchManager;
 import com.thrashplay.luna.api.math.Random;
 import com.thrashplay.luna.api.physics.CollisionDetector;
 import com.thrashplay.luna.api.ui.Button;
+import com.thrashplay.luna.engine.LegacyGameObjectAdapter;
 import com.thrashplay.luna.input.VirtualKeyboard;
 import com.thrashplay.luna.renderable.ClearScreen;
 import com.thrashplay.luna.renderable.FpsDisplay;
 import com.thrashplay.luna.ui.TextButton;
 import com.thrashplay.saltar.component.KeyboardMovementController;
+import com.thrashplay.saltar.component.ViewportScrollController;
 
 /**
  * TODO: Add class documentation
  *
  * @author Sean Kleinjung
  */
-public class TestScreen extends EntityManagerScreen {
+public class TestScreen extends DefaultScreen {
     private ImageManager imageManager;
     private AnimationConfigManager animationConfigManager;
     private MultiTouchManager multiTouchManager;
@@ -40,7 +44,7 @@ public class TestScreen extends EntityManagerScreen {
 
     @Override
     protected void doInitialize() {
-        entityManager.addEntity(new ClearScreen(0x7EC0EE));
+        gameObjectManager.register(new LegacyGameObjectAdapter("clear screen", new ClearScreen(0x7EC0EE)));
 
         AnimationConfig animationConfig = animationConfigManager.getAnimationConfig("animations/player_animation.json");
         AnimationRenderer animation = new AnimationRenderer(animationConfig, imageManager.createSpriteSheet(animationConfig.getSpriteSheet()));
@@ -63,7 +67,7 @@ public class TestScreen extends EntityManagerScreen {
             }
         });
         player.addComponent(new KeyboardMovementController(inputManager));
-        entityManager.addEntity(player);
+        gameObjectManager.register(player);
 
         SpriteSheet spriteSheet = imageManager.createSpriteSheet("spritesheets/terrain_spritesheet.json");
         final LunaImage image1 = spriteSheet.getImage(1);
@@ -94,7 +98,7 @@ public class TestScreen extends EntityManagerScreen {
                     }
 
                     System.out.println("Created " + blockCount + " blocks");
-                    entityManager.addEntity(block);
+                    gameObjectManager.register(block);
                 }
             }
 
@@ -107,13 +111,22 @@ public class TestScreen extends EntityManagerScreen {
         virtualKeyboard.registerButtonForKey(leftButton, KeyCode.KEY_LEFT_ARROW);
         virtualKeyboard.registerButtonForKey(rightButton, KeyCode.KEY_RIGHT_ARROW);
         virtualKeyboard.registerButtonForKey(jumpButton, KeyCode.KEY_SPACE);
-        entityManager.addEntity(virtualKeyboard);
+        LegacyGameObjectAdapter virtualKeyboardGameObject = new LegacyGameObjectAdapter("virtual keyboard", virtualKeyboard);
+        virtualKeyboardGameObject.setRenderLayer(GameObject.RenderLayer.Overlay);
+        gameObjectManager.register(virtualKeyboardGameObject);
 
         inputManager.addKeyboard(virtualKeyboard);
 
-        entityManager.addEntity(new FpsDisplay(18));
+        // create the viewport
+        GameObject viewport = new GameObject(GameObjectIds.ID_VIEWPORT);
+        viewport.addComponent(new Position(48, 0, Saltar.SCENE_WIDTH, Saltar.SCENE_HEIGHT));
+        viewport.addComponent(new ViewportScrollController(player));
+        gameObjectManager.register(viewport);
 
-        entityManager.addEntity(new CollisionDetector(entityManager));
+        LegacyGameObjectAdapter fpsDisplay = new LegacyGameObjectAdapter("fps display", new FpsDisplay(18));
+        fpsDisplay.setRenderLayer(GameObject.RenderLayer.Overlay);
+        gameObjectManager.register(fpsDisplay);
+        gameObjectManager.register(new LegacyGameObjectAdapter("collision detector", new CollisionDetector(gameObjectManager)));
 
         /*
         entityManager.addEntity(new Renderable() {
@@ -138,7 +151,7 @@ public class TestScreen extends EntityManagerScreen {
 
     @Override
     public void shutdown() {
-        entityManager.removeAll();
+        gameObjectManager.unregisterAll();
     }
 }
 
