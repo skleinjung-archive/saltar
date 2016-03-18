@@ -51,11 +51,14 @@ public class TestScreen extends DefaultScreen {
         AnimationConfig animationConfig = animationConfigManager.getAnimationConfig("animations/player_animation.json");
         SpriteSheet playerAnimationSpriteSheet = imageManager.createSpriteSheet(animationConfig.getSpriteSheet());
 
-        ImageRenderer idleImage = new ImageRenderer(playerAnimationSpriteSheet.getImage(1), true);
+        ImageRenderer idleLeftImage = new ImageRenderer(playerAnimationSpriteSheet.getImage(1), true);
+        idleLeftImage.setFlipHorizontally(true);
+        ImageRenderer idleRightImage = new ImageRenderer(playerAnimationSpriteSheet.getImage(1), true);
         AnimationRenderer walkingRightAnimation = new AnimationRenderer(animationConfig, playerAnimationSpriteSheet);
 
         AnimationStateBasedRenderer playerRenderer = new AnimationStateBasedRenderer();
-        playerRenderer.addRenderer(Player.AnimationState.Idle, idleImage);
+        playerRenderer.addRenderer(Player.AnimationState.IdleFacingLeft, idleLeftImage);
+        playerRenderer.addRenderer(Player.AnimationState.IdleFacingRight, idleRightImage);
         playerRenderer.addRenderer(Player.AnimationState.WalkingRight, walkingRightAnimation);
 
 //        final LunaImage image = imageManager.createSpriteSheet("spritesheets/player_spritesheet.json").getImage(1); // createImage("graphics/daxbotsheet.png");

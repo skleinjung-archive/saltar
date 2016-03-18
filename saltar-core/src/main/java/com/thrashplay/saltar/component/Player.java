@@ -11,13 +11,15 @@ import com.thrashplay.luna.api.engine.GameObject;
  */
 public class Player implements UpdateableComponent {
     public enum AnimationState {
-        Idle,
+        IdleFacingLeft,
+        IdleFacingRight,
         WalkingLeft,
         WalkingRight,
         Jumping
     }
 
-    private AnimationState animationState = AnimationState.Idle;
+    private AnimationState animationState = AnimationState.IdleFacingRight;
+    private boolean facingLeft = false;
 
     public AnimationState getAnimationState() {
         return animationState;
@@ -39,10 +41,14 @@ public class Player implements UpdateableComponent {
             player.setAnimationState(AnimationState.Jumping);
         } else if (movement.getVelocityX() < 0) {
             player.setAnimationState(AnimationState.WalkingLeft);
+            facingLeft = true;
         } else if (movement.getVelocityX() > 0) {
             player.setAnimationState(AnimationState.WalkingRight);
+            facingLeft = false;
+        } else if (facingLeft) {
+            player.setAnimationState(AnimationState.IdleFacingLeft);
         } else {
-            player.setAnimationState(AnimationState.Idle);
+            player.setAnimationState(AnimationState.IdleFacingRight);
         }
     }
 }
