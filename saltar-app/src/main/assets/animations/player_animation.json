@@ -3,19 +3,19 @@
   "frames":[
     {
       "imageId": 5,
-      "duration": 200
+      "duration": 300
     },
     {
       "imageId": 6,
-      "duration": 150
+      "duration": 300
     },
     {
       "imageId": 7,
-      "duration": 200
+      "duration": 300
     },
     {
       "imageId": 6,
-      "duration": 150
+      "duration": 300
     }
   ]
 }

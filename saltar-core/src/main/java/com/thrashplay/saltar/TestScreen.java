@@ -21,7 +21,9 @@ import com.thrashplay.luna.input.VirtualKeyboard;
 import com.thrashplay.luna.renderable.ClearScreen;
 import com.thrashplay.luna.renderable.FpsDisplay;
 import com.thrashplay.luna.ui.TextButton;
+import com.thrashplay.saltar.component.AnimationStateBasedRenderer;
 import com.thrashplay.saltar.component.KeyboardMovementController;
+import com.thrashplay.saltar.component.Player;
 import com.thrashplay.saltar.component.ViewportScrollController;
 
 /**
@@ -47,14 +49,22 @@ public class TestScreen extends DefaultScreen {
         gameObjectManager.register(new LegacyGameObjectAdapter("clear screen", new ClearScreen(0x7EC0EE)));
 
         AnimationConfig animationConfig = animationConfigManager.getAnimationConfig("animations/player_animation.json");
-        AnimationRenderer animation = new AnimationRenderer(animationConfig, imageManager.createSpriteSheet(animationConfig.getSpriteSheet()));
+        SpriteSheet playerAnimationSpriteSheet = imageManager.createSpriteSheet(animationConfig.getSpriteSheet());
+
+        ImageRenderer idleImage = new ImageRenderer(playerAnimationSpriteSheet.getImage(1), true);
+        AnimationRenderer walkingRightAnimation = new AnimationRenderer(animationConfig, playerAnimationSpriteSheet);
+
+        AnimationStateBasedRenderer playerRenderer = new AnimationStateBasedRenderer();
+        playerRenderer.addRenderer(Player.AnimationState.Idle, idleImage);
+        playerRenderer.addRenderer(Player.AnimationState.WalkingRight, walkingRightAnimation);
 
 //        final LunaImage image = imageManager.createSpriteSheet("spritesheets/player_spritesheet.json").getImage(1); // createImage("graphics/daxbotsheet.png");
         GameObject player = new GameObject("player");
         player.addComponent(new Position(200, 50));
         player.addComponent(new Movement());
         player.addComponent(new Gravity(3));
-        player.addComponent(animation);
+        player.addComponent(new Player());
+        player.addComponent(playerRenderer);
         player.addComponent(new Collider(1, true, new Rectangle(0, 0, 30, 55)));
         player.addComponent(CollisionHandler.class, new CollisionHandler() {
             @Override
@@ -78,7 +88,7 @@ public class TestScreen extends DefaultScreen {
         Rectangle screenBounds = new Rectangle(0, 0, Saltar.SCENE_WIDTH, Saltar.SCENE_HEIGHT);
             for (int y = screenBounds.getBottom() - 64; y <= screenBounds.getBottom() - 32; y += 32) {
 //        for (int y = 0; y < screenBounds.getBottom() - 32; y += 32) {
-                for (int x = 0; x < screenBounds.getRight(); x += 32) {
+                for (int x = 0; x < screenBounds.getRight() * 3; x += 32) {
                     GameObject block = new GameObject("block-" + ++blockCount);
                     block.addComponent(new Position(x, y));
 
