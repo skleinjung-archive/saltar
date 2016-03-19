@@ -14,17 +14,14 @@ import com.thrashplay.luna.api.input.InputManager;
 import com.thrashplay.luna.api.input.KeyCode;
 import com.thrashplay.luna.api.input.MultiTouchManager;
 import com.thrashplay.luna.api.math.Random;
-import com.thrashplay.luna.api.physics.CollisionDetector;
+import com.thrashplay.luna.api.physics.CrossCollisionDetector;
 import com.thrashplay.luna.api.ui.Button;
 import com.thrashplay.luna.engine.LegacyGameObjectAdapter;
 import com.thrashplay.luna.input.VirtualKeyboard;
 import com.thrashplay.luna.renderable.ClearScreen;
 import com.thrashplay.luna.renderable.FpsDisplay;
 import com.thrashplay.luna.ui.TextButton;
-import com.thrashplay.saltar.component.AnimationStateBasedRenderer;
-import com.thrashplay.saltar.component.KeyboardMovementController;
-import com.thrashplay.saltar.component.Player;
-import com.thrashplay.saltar.component.ViewportScrollController;
+import com.thrashplay.saltar.component.*;
 
 /**
  * TODO: Add class documentation
@@ -48,22 +45,24 @@ public class TestScreen extends DefaultScreen {
     protected void doInitialize() {
         gameObjectManager.register(new LegacyGameObjectAdapter("clear screen", new ClearScreen(0x7EC0EE)));
 
-        AnimationConfig animationConfig = animationConfigManager.getAnimationConfig("animations/player_animation.json");
-        SpriteSheet playerAnimationSpriteSheet = imageManager.createSpriteSheet(animationConfig.getSpriteSheet());
+        AnimationConfig walkAnimation = animationConfigManager.getAnimationConfig("animations/player/walk.json");
+        AnimationConfig jumpAnimationConfig = animationConfigManager.getAnimationConfig("animations/player/jump.json");
+        SpriteSheet playerAnimationSpriteSheet = imageManager.createSpriteSheet(walkAnimation.getSpriteSheet());
 
         ImageRenderer idleLeftImage = new ImageRenderer(playerAnimationSpriteSheet.getImage(1), true);
         idleLeftImage.setFlipHorizontally(true);
         ImageRenderer idleRightImage = new ImageRenderer(playerAnimationSpriteSheet.getImage(1), true);
-        AnimationRenderer walkingLeftAnimation = new AnimationRenderer(animationConfig, playerAnimationSpriteSheet);
+        AnimationRenderer walkingLeftAnimation = new AnimationRenderer(walkAnimation, playerAnimationSpriteSheet);
         walkingLeftAnimation.setFlipHorizontally(true);
-        AnimationRenderer walkingRightAnimation = new AnimationRenderer(animationConfig, playerAnimationSpriteSheet);
+        AnimationRenderer walkingRightAnimation = new AnimationRenderer(walkAnimation, playerAnimationSpriteSheet);
+        AnimationRenderer jumpingAnimation = new AnimationRenderer(jumpAnimationConfig, playerAnimationSpriteSheet);
 
         AnimationStateBasedRenderer playerRenderer = new AnimationStateBasedRenderer();
-        playerRenderer.addRenderer(Player.AnimationState.Jumping, idleLeftImage);
         playerRenderer.addRenderer(Player.AnimationState.IdleFacingLeft, idleLeftImage);
         playerRenderer.addRenderer(Player.AnimationState.IdleFacingRight, idleRightImage);
         playerRenderer.addRenderer(Player.AnimationState.WalkingLeft, walkingLeftAnimation);
         playerRenderer.addRenderer(Player.AnimationState.WalkingRight, walkingRightAnimation);
+        playerRenderer.addRenderer(Player.AnimationState.Jumping, jumpingAnimation);
 
 //        final LunaImage image = imageManager.createSpriteSheet("spritesheets/player_spritesheet.json").getImage(1); // createImage("graphics/daxbotsheet.png");
         GameObject player = new GameObject("player");
@@ -72,19 +71,8 @@ public class TestScreen extends DefaultScreen {
         player.addComponent(new Gravity(3));
         player.addComponent(new Player());
         player.addComponent(playerRenderer);
-        player.addComponent(new Collider(1, true, new Rectangle(0, 0, 30, 55)));
-        player.addComponent(CollisionHandler.class, new CollisionHandler() {
-            @Override
-            public void handleCollision(GameObject ourObject, GameObject otherObject, Rectangle ourBoundingBox, Rectangle otherBoundingBox) {
-                Position position = ourObject.getComponent(Position.class);
-                position.setY(otherBoundingBox.getY() - ourBoundingBox.getHeight());
-
-                Movement movement = ourObject.getComponent(Movement.class);
-                if (movement.getVelocityY() > 0) {
-                    movement.setVelocityY(0);
-                }
-            }
-        });
+        player.addComponent(new Collider(1, true, new Rectangle(6, 0, 18, 55),  new Rectangle(0, 5, 30, 40)));
+        player.addComponent(CollisionHandler.class, new PlayerCollisionHandler());
         player.addComponent(new KeyboardMovementController(inputManager));
         gameObjectManager.register(player);
 
@@ -139,7 +127,7 @@ public class TestScreen extends DefaultScreen {
         }
 
         GameObject platform = new GameObject("platform");
-        platform.addComponent(new Position(500, screenBounds.getBottom() - 64 - 32));
+        platform.addComponent(new Position(1300, screenBounds.getBottom() - 64 - 32));
         platform.addComponent(new Collider(2, false, new Rectangle(0, 0, 48, 32)));
         platform.addComponent(new ImageRenderer(spriteSheet.getImage(14), true));
         gameObjectManager.register(platform);
@@ -166,7 +154,7 @@ public class TestScreen extends DefaultScreen {
         LegacyGameObjectAdapter fpsDisplay = new LegacyGameObjectAdapter("fps display", new FpsDisplay(18));
         fpsDisplay.setRenderLayer(GameObject.RenderLayer.Overlay);
         gameObjectManager.register(fpsDisplay);
-        gameObjectManager.register(new LegacyGameObjectAdapter("collision detector", new CollisionDetector(gameObjectManager)));
+        gameObjectManager.register(new LegacyGameObjectAdapter("collision detector", new CrossCollisionDetector(gameObjectManager)));
 
         /*
         entityManager.addEntity(new Renderable() {

@@ -1,0 +1,21 @@
+{
+  "spriteSheet":"spritesheets/player_spritesheet.json",
+  "frames":[
+    {
+      "imageId": 8,
+      "duration": 50
+    },
+    {
+      "imageId": 9,
+      "duration": 50
+    },
+    {
+      "imageId": 10,
+      "duration": 50
+    },
+    {
+      "imageId": 9,
+      "duration": 50
+    }
+  ]
+}
