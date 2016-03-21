@@ -182,7 +182,7 @@ public class TestScreen extends DefaultScreen {
 
         // create the viewport
         GameObject viewport = new GameObject(GameObjectIds.ID_VIEWPORT);
-        viewport.addComponent(new Position(48, 0, Saltar.SCENE_WIDTH, Saltar.SCENE_HEIGHT));
+        viewport.addComponent(new Position(0, 0, Saltar.SCENE_WIDTH, Saltar.SCENE_HEIGHT));
         viewport.addComponent(new ViewportScrollController(player));
         gameObjectManager.register(viewport);
 

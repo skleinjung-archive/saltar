@@ -29,6 +29,7 @@
         <module>saltar-core</module>
         <module>saltar-app</module>
         <module>saltar-desktop</module>
+        <module>saltar-editor</module>
     </modules>
 
     <build>

@@ -1,12 +1,11 @@
 package com.thrashplay.saltar.component;
 
-import com.thrashplay.luna.api.engine.GameObject;
 import com.thrashplay.luna.api.component.Movement;
 import com.thrashplay.luna.api.component.Position;
 import com.thrashplay.luna.api.component.UpdateableComponent;
+import com.thrashplay.luna.api.engine.GameObject;
 import com.thrashplay.luna.api.input.InputManager;
 import com.thrashplay.luna.api.input.KeyCode;
-import com.thrashplay.luna.api.math.MathUtils;
 
 /**
  * TODO: Add class documentation
@@ -48,8 +47,8 @@ public class KeyboardMovementController implements UpdateableComponent {
         }
 
         if (!horizontalKeyDown) {
-//            movement.setVelocityX(0);
-            movement.setAccelerationX(-MathUtils.sign(movement.getVelocityX() / 5));
+            movement.setVelocityX(0);
+//            movement.setAccelerationX(-MathUtils.sign(movement.getVelocityX() / 1));
 
             player.onHorizontalKeyRelased();
         }
