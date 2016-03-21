@@ -23,6 +23,7 @@ public class KeyboardMovementController implements UpdateableComponent {
 
     @Override
     public void update(GameObject gameObject, long delta) {
+        Player player = gameObject.getComponent(Player.class);
         Position position = gameObject.getComponent(Position.class);
         Movement movement = gameObject.getComponent(Movement.class);
 
@@ -32,6 +33,8 @@ public class KeyboardMovementController implements UpdateableComponent {
             //movement.setAccelerationX(-1);
             movement.setVelocityX(-5);
             horizontalKeyDown = true;
+
+            player.onLeftPressed();
         }
 
         if (inputManager.isKeyDown(KeyCode.KEY_RIGHT_ARROW) || inputManager.isKeyDown(KeyCode.KEY_F)) {
@@ -39,11 +42,15 @@ public class KeyboardMovementController implements UpdateableComponent {
 //            movement.setAccelerationX(1);
             movement.setVelocityX(5);
             horizontalKeyDown = true;
+
+            player.onRightPressed();
         }
 
         if (!horizontalKeyDown) {
 //            movement.setVelocityX(0);
             movement.setAccelerationX(-MathUtils.sign(movement.getVelocityX() / 5));
+
+            player.onHorizontalKeyRelased();
         }
 
         if (inputManager.isKeyDown(KeyCode.KEY_SPACE)) {

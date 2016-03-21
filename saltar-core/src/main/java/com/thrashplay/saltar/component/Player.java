@@ -15,11 +15,26 @@ public class Player implements UpdateableComponent {
         IdleFacingRight,
         WalkingLeft,
         WalkingRight,
-        Jumping
+        JumpingLeft,
+        JumpingRight
+    }
+
+    public enum VerticalDirection {
+        Up,
+        Down,
+        Idle
+    }
+
+    public enum HorizontalDirection {
+        Left,
+        Right,
+        Idle
     }
 
     private AnimationState animationState = AnimationState.IdleFacingRight;
-    private boolean facingLeft = false;
+    private VerticalDirection verticalDirection = VerticalDirection.Idle;
+    private HorizontalDirection horizontalDirection = HorizontalDirection.Right;
+    boolean isWalking = false;
 
     public AnimationState getAnimationState() {
         return animationState;
@@ -29,11 +44,113 @@ public class Player implements UpdateableComponent {
         this.animationState = animationState;
     }
 
+    public VerticalDirection getVerticalDirection() {
+        return verticalDirection;
+    }
+
+    public void setVerticalDirection(VerticalDirection verticalDirection) {
+        this.verticalDirection = verticalDirection;
+    }
+
+    public HorizontalDirection getHorizontalDirection() {
+        return horizontalDirection;
+    }
+
+    public void setHorizontalDirection(HorizontalDirection horizontalDirection) {
+        this.horizontalDirection = horizontalDirection;
+    }
+
+    public void onLeftPressed() {
+        animationState = AnimationState.WalkingLeft;
+    }
+
+    public void onHorizontalKeyRelased() {
+        switch (animationState) {
+            case WalkingLeft:
+                animationState = AnimationState.IdleFacingLeft;
+                break;
+
+            case WalkingRight:
+                animationState = AnimationState.IdleFacingRight;
+                break;
+        }
+    }
+
+    public void onRightPressed() {
+        animationState = AnimationState.WalkingRight;
+    }
+
+    public void onWallCollision() {
+        switch (animationState) {
+            case WalkingLeft:
+                animationState = AnimationState.IdleFacingLeft;
+                break;
+
+            case WalkingRight:
+                animationState = AnimationState.IdleFacingRight;
+                break;
+        }
+    }
+
     @Override
     public void update(GameObject gameObject, long delta) {
         Movement movement = gameObject.getComponent(Movement.class);
         Player player = gameObject.getComponent(Player.class);
 
+        /*
+
+        if (movement.getVelocityY() < 0) {
+            verticalDirection = VerticalDirection.Up;
+        } else if (movement.getVelocityY() > 0) {
+            verticalDirection = VerticalDirection.Down;
+        }
+
+        if (movement.getVelocityX() == 0) {
+            horizontalDirection = HorizontalDirection.Idle;
+        }
+
+        switch (horizontalDirection) {
+            case Left:
+                switch (verticalDirection) {
+                    case Up:
+                    case Down:
+                        animationState = AnimationState.JumpingLeft;
+                        break;
+
+                    case Idle:
+                        animationState = AnimationState.WalkingLeft;
+                        break;
+                }
+                break;
+
+            case Right:
+                switch (verticalDirection) {
+                    case Up:
+                    case Down:
+                        animationState = AnimationState.JumpingRight;
+                        break;
+
+                    case Idle:
+                        animationState = AnimationState.WalkingRight;
+                        break;
+                }
+                break;
+
+            case Idle:
+                switch (verticalDirection) {
+                    case Up:
+                    case Down:
+                        animationState = AnimationState.JumpingRight;
+                        break;
+
+                    case Idle:
+                        animationState = AnimationState.IdleFacingRight;
+                        break;
+                }
+        }
+        */
+
+        /*
         if (movement.getVelocityY() < 0) {
             player.setAnimationState(AnimationState.Jumping);
         } else if (movement.getVelocityY() > 0) {
@@ -50,5 +167,7 @@ public class Player implements UpdateableComponent {
         } else {
             player.setAnimationState(AnimationState.IdleFacingRight);
         }
+        */
     }
 }
+

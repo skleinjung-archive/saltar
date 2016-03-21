@@ -62,7 +62,7 @@ public class TestScreen extends DefaultScreen {
         playerRenderer.addRenderer(Player.AnimationState.IdleFacingRight, idleRightImage);
         playerRenderer.addRenderer(Player.AnimationState.WalkingLeft, walkingLeftAnimation);
         playerRenderer.addRenderer(Player.AnimationState.WalkingRight, walkingRightAnimation);
-        playerRenderer.addRenderer(Player.AnimationState.Jumping, jumpingAnimation);
+        playerRenderer.addRenderer(Player.AnimationState.JumpingRight, jumpingAnimation);
 
 //        final LunaImage image = imageManager.createSpriteSheet("spritesheets/player_spritesheet.json").getImage(1); // createImage("graphics/daxbotsheet.png");
         GameObject player = new GameObject("player");
@@ -70,10 +70,10 @@ public class TestScreen extends DefaultScreen {
         player.addComponent(new Movement());
         player.addComponent(new Gravity(3));
         player.addComponent(new Player());
-        player.addComponent(playerRenderer);
         player.addComponent(new Collider(1, true, new Rectangle(6, 0, 18, 55),  new Rectangle(0, 5, 30, 40)));
         player.addComponent(CollisionHandler.class, new PlayerCollisionHandler());
         player.addComponent(new KeyboardMovementController(inputManager));
+        player.addComponent(playerRenderer);
         gameObjectManager.register(player);
 
         SpriteSheet spriteSheet = imageManager.createSpriteSheet("spritesheets/level1_spritesheet.json");

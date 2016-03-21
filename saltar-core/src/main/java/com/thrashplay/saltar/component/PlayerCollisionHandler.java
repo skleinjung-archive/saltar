@@ -34,7 +34,7 @@ public class PlayerCollisionHandler implements CollisionHandler, RenderableCompo
                 if (movement.getVelocityX() < 0) {
                     movement.setVelocityX(0);
                 }
-                player.setAnimationState(Player.AnimationState.IdleFacingLeft);
+                player.onWallCollision();
                 break;
 
             case CollisionHandler.DIRECTION_TOP:
@@ -51,7 +51,7 @@ public class PlayerCollisionHandler implements CollisionHandler, RenderableCompo
                 if (movement.getVelocityX() > 0) {
                     movement.setVelocityX(0);
                 }
-                player.setAnimationState(Player.AnimationState.IdleFacingRight);
+                player.onWallCollision();
                 break;
 
             case CollisionHandler.DIRECTION_BOTTOM:
@@ -117,7 +117,7 @@ public class PlayerCollisionHandler implements CollisionHandler, RenderableCompo
             Position position = gameObject.getComponent(Position.class);
 
             if (collisionDirections[CollisionHandler.DIRECTION_LEFT]) {
-                graphics.fillCircle(position.getLeft(), position.getCenterY(), 9, 0xffff0000);
+                graphics.fillCircle(position.getX(), position.getCenterY(), 9, 0xffff0000);
             }
             if (collisionDirections[CollisionHandler.DIRECTION_RIGHT]) {
                 graphics.fillCircle(position.getRight(), position.getCenterY(), 9, 0xffff0000);
