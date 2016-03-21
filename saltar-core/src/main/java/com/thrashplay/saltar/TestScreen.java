@@ -65,12 +65,14 @@ public class TestScreen extends DefaultScreen {
         playerRenderer.addRenderer(Player.AnimationState.JumpingRight, jumpingAnimation);
 
 //        final LunaImage image = imageManager.createSpriteSheet("spritesheets/player_spritesheet.json").getImage(1); // createImage("graphics/daxbotsheet.png");
+
+        int maxPlayerVelocity = 8;
         GameObject player = new GameObject("player");
         player.addComponent(new Position(200, 50));
         player.addComponent(new Movement());
         player.addComponent(new Gravity(3));
         player.addComponent(new Player());
-        player.addComponent(new Collider(1, true, new Rectangle(6, 0, 18, 55),  new Rectangle(0, 5, 30, 40)));
+        player.addComponent(new Collider(1, true, new Rectangle(maxPlayerVelocity + 1, 0, 30 - ((maxPlayerVelocity + 1) * 2), 55),  new Rectangle(0, maxPlayerVelocity + 1, 30, 55 - ((maxPlayerVelocity + 1) * 2))));
         player.addComponent(CollisionHandler.class, new PlayerCollisionHandler());
         player.addComponent(new KeyboardMovementController(inputManager));
         player.addComponent(playerRenderer);
@@ -126,15 +128,48 @@ public class TestScreen extends DefaultScreen {
             gameObjectManager.register(block);
         }
 
-        GameObject platform = new GameObject("platform");
+        GameObject platform = new GameObject("ground-platform");
         platform.addComponent(new Position(1300, screenBounds.getBottom() - 64 - 32));
         platform.addComponent(new Collider(2, false, new Rectangle(0, 0, 48, 32)));
         platform.addComponent(new ImageRenderer(spriteSheet.getImage(14), true));
         gameObjectManager.register(platform);
 
-        Button leftButton = new TextButton(multiTouchManager, "<", 32, screenBounds.getBottom() - 48, 32, 32);
-        Button rightButton = new TextButton(multiTouchManager, ">", 96, screenBounds.getBottom() - 48, 32, 32);
-        Button jumpButton = new TextButton(multiTouchManager, "^", screenBounds.getRight() - 64, screenBounds.getBottom() - 48, 32, 32);
+        GameObject platformLeft = new GameObject("air-platform-left");
+        platformLeft.addComponent(new Position(400, screenBounds.getBottom() - 64 - 128));
+        platformLeft.addComponent(new Collider(2, false, new Rectangle(0, 0, 32, 32)));
+        platformLeft.addComponent(new ImageRenderer(image1, true));
+        gameObjectManager.register(platformLeft);
+        GameObject platformCenter = new GameObject("air-platform-center");
+        platformCenter.addComponent(new Position(432, screenBounds.getBottom() - 64 - 128));
+        platformCenter.addComponent(new Collider(2, false, new Rectangle(0, 0, 32, 32)));
+        platformCenter.addComponent(new ImageRenderer(image1, true));
+        gameObjectManager.register(platformCenter);
+        GameObject platformRight = new GameObject("air-platform-right");
+        platformRight.addComponent(new Position(464, screenBounds.getBottom() - 64 - 128));
+        platformRight.addComponent(new Collider(2, false, new Rectangle(0, 0, 32, 32)));
+        platformRight.addComponent(new ImageRenderer(image1, true));
+        gameObjectManager.register(platformRight);
+
+        GameObject platformLeft2 = new GameObject("air-platform-left2");
+        platformLeft2.addComponent(new Position(600, screenBounds.getBottom() - 64 - 96));
+        platformLeft2.addComponent(new Collider(2, false, new Rectangle(0, 0, 32, 32)));
+        platformLeft2.addComponent(new ImageRenderer(image1, true));
+        gameObjectManager.register(platformLeft2);
+        GameObject platformCenter2 = new GameObject("air-platform-center2");
+        platformCenter2.addComponent(new Position(632, screenBounds.getBottom() - 64 - 96));
+        platformCenter2.addComponent(new Collider(2, false, new Rectangle(0, 0, 32, 32)));
+        platformCenter2.addComponent(new ImageRenderer(image1, true));
+        gameObjectManager.register(platformCenter2);
+        GameObject platformRight2 = new GameObject("air-platform-right2");
+        platformRight2.addComponent(new Position(664, screenBounds.getBottom() - 64 - 96));
+        platformRight2.addComponent(new Collider(2, false, new Rectangle(0, 0, 32, 32)));
+        platformRight2.addComponent(new ImageRenderer(image1, true));
+        gameObjectManager.register(platformRight2);
+
+
+        Button leftButton = new TextButton(multiTouchManager, "<", 16, screenBounds.getBottom() - 56, 48, 48);
+        Button rightButton = new TextButton(multiTouchManager, ">", 80, screenBounds.getBottom() - 56, 48, 48);
+        Button jumpButton = new TextButton(multiTouchManager, "^", screenBounds.getRight() - 64, screenBounds.getBottom() - 56, 48, 48);
         VirtualKeyboard virtualKeyboard = new VirtualKeyboard();
         virtualKeyboard.registerButtonForKey(leftButton, KeyCode.KEY_LEFT_ARROW);
         virtualKeyboard.registerButtonForKey(rightButton, KeyCode.KEY_RIGHT_ARROW);

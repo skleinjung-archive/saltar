@@ -16,6 +16,7 @@ import com.thrashplay.luna.api.math.MathUtils;
 public class KeyboardMovementController implements UpdateableComponent {
 
     private InputManager inputManager;
+    private int jumpFrames = 0;
 
     public KeyboardMovementController(InputManager inputManager) {
         this.inputManager = inputManager;
@@ -31,7 +32,7 @@ public class KeyboardMovementController implements UpdateableComponent {
         if (inputManager.isKeyDown(KeyCode.KEY_LEFT_ARROW) || inputManager.isKeyDown(KeyCode.KEY_S)) {
 //            position.setX(position.getX() - 5);
             //movement.setAccelerationX(-1);
-            movement.setVelocityX(-5);
+            movement.setVelocityX(-8);
             horizontalKeyDown = true;
 
             player.onLeftPressed();
@@ -40,7 +41,7 @@ public class KeyboardMovementController implements UpdateableComponent {
         if (inputManager.isKeyDown(KeyCode.KEY_RIGHT_ARROW) || inputManager.isKeyDown(KeyCode.KEY_F)) {
 //            position.setX(position.getX() + 5);
 //            movement.setAccelerationX(1);
-            movement.setVelocityX(5);
+            movement.setVelocityX(8);
             horizontalKeyDown = true;
 
             player.onRightPressed();
@@ -54,7 +55,11 @@ public class KeyboardMovementController implements UpdateableComponent {
         }
 
         if (inputManager.isKeyDown(KeyCode.KEY_SPACE)) {
-            movement.setVelocityY(-10);
+            if (jumpFrames < 5) {
+                movement.setVelocityY(-20 + (2 * jumpFrames++));
+            }
+        } else {
+            jumpFrames = 0;
         }
     }
 }
