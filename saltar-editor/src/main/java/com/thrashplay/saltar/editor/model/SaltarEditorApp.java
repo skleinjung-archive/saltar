@@ -3,6 +3,8 @@ package com.thrashplay.saltar.editor.model;
 import com.thrashplay.luna.api.engine.ScreenManager;
 import com.thrashplay.luna.api.input.InputManager;
 import com.thrashplay.luna.desktop.LunaCanvas;
+import com.thrashplay.luna.desktop.graphics.DesktopImageManager;
+import com.thrashplay.luna.desktop.graphics.DesktopSpriteSheetConfigManager;
 import com.thrashplay.luna.desktop.input.DesktopKeyboard;
 import com.thrashplay.luna.desktop.input.MouseTouchManager;
 import com.thrashplay.luna.engine.DefaultScreenManager;
@@ -36,6 +38,7 @@ public class SaltarEditorApp {
     private DefaultScreenManager screenManager;
     private DefaultInputManager inputManager;
     private MouseTouchManager mouseTouchManager;
+    private DesktopImageManager imageManager;
 
     public void initialize() {
         lunaCanvas = new LunaCanvas(480, 320);
@@ -52,6 +55,7 @@ public class SaltarEditorApp {
         mouseTouchManager = new MouseTouchManager(lunaCanvas, 480, 320);
         inputManager = new DefaultInputManager();
         inputManager.addKeyboard(new DesktopKeyboard(lunaCanvas));
+        imageManager = new DesktopImageManager(new DesktopSpriteSheetConfigManager());
 
         mainLoop = new FixedFpsMainLoop(screenManager, lunaCanvas);
 
@@ -77,6 +81,10 @@ public class SaltarEditorApp {
 
     public MouseTouchManager getMouseTouchManager() {
         return mouseTouchManager;
+    }
+
+    public DesktopImageManager getImageManager() {
+        return imageManager;
     }
 
     public MutableScreen getScreen() {

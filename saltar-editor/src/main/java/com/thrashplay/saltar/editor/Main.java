@@ -2,7 +2,7 @@ package com.thrashplay.saltar.editor;
 
 import com.thrashplay.saltar.editor.model.SaltarEditorApp;
 import com.thrashplay.saltar.editor.ui.NavigationUiManager;
-import com.thrashplay.saltar.editor.ui.SaltarEditorWindow;
+import com.thrashplay.saltar.editor.swing.SaltarEditorWindow;
 
 /**
  * TODO: Add class documentation
