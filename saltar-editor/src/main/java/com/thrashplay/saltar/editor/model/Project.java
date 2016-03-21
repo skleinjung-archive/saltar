@@ -12,6 +12,9 @@ public class Project {
     // the level associated with this project, in the future we would like to support multiple levels per project
     private Level level;
 
+    private int selectedTileX = 0;
+    private int selectedTileY = 0;
+
     // todo: replace with me a settings dialog on projection creation / project settings from menu bar
     public Project() {
         level = new Level(2000, 500);
@@ -32,5 +35,21 @@ public class Project {
 
     public void setLevel(Level level) {
         this.level = level;
+    }
+
+    public int getSelectedTileX() {
+        return selectedTileX;
+    }
+
+    public void setSelectedTileX(int selectedTileX) {
+        this.selectedTileX = selectedTileX;
+    }
+
+    public int getSelectedTileY() {
+        return selectedTileY;
+    }
+
+    public void setSelectedTileY(int selectedTileY) {
+        this.selectedTileY = selectedTileY;
     }
 }

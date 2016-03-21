@@ -38,4 +38,12 @@ public class Level {
     public void setTileSize(int tileSize) {
         this.tileSize = tileSize;
     }
+
+    public int getGridSizeX() {
+        return width / tileSize;
+    }
+
+    public int getGridSizeY() {
+        return height / tileSize;
+    }
 }

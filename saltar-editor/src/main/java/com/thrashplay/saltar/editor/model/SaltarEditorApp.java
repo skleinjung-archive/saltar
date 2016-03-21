@@ -1,11 +1,14 @@
 package com.thrashplay.saltar.editor.model;
 
 import com.thrashplay.luna.api.engine.ScreenManager;
+import com.thrashplay.luna.api.input.InputManager;
 import com.thrashplay.luna.desktop.LunaCanvas;
+import com.thrashplay.luna.desktop.input.DesktopKeyboard;
 import com.thrashplay.luna.desktop.input.MouseTouchManager;
 import com.thrashplay.luna.engine.DefaultScreenManager;
 import com.thrashplay.luna.engine.LegacyGameObjectAdapter;
 import com.thrashplay.luna.engine.loop.FixedFpsMainLoop;
+import com.thrashplay.luna.input.DefaultInputManager;
 import com.thrashplay.luna.renderable.ClearScreen;
 import com.thrashplay.saltar.editor.screen.MutableScreen;
 
@@ -31,6 +34,7 @@ public class SaltarEditorApp {
 
     // managers
     private DefaultScreenManager screenManager;
+    private DefaultInputManager inputManager;
     private MouseTouchManager mouseTouchManager;
 
     public void initialize() {
@@ -46,6 +50,8 @@ public class SaltarEditorApp {
         screenManager.setCurrentScreen("default");
 
         mouseTouchManager = new MouseTouchManager(lunaCanvas, 480, 320);
+        inputManager = new DefaultInputManager();
+        inputManager.addKeyboard(new DesktopKeyboard(lunaCanvas));
 
         mainLoop = new FixedFpsMainLoop(screenManager, lunaCanvas);
 
@@ -63,6 +69,10 @@ public class SaltarEditorApp {
 
     public ScreenManager getScreenManager() {
         return screenManager;
+    }
+
+    public InputManager getInputManager() {
+        return inputManager;
     }
 
     public MouseTouchManager getMouseTouchManager() {
