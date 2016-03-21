@@ -40,6 +40,7 @@ public class SaltarEditorApp {
     private DefaultInputManager inputManager;
     private MouseTouchManager leftMouseButtonTouchManager;
     private MouseTouchManager middleMouseButtonTouchManager;
+    private DesktopSpriteSheetConfigManager spriteSheetConfigManager;
     private DesktopImageManager imageManager;
 
     public void initialize() {
@@ -58,7 +59,8 @@ public class SaltarEditorApp {
         middleMouseButtonTouchManager = new MouseTouchManager(lunaCanvas, MouseEvent.BUTTON2, 480, 320);
         inputManager = new DefaultInputManager();
         inputManager.addKeyboard(new DesktopKeyboard(lunaCanvas));
-        imageManager = new DesktopImageManager(new DesktopSpriteSheetConfigManager());
+        spriteSheetConfigManager = new DesktopSpriteSheetConfigManager();
+        imageManager = new DesktopImageManager(spriteSheetConfigManager);
 
         mainLoop = new FixedFpsMainLoop(screenManager, lunaCanvas);
 

@@ -66,7 +66,7 @@ public class SaltarEditorWindow extends JFrame {
         newProject.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                app.setProject(new Project());
+                app.setProject(new Project(app));
 //                projectSettings.setEnabled(true);
 //                projectSettings.doClick();
             }

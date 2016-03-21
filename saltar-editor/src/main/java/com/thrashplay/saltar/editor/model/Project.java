@@ -1,5 +1,13 @@
 package com.thrashplay.saltar.editor.model;
 
+import com.thrashplay.luna.api.component.Collider;
+import com.thrashplay.luna.api.component.ImageRenderer;
+import com.thrashplay.luna.api.component.Position;
+import com.thrashplay.luna.api.engine.GameObject;
+import com.thrashplay.luna.api.geom.Rectangle;
+import com.thrashplay.luna.api.graphics.LunaImage;
+import com.thrashplay.luna.api.graphics.SpriteSheet;
+
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
@@ -10,6 +18,8 @@ import java.beans.PropertyChangeSupport;
  */
 public class Project {
     private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
+
+    private SaltarEditorApp app;
 
     /// root folder for assets, should be the game project's assets folder
     private String assetsRoot;
@@ -28,7 +38,9 @@ public class Project {
     private int selectedTileY = 0;
 
     // todo: replace with me a settings dialog on projection creation / project settings from menu bar
-    public Project() {
+    public Project(SaltarEditorApp app) {
+        this.app = app;
+
         assetsRoot = "C:\\sandbox\\thrashplay-android-apps\\modules\\saltar\\saltar-app\\src\\main\\assets";
         spriteSheet = "spritesheets\\level1_spritesheet.json";
         level = new Level(2000, 500);
@@ -96,5 +108,17 @@ public class Project {
 
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         this.pcs.removePropertyChangeListener(listener);
+    }
+
+    public GameObject createGameObjectFromSelectedTemplate() {
+        SpriteSheet spriteSheet = app.getImageManager().createSpriteSheet(assetsRoot, this.spriteSheet);
+        LunaImage image = spriteSheet.getImage(selectedTemplate);
+
+        GameObject gameObject = new GameObject();
+        gameObject.addComponent(new Position());        // position will be set by the tool that creates us
+        gameObject.addComponent(new ImageRenderer(image, true));
+        gameObject.addComponent(new Collider(2, false, new Rectangle(0, 0, level.getTileSize(), level.getTileSize())));
+
+        return gameObject;
     }
 }

@@ -1,7 +1,7 @@
 package com.thrashplay.saltar.editor;
 
 import com.thrashplay.saltar.editor.model.SaltarEditorApp;
-import com.thrashplay.saltar.editor.ui.NavigationUiManager;
+import com.thrashplay.saltar.editor.ui.UiGameObjectManager;
 import com.thrashplay.saltar.editor.swing.SaltarEditorWindow;
 
 /**
@@ -21,7 +21,7 @@ public class Main {
         app.getMainLoop().resume();
 
         // add grid
-        NavigationUiManager navigationUiManager = new NavigationUiManager(
+        UiGameObjectManager navigationUiManager = new UiGameObjectManager(
                 app.getInputManager(),
                 app.getLeftMouseButtonTouchManager(),
                 app.getMiddleMouseButtonTouchManager(),
