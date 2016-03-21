@@ -29,7 +29,7 @@ public class SaltarEditorWindow extends JFrame {
 
         GameObject temp__for__testing = new GameObject(GameObjectIds.ID_VIEWPORT);
         temp__for__testing.addComponent(new Position(0, 0, Saltar.SCENE_WIDTH, Saltar.SCENE_HEIGHT));
-        temp__for__testing.addComponent(new MouseViewportController(app.getMouseTouchManager(), null));
+        temp__for__testing.addComponent(new MouseViewportController(app.getLeftMouseButtonTouchManager(), null));
         temp__for__testing.addComponent(new SelectedTileTrackingViewportController(null, null));
 
         GameObjectPropertiesPanel gameObjectPropertiesPanel = new GameObjectPropertiesPanel(temp__for__testing);

@@ -21,7 +21,12 @@ public class Main {
         app.getMainLoop().resume();
 
         // add grid
-        NavigationUiManager navigationUiManager = new NavigationUiManager(app.getInputManager(), app.getMouseTouchManager(), app.getScreen().getGameObjectManager(), app.getIdGenerator());
+        NavigationUiManager navigationUiManager = new NavigationUiManager(
+                app.getInputManager(),
+                app.getLeftMouseButtonTouchManager(),
+                app.getMiddleMouseButtonTouchManager(),
+                app.getScreen().getGameObjectManager(),
+                app.getIdGenerator());
         app.addProjectChangeListener(navigationUiManager);
 
 

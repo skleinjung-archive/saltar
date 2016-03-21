@@ -19,16 +19,18 @@ import com.thrashplay.saltar.editor.screen.GridRenderer;
  */
 public class NavigationUiManager implements ProjectChangeListener {
     private InputManager inputManager;
-    private MouseTouchManager mouseTouchManager;
+    private MouseTouchManager leftMouseTouchManager;
+    private MouseTouchManager middleMouseTouchManager;
     private GameObjectManager gameObjectManager;
     private IdGenerator idGenerator;
 
     private GameObject grid;
     private GameObject viewport;
 
-    public NavigationUiManager(InputManager inputManager, MouseTouchManager mouseTouchManager, GameObjectManager gameObjectManager, IdGenerator idGenerator) {
+    public NavigationUiManager(InputManager inputManager, MouseTouchManager leftMouseTouchManager, MouseTouchManager middleMouseTouchManager, GameObjectManager gameObjectManager, IdGenerator idGenerator) {
         this.inputManager = inputManager;
-        this.mouseTouchManager = mouseTouchManager;
+        this.leftMouseTouchManager = leftMouseTouchManager;
+        this.middleMouseTouchManager = middleMouseTouchManager;
         this.gameObjectManager = gameObjectManager;
         this.idGenerator = idGenerator;
     }
@@ -41,12 +43,13 @@ public class NavigationUiManager implements ProjectChangeListener {
         if (newProject != null) {
             grid = new GameObject(idGenerator.getId("saltar-level-editor-grid"));
             grid.addComponent(new GridRenderer(newProject, newProject.getLevel()));
+            grid.addComponent(new MouseSelectionController(newProject, leftMouseTouchManager, gameObjectManager));
             grid.addComponent(new KeyboardGridNavigationController(inputManager, newProject));
             gameObjectManager.register(grid);
 
             viewport = new GameObject(GameObjectIds.ID_VIEWPORT);
             viewport.addComponent(new Position(0, 0, Saltar.SCENE_WIDTH, Saltar.SCENE_HEIGHT));
-            viewport.addComponent(new MouseViewportController(mouseTouchManager, gameObjectManager));
+            viewport.addComponent(new MouseViewportController(middleMouseTouchManager, gameObjectManager));
             viewport.addComponent(new SelectedTileTrackingViewportController(newProject, gameObjectManager));
             gameObjectManager.register(viewport);
         } else {

@@ -15,6 +15,7 @@ import com.thrashplay.luna.renderable.ClearScreen;
 import com.thrashplay.saltar.editor.screen.MutableScreen;
 
 import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -37,7 +38,8 @@ public class SaltarEditorApp {
     // managers
     private DefaultScreenManager screenManager;
     private DefaultInputManager inputManager;
-    private MouseTouchManager mouseTouchManager;
+    private MouseTouchManager leftMouseButtonTouchManager;
+    private MouseTouchManager middleMouseButtonTouchManager;
     private DesktopImageManager imageManager;
 
     public void initialize() {
@@ -52,7 +54,8 @@ public class SaltarEditorApp {
         screenManager.registerScreen("default", screen);
         screenManager.setCurrentScreen("default");
 
-        mouseTouchManager = new MouseTouchManager(lunaCanvas, 480, 320);
+        leftMouseButtonTouchManager = new MouseTouchManager(lunaCanvas, MouseEvent.BUTTON1, 480, 320);
+        middleMouseButtonTouchManager = new MouseTouchManager(lunaCanvas, MouseEvent.BUTTON2, 480, 320);
         inputManager = new DefaultInputManager();
         inputManager.addKeyboard(new DesktopKeyboard(lunaCanvas));
         imageManager = new DesktopImageManager(new DesktopSpriteSheetConfigManager());
@@ -79,8 +82,12 @@ public class SaltarEditorApp {
         return inputManager;
     }
 
-    public MouseTouchManager getMouseTouchManager() {
-        return mouseTouchManager;
+    public MouseTouchManager getLeftMouseButtonTouchManager() {
+        return leftMouseButtonTouchManager;
+    }
+
+    public MouseTouchManager getMiddleMouseButtonTouchManager() {
+        return middleMouseButtonTouchManager;
     }
 
     public DesktopImageManager getImageManager() {
