@@ -10,9 +10,9 @@ public class Level {
     private int height;
     private int tileSize = 32;
 
-    public Level(int width, int height) {
-        this.width = width;
-        this.height = height;
+    public Level(int gridWidth, int gridHeight) {
+        this.width = gridWidth * tileSize;
+        this.height = gridHeight * tileSize;
     }
 
     public int getWidth() {

@@ -51,7 +51,9 @@ public class Project {
 
         assetsRoot = "C:\\sandbox\\thrashplay-android-apps\\modules\\saltar\\saltar-app\\src\\main\\assets";
         spriteSheet = "spritesheets\\level1_spritesheet.json";
-        level = new Level(2000, 500);
+
+        //level = new Level(240, 26);  <- mario maker dimensions
+        level = new Level(80, 26);
 
         resizeGameObjectGrid();
     }

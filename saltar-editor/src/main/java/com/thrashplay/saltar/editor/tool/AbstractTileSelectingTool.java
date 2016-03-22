@@ -6,6 +6,7 @@ import com.thrashplay.luna.api.engine.GameObject;
 import com.thrashplay.luna.api.engine.GameObjectIds;
 import com.thrashplay.luna.api.engine.GameObjectManager;
 import com.thrashplay.luna.desktop.input.MouseTouchManager;
+import com.thrashplay.saltar.editor.model.Level;
 import com.thrashplay.saltar.editor.model.Project;
 
 /**
@@ -39,9 +40,15 @@ public class AbstractTileSelectingTool implements UpdateableComponent {
                 int tileX = xCoordinate / tileSize;
                 int tileY = yCoordinate / tileSize;
 
-                project.setSelectedTileX(tileX);
-                project.setSelectedTileY(tileY);
+                if (isSelectionInBounds(project.getLevel(), tileX, tileY)) {
+                    project.setSelectedTileX(tileX);
+                    project.setSelectedTileY(tileY);
+                }
             }
         }
+    }
+
+    private boolean isSelectionInBounds(Level level, int tileX, int tileY) {
+        return tileX >= 0 && tileX < level.getGridSizeX() && tileY >= 0 && tileY < level.getGridSizeY();
     }
 }
