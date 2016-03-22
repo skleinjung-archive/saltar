@@ -8,11 +8,13 @@ import com.thrashplay.saltar.editor.model.SaltarEditorApp;
 import com.thrashplay.saltar.editor.model.Project;
 import com.thrashplay.saltar.editor.ui.MouseViewportController;
 import com.thrashplay.saltar.editor.ui.SelectedTileTrackingViewportController;
+import com.thrashplay.saltar.editor.ui.ToolType;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.URL;
 
 /**
  * TODO: Add class documentation
@@ -48,11 +50,19 @@ public class SaltarEditorWindow extends JFrame {
         splitPane.setOneTouchExpandable(true);
         splitPane.setDividerLocation(760);
 
-
         getContentPane().setLayout(new BorderLayout());
         getContentPane().add(splitPane, BorderLayout.CENTER);
         getContentPane().add(new JScrollPane(new TileTemplateToolbar(app)), BorderLayout.LINE_START);
+        getContentPane().add(createToolbar(), BorderLayout.PAGE_START);
 
+        MenuBar menubar = createMenu(app);
+        setMenuBar(menubar);
+
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        pack();
+    }
+
+    private MenuBar createMenu(final SaltarEditorApp app) {
         MenuBar menubar = new MenuBar();
         Menu file = new Menu("File");
         Menu settings = new Menu("Settings");
@@ -83,10 +93,31 @@ public class SaltarEditorWindow extends JFrame {
         file.add(newProject);
 //        settings.add(projectSettings);
 //        settings.add(applicationSettings);
-
-        setMenuBar(menubar);
-
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        pack();
+        return menubar;
     }
+
+    private JToolBar createToolbar() {
+        JToolBar toolbar = new JToolBar(JToolBar.HORIZONTAL);
+        toolbar.setFloatable(false);
+
+        ButtonGroup buttonGroup = new ButtonGroup();
+        toolbar.add(createButton(buttonGroup, ToolType.Select, "/icons/select.png"));
+        toolbar.add(createButton(buttonGroup, ToolType.Paint, "/icons/paint.png"));
+        toolbar.add(createButton(buttonGroup, ToolType.Erase, "/icons/delete.png"));
+        toolbar.add(createButton(buttonGroup, ToolType.PlacePlayer, "/icons/player.png"));
+        return toolbar;
+    }
+
+    private AbstractButton createButton(ButtonGroup buttonGroup, ToolType toolType, String iconPath) {
+        URL imageUrl = SaltarToolbar.class.getResource(iconPath);
+
+        JToggleButton button = new JToggleButton();
+        button.setIcon(new ImageIcon(imageUrl));
+
+        buttonGroup.add(button);
+
+        return button;
+    }
+
+
 }
