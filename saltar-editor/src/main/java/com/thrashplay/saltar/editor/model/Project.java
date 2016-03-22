@@ -7,10 +7,15 @@ import com.thrashplay.luna.api.engine.GameObject;
 import com.thrashplay.luna.api.geom.Rectangle;
 import com.thrashplay.luna.api.graphics.LunaImage;
 import com.thrashplay.luna.api.graphics.SpriteSheet;
+import com.thrashplay.luna.api.level.config.*;
 import com.thrashplay.saltar.editor.ui.ToolType;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
 
 /**
  * TODO: Add class documentation
@@ -42,6 +47,7 @@ public class Project {
     private int selectedTileY = 0;
 
     private GameObject[][] gameObjects;
+    private Map<GameObject, GameObjectConfig> gameObjectConfigs = new HashMap<>();
 
     // todo: replace with me a settings dialog on projection creation / project settings from menu bar
     public Project(SaltarEditorApp app) {
@@ -137,8 +143,50 @@ public class Project {
         return gameObjects[tileY][tileX];
     }
 
-    public void setGameObject(int tileX, int tileY, GameObject gameObject) {
-        gameObjects[tileY][tileX] = gameObject;
+    public GameObject createGameObject() {
+        if (selectedTemplate == -1) {
+            return null;
+        }
+
+        PositionConfig position = new PositionConfig();
+        position.setX(selectedTileX * level.getTileSize());
+        position.setY(selectedTileY * level.getTileSize());
+
+        RendererConfig renderer = new RendererConfig();
+        renderer.setTileMapId(1);
+        renderer.setImageId(selectedTemplate);
+
+        GameObjectConfig config = new GameObjectConfig();
+        config.setPosition(position);
+        config.setRenderer(renderer);
+
+        SpriteSheet spriteSheet = app.getImageManager().createSpriteSheet(assetsRoot, this.spriteSheet);
+        LunaImage image = spriteSheet.getImage(renderer.getImageId());
+
+        GameObject gameObject = new GameObject();
+        gameObject.addComponent(new Position(position.getX(), position.getY()));
+        gameObject.addComponent(new ImageRenderer(image, true));
+        gameObject.addComponent(new Collider(2, false, new Rectangle(0, 0, level.getTileSize(), level.getTileSize())));
+
+        gameObjectConfigs.put(gameObject, config);
+        gameObjects[selectedTileY][selectedTileX] = gameObject;
+        return gameObject;
+    }
+
+    public void eraseGameObject(int tileX, int tileY) {
+        gameObjectConfigs.remove(gameObjects[tileY][tileX]);
+        gameObjects[tileY][tileX] = null;
+    }
+
+    public LevelConfig getLevelConfig() {
+        TileMapConfig tileMapConfig = new TileMapConfig();
+        tileMapConfig.setId(1);
+        tileMapConfig.setResource(spriteSheet);
+
+        LevelConfig level = new LevelConfig();
+        level.setObjects(new LinkedList<GameObjectConfig>(gameObjectConfigs.values()));
+        level.setTileMaps(Arrays.asList(tileMapConfig));
+        return level;
     }
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
@@ -147,18 +195,6 @@ public class Project {
 
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         this.pcs.removePropertyChangeListener(listener);
-    }
-
-    public GameObject createGameObjectFromSelectedTemplate() {
-        SpriteSheet spriteSheet = app.getImageManager().createSpriteSheet(assetsRoot, this.spriteSheet);
-        LunaImage image = spriteSheet.getImage(selectedTemplate);
-
-        GameObject gameObject = new GameObject();
-        gameObject.addComponent(new Position());        // position will be set by the tool that creates us
-        gameObject.addComponent(new ImageRenderer(image, true));
-        gameObject.addComponent(new Collider(2, false, new Rectangle(0, 0, level.getTileSize(), level.getTileSize())));
-
-        return gameObject;
     }
 
     private void resizeGameObjectGrid() {

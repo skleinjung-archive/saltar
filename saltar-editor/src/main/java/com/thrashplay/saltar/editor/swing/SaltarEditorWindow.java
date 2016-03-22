@@ -1,19 +1,20 @@
 package com.thrashplay.saltar.editor.swing;
 
-import com.thrashplay.luna.api.component.Position;
-import com.thrashplay.luna.api.engine.GameObject;
-import com.thrashplay.luna.api.engine.GameObjectIds;
-import com.thrashplay.saltar.Saltar;
-import com.thrashplay.saltar.editor.model.SaltarEditorApp;
+import com.google.gson.Gson;
+import com.thrashplay.luna.api.LunaException;
 import com.thrashplay.saltar.editor.model.Project;
-import com.thrashplay.saltar.editor.ui.MouseViewportController;
-import com.thrashplay.saltar.editor.ui.SelectedTileTrackingViewportController;
+import com.thrashplay.saltar.editor.model.ProjectChangeListener;
+import com.thrashplay.saltar.editor.model.SaltarEditorApp;
 import com.thrashplay.saltar.editor.ui.ToolType;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.net.URL;
 
 /**
@@ -29,12 +30,7 @@ public class SaltarEditorWindow extends JFrame {
         lunaCanvasHolder.setLayout(new GridLayout(1, 1));
         lunaCanvasHolder.add(app.getLunaCanvas());
 
-        GameObject temp__for__testing = new GameObject(GameObjectIds.ID_VIEWPORT);
-        temp__for__testing.addComponent(new Position(0, 0, Saltar.SCENE_WIDTH, Saltar.SCENE_HEIGHT));
-        temp__for__testing.addComponent(new MouseViewportController(app.getLeftMouseButtonTouchManager(), null));
-        temp__for__testing.addComponent(new SelectedTileTrackingViewportController(null, null));
-
-        GameObjectPropertiesPanel gameObjectPropertiesPanel = new GameObjectPropertiesPanel(temp__for__testing);
+        GameObjectPropertiesPanel gameObjectPropertiesPanel = createGameObjectPropertiesPanel(app);
         JScrollPane gameObjectPropertiesScrollPane = new JScrollPane(gameObjectPropertiesPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
         ProjectPropertiesPanel projectPropertiesPanel = new ProjectPropertiesPanel();
@@ -62,6 +58,34 @@ public class SaltarEditorWindow extends JFrame {
         pack();
     }
 
+    private GameObjectPropertiesPanel createGameObjectPropertiesPanel(SaltarEditorApp app) {
+        final GameObjectPropertiesPanel result = new GameObjectPropertiesPanel(null);
+
+        final PropertyChangeListener selectionPropertyChangeListener = new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent event) {
+                if ("selectedTileX".equals(event.getPropertyName()) || "selectedTileY".equals(event.getPropertyName())) {
+                    Project project = (Project) event.getSource();
+                    result.setGameObject(project.getGameObject(project.getSelectedTileX(), project.getSelectedTileY()));
+                }
+            }
+        };
+
+        app.addProjectChangeListener(new ProjectChangeListener() {
+            @Override
+            public void onProjectChanged(Project oldProject, Project newProject) {
+                if (oldProject != null) {
+                    oldProject.removePropertyChangeListener(selectionPropertyChangeListener);
+                }
+                if (newProject != null) {
+                    newProject.addPropertyChangeListener(selectionPropertyChangeListener);
+                }
+            }
+        });
+
+        return result;
+    }
+
     private MenuBar createMenu(final SaltarEditorApp app) {
         MenuBar menubar = new MenuBar();
         Menu file = new Menu("File");
@@ -70,7 +94,8 @@ public class SaltarEditorWindow extends JFrame {
 //        menubar.add(settings);
 
         MenuItem newProject = new MenuItem("New Project");
-        final JMenuItem projectSettings = new JMenuItem("Project...");
+        MenuItem exportMap = new MenuItem("Export Map");
+        final MenuItem projectSettings = new MenuItem("Project...");
         MenuItem applicationSettings = new MenuItem("Application...");
 
         newProject.addActionListener(new ActionListener() {
@@ -79,6 +104,31 @@ public class SaltarEditorWindow extends JFrame {
                 app.setProject(new Project(app));
 //                projectSettings.setEnabled(true);
 //                projectSettings.doClick();
+            }
+        });
+
+        exportMap.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Gson gson = new Gson();
+                JFileChooser fileChooser = new JFileChooser();
+                int result = fileChooser.showSaveDialog(SaltarEditorWindow.this);
+                if (result == JFileChooser.APPROVE_OPTION) {
+                    FileWriter writer = null;
+                    try {
+                        writer = new FileWriter(fileChooser.getSelectedFile().getAbsolutePath());
+                        gson.toJson(app.getProject().getLevelConfig(), writer);
+                    } catch (IOException e1) {
+                        throw new LunaException("Failed to write to file '" + fileChooser.getSelectedFile() + "': " + e1.toString(), e1);
+                    } finally {
+                        if (writer != null) {
+                            try {
+                                writer.close();
+                            } catch (IOException e1) { }
+                        }
+                    }
+                }
+                System.out.println(new Gson().toJson(app.getProject().getLevelConfig()));
             }
         });
 
@@ -91,6 +141,7 @@ public class SaltarEditorWindow extends JFrame {
         });
 
         file.add(newProject);
+        file.add(exportMap);
 //        settings.add(projectSettings);
 //        settings.add(applicationSettings);
         return menubar;

@@ -15,10 +15,15 @@ public class GameObjectPropertiesPanel extends PropertiesPanel {
 
     public GameObjectPropertiesPanel(GameObject gameObject) {
         this.gameObject = gameObject;
-        updateProperties(gameObject);
+        updateProperties();
     }
 
-    private void updateProperties(GameObject gameObject) {
+    public void setGameObject(GameObject gameObject) {
+        this.gameObject = gameObject;
+        updateProperties();
+    }
+
+    private void updateProperties() {
         removeAll();
 
         if (gameObject != null) {
@@ -42,8 +47,13 @@ public class GameObjectPropertiesPanel extends PropertiesPanel {
                     addComment("No editable properties");
                 }
             }
+        } else {
+            addSection("GameObject Properties");
+            addComment("No object selected.");
         }
 
         addBottomBuffer();
+
+        revalidate();
     }
 }

@@ -29,7 +29,7 @@ public class EraseToolComponent extends AbstractTileSelectingTool {
         if (leftMouseButtonTouchManager.isDown()) {
             GameObject objectToRemove = project.getGameObject(project.getSelectedTileX(), project.getSelectedTileY());
             gameObjectManager.unregister(objectToRemove);
-            project.setGameObject(project.getSelectedTileX(), project.getSelectedTileY(), null);
+            project.eraseGameObject(project.getSelectedTileX(), project.getSelectedTileY());
         }
     }
 }

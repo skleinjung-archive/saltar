@@ -26,7 +26,7 @@ public class PropertiesPanel extends JPanel {
         GridBagConstraints c = new GridBagConstraints();
         c.gridy = currentRow++;
         c.gridwidth = 2;
-        c.insets = new Insets(15, 10, 10, 5);
+        c.insets = new Insets(15, 5, 10, 5);
         c.fill = GridBagConstraints.HORIZONTAL;
         c.anchor = GridBagConstraints.LINE_START;
         c.weightx = 1.0f;
@@ -54,7 +54,10 @@ public class PropertiesPanel extends JPanel {
         JLabel label = new JLabel(name);
         final JTextField textField = new JTextField();
         try {
-            textField.setText(PropertyUtils.getProperty(object, name).toString());
+            Object value = PropertyUtils.getProperty(object, name);
+            if (value != null) {
+                textField.setText(value.toString());
+            }
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             throw new LunaException("Failed to create property editor for property '" + name + "' on bean '" + object + "': " + e.toString(), e);
         }
