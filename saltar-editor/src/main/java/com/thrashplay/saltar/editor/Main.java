@@ -1,6 +1,7 @@
 package com.thrashplay.saltar.editor;
 
 import com.thrashplay.saltar.editor.model.SaltarEditorApp;
+import com.thrashplay.saltar.editor.ui.ToolGameObjectManager;
 import com.thrashplay.saltar.editor.ui.UiGameObjectManager;
 import com.thrashplay.saltar.editor.swing.SaltarEditorWindow;
 
@@ -28,6 +29,9 @@ public class Main {
                 app.getScreen().getGameObjectManager(),
                 app.getIdGenerator());
         app.addProjectChangeListener(navigationUiManager);
+
+        ToolGameObjectManager toolGameObjectManager = new ToolGameObjectManager(app.getLeftMouseButtonTouchManager(), app.getScreen().getGameObjectManager());
+        app.addProjectChangeListener(toolGameObjectManager);
 
 
 //        GameObject grid = new GameObject("saltar-editor-grid");

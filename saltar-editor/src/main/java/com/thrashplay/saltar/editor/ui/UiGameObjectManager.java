@@ -11,7 +11,6 @@ import com.thrashplay.saltar.editor.model.IdGenerator;
 import com.thrashplay.saltar.editor.model.Project;
 import com.thrashplay.saltar.editor.model.ProjectChangeListener;
 import com.thrashplay.saltar.editor.screen.GridRenderer;
-import com.thrashplay.saltar.editor.tool.PaintbrushToolComponent;
 
 /**
  * Registers and unregisteres navigation components such as a grid and mouse viewport.
@@ -25,7 +24,6 @@ public class UiGameObjectManager implements ProjectChangeListener {
     private GameObjectManager gameObjectManager;
     private IdGenerator idGenerator;
 
-    private GameObject tool;
     private GameObject grid;
     private GameObject viewport;
 
@@ -39,16 +37,12 @@ public class UiGameObjectManager implements ProjectChangeListener {
 
     @Override
     public void onProjectChanged(Project oldProject, Project newProject) {
-        unregister(tool);
         unregister(grid);
         unregister(viewport);
 
         if (newProject != null) {
-            GameObject tool = new GameObject("saltar-editor-tool");
-            tool.addComponent(new PaintbrushToolComponent(newProject, leftMouseTouchManager, gameObjectManager));
-            gameObjectManager.register(tool);
-
             grid = new GameObject(idGenerator.getId("saltar-level-editor-grid"));
+            grid.setRenderLayer(GameObject.RenderLayer.Foreground);
             grid.addComponent(new GridRenderer(newProject, newProject.getLevel()));
 //            grid.addComponent(new MouseSelectionController(newProject, leftMouseTouchManager, gameObjectManager));
             grid.addComponent(new KeyboardGridNavigationController(inputManager, newProject));
@@ -60,7 +54,6 @@ public class UiGameObjectManager implements ProjectChangeListener {
             viewport.addComponent(new SelectedTileTrackingViewportController(newProject, gameObjectManager));
             gameObjectManager.register(viewport);
         } else {
-            tool = null;
             grid = null;
             viewport = null;
         }

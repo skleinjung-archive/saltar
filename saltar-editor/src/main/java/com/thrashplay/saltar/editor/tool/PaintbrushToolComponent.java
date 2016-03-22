@@ -30,13 +30,16 @@ public class PaintbrushToolComponent extends AbstractTileSelectingTool implement
         super.update(gameObject, delta);
 
         if (leftMouseButtonTouchManager.isDown() && project.getSelectedTemplate() != -1) {
-            GameObject newGameObject = project.createGameObjectFromSelectedTemplate();
-            Position position = newGameObject.getComponent(Position.class);
-            int tileSize = project.getLevel().getTileSize();
-            position.setX(project.getSelectedTileX() * tileSize);
-            position.setY(project.getSelectedTileY() * tileSize);
+            if (project.getGameObject(project.getSelectedTileX(), project.getSelectedTileY()) == null) {
+                GameObject newGameObject = project.createGameObjectFromSelectedTemplate();
+                Position position = newGameObject.getComponent(Position.class);
+                int tileSize = project.getLevel().getTileSize();
+                position.setX(project.getSelectedTileX() * tileSize);
+                position.setY(project.getSelectedTileY() * tileSize);
+                project.setGameObject(project.getSelectedTileX(), project.getSelectedTileY(), newGameObject);
 
-            gameObjectManager.register(newGameObject);
+                gameObjectManager.register(newGameObject);
+            }
         }
     }
 

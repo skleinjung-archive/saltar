@@ -53,7 +53,7 @@ public class SaltarEditorWindow extends JFrame {
         getContentPane().setLayout(new BorderLayout());
         getContentPane().add(splitPane, BorderLayout.CENTER);
         getContentPane().add(new JScrollPane(new TileTemplateToolbar(app)), BorderLayout.LINE_START);
-        getContentPane().add(createToolbar(), BorderLayout.PAGE_START);
+        getContentPane().add(createToolbar(app), BorderLayout.PAGE_START);
 
         MenuBar menubar = createMenu(app);
         setMenuBar(menubar);
@@ -96,24 +96,29 @@ public class SaltarEditorWindow extends JFrame {
         return menubar;
     }
 
-    private JToolBar createToolbar() {
+    private JToolBar createToolbar(SaltarEditorApp app) {
         JToolBar toolbar = new JToolBar(JToolBar.HORIZONTAL);
         toolbar.setFloatable(false);
 
         ButtonGroup buttonGroup = new ButtonGroup();
-        toolbar.add(createButton(buttonGroup, ToolType.Select, "/icons/select.png"));
-        toolbar.add(createButton(buttonGroup, ToolType.Paint, "/icons/paint.png"));
-        toolbar.add(createButton(buttonGroup, ToolType.Erase, "/icons/delete.png"));
-        toolbar.add(createButton(buttonGroup, ToolType.PlacePlayer, "/icons/player.png"));
+        toolbar.add(createButton(app, buttonGroup, ToolType.Select, "/icons/select.png"));
+        toolbar.add(createButton(app, buttonGroup, ToolType.Paint, "/icons/paint.png"));
+        toolbar.add(createButton(app, buttonGroup, ToolType.Erase, "/icons/delete.png"));
+        toolbar.add(createButton(app, buttonGroup, ToolType.PlacePlayer, "/icons/player.png"));
         return toolbar;
     }
 
-    private AbstractButton createButton(ButtonGroup buttonGroup, ToolType toolType, String iconPath) {
-        URL imageUrl = SaltarToolbar.class.getResource(iconPath);
+    private AbstractButton createButton(final SaltarEditorApp app, final ButtonGroup buttonGroup, final ToolType toolType, final String iconPath) {
+        URL imageUrl = SaltarEditorWindow.class.getResource(iconPath);
 
         JToggleButton button = new JToggleButton();
         button.setIcon(new ImageIcon(imageUrl));
-
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                app.getProject().setSelectedTool(toolType);
+            }
+        });
         buttonGroup.add(button);
 
         return button;
