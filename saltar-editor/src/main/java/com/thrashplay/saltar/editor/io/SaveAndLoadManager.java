@@ -40,7 +40,7 @@ public class SaveAndLoadManager {
     public void saveProject(Project project) {
         if (projectFileChooser == null) {
             projectFileChooser = new JFileChooser();
-            projectFileChooser.setCurrentDirectory(new File("C:\\sandbox\\thrashplay-android-apps\\modules\\saltar\\saltar-app\\src\\main\\assets\\levels"));
+            projectFileChooser.setCurrentDirectory(new File("C:\\sandbox\\thrashplay-android-apps\\modules\\saltar\\assets\\levels"));
         }
 
         doExport(projectFileChooser, project);
@@ -49,7 +49,7 @@ public class SaveAndLoadManager {
     public void loadProject() {
         if (projectFileChooser == null) {
             projectFileChooser = new JFileChooser();
-            projectFileChooser.setCurrentDirectory(new File("C:\\sandbox\\thrashplay-android-apps\\modules\\saltar\\saltar-app\\src\\main\\assets\\levels"));
+            projectFileChooser.setCurrentDirectory(new File("C:\\sandbox\\thrashplay-android-apps\\modules\\saltar\\assets\\levels"));
         }
 
         int result = projectFileChooser.showSaveDialog(app.getWindow());

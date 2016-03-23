@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.net.URL;
+import java.util.Enumeration;
 
 /**
  * TODO: Add class documentation
@@ -149,11 +150,29 @@ public class SaltarEditorWindow extends JFrame {
         JToolBar toolbar = new JToolBar(JToolBar.HORIZONTAL);
         toolbar.setFloatable(false);
 
-        ButtonGroup buttonGroup = new ButtonGroup();
-        toolbar.add(createButton(app, buttonGroup, ToolType.Select, "/icons/select.png"));
+        final ButtonGroup buttonGroup = new ButtonGroup();
+        final AbstractButton selectToolButton = createButton(app, buttonGroup, ToolType.Select, "/icons/select.png");
+        toolbar.add(selectToolButton);
         toolbar.add(createButton(app, buttonGroup, ToolType.Paint, "/icons/paint.png"));
         toolbar.add(createButton(app, buttonGroup, ToolType.Erase, "/icons/delete.png"));
         toolbar.add(createButton(app, buttonGroup, ToolType.PlacePlayer, "/icons/player.png"));
+
+        // when a new project is created or loaded, change back to the select tool
+        app.addProjectChangeListener(new ProjectChangeListener() {
+            @Override
+            public void onProjectChanged(Project oldProject, Project newProject) {
+                Enumeration<AbstractButton> buttons = buttonGroup.getElements();
+                while (buttons.hasMoreElements()) {
+                    AbstractButton button = buttons.nextElement();
+                    if (button instanceof JToggleButton) {
+                        button.setSelected(false);
+                    }
+                }
+
+                selectToolButton.setSelected(true);
+            }
+        });
+
         return toolbar;
     }
 

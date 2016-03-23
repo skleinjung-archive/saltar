@@ -18,7 +18,7 @@ import java.beans.PropertyChangeListener;
  *
  * @author Sean Kleinjung
  */
-public class ToolGameObjectManager implements ProjectChangeListener {
+public class ToolManager implements ProjectChangeListener {
     private MouseTouchManager leftMouseTouchManager;
     private GameObjectGridSelectionManager gameObjectGridSelectionManager;
     private GameObjectManager gameObjectManager;
@@ -26,7 +26,7 @@ public class ToolGameObjectManager implements ProjectChangeListener {
 
     private GameObject tool;
 
-    public ToolGameObjectManager(GameObjectFactory gameObjectFactory, GameObjectManager gameObjectManager, GameObjectGridSelectionManager gameObjectGridSelectionManager, MouseTouchManager leftMouseTouchManager) {
+    public ToolManager(GameObjectFactory gameObjectFactory, GameObjectManager gameObjectManager, GameObjectGridSelectionManager gameObjectGridSelectionManager, MouseTouchManager leftMouseTouchManager) {
         this.gameObjectFactory = gameObjectFactory;
         this.gameObjectManager = gameObjectManager;
         this.gameObjectGridSelectionManager = gameObjectGridSelectionManager;

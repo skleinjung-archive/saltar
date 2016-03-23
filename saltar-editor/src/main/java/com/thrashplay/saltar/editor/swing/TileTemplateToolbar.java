@@ -58,8 +58,15 @@ public class TileTemplateToolbar extends JPanel implements ProjectChangeListener
             for (int imageId : spriteSheet.getImageIds()) {
                 DesktopImage image = (DesktopImage) spriteSheet.getImage(imageId);
 
-                add(createButton(project, buttonGroup, imageId, image));
+                JToggleButton button = createButton(project, buttonGroup, imageId, image);
+                add(button);
                 add(Box.createVerticalStrut(3));
+
+                // select the first templte by default instead of no template
+                if (templateCount == 0) {
+                    button.setSelected(true);
+                    project.setSelectedTemplate(imageId);
+                }
 
                 templateCount++;
             }
