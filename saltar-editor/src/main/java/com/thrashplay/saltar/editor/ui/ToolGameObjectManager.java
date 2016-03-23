@@ -3,6 +3,7 @@ package com.thrashplay.saltar.editor.ui;
 import com.thrashplay.luna.api.engine.GameObject;
 import com.thrashplay.luna.api.engine.GameObjectManager;
 import com.thrashplay.luna.desktop.input.MouseTouchManager;
+import com.thrashplay.saltar.editor.model.GameObjectFactory;
 import com.thrashplay.saltar.editor.model.Project;
 import com.thrashplay.saltar.editor.model.ProjectChangeListener;
 import com.thrashplay.saltar.editor.tool.EraseToolComponent;
@@ -19,13 +20,17 @@ import java.beans.PropertyChangeListener;
  */
 public class ToolGameObjectManager implements ProjectChangeListener {
     private MouseTouchManager leftMouseTouchManager;
+    private GameObjectGridSelectionManager gameObjectGridSelectionManager;
     private GameObjectManager gameObjectManager;
+    private GameObjectFactory gameObjectFactory;
 
     private GameObject tool;
 
-    public ToolGameObjectManager(MouseTouchManager leftMouseTouchManager, GameObjectManager gameObjectManager) {
-        this.leftMouseTouchManager = leftMouseTouchManager;
+    public ToolGameObjectManager(GameObjectFactory gameObjectFactory, GameObjectManager gameObjectManager, GameObjectGridSelectionManager gameObjectGridSelectionManager, MouseTouchManager leftMouseTouchManager) {
+        this.gameObjectFactory = gameObjectFactory;
         this.gameObjectManager = gameObjectManager;
+        this.gameObjectGridSelectionManager = gameObjectGridSelectionManager;
+        this.leftMouseTouchManager = leftMouseTouchManager;
     }
 
     @Override
@@ -54,10 +59,10 @@ public class ToolGameObjectManager implements ProjectChangeListener {
                                 tool.addComponent(new SelectionToolComponent(project, leftMouseTouchManager, gameObjectManager));
                                 break;
                             case Paint:
-                                tool.addComponent(new PaintbrushToolComponent(project, leftMouseTouchManager, gameObjectManager));
+                                tool.addComponent(new PaintbrushToolComponent(project, leftMouseTouchManager, gameObjectManager, gameObjectFactory));
                                 break;
                             case Erase:
-                                tool.addComponent(new EraseToolComponent(project, leftMouseTouchManager, gameObjectManager));
+                                tool.addComponent(new EraseToolComponent(project, gameObjectGridSelectionManager, leftMouseTouchManager, gameObjectManager));
                                 break;
 
                         }

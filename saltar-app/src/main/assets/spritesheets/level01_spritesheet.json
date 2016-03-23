@@ -1,5 +1,5 @@
 {
-    "image":"graphics/level1_tiles.png",
+    "image":"graphics/level01_tiles.png",
     "sprites":[
         {
             "id": 1,

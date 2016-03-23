@@ -18,6 +18,7 @@ public class Main {
         SaltarEditorWindow window = new SaltarEditorWindow(app);
         window.setVisible(true);
 
+        app.setWindow(window);
         app.getLunaCanvas().initialize();
         app.getMainLoop().resume();
 
@@ -30,7 +31,7 @@ public class Main {
                 app.getIdGenerator());
         app.addProjectChangeListener(navigationUiManager);
 
-        ToolGameObjectManager toolGameObjectManager = new ToolGameObjectManager(app.getLeftMouseButtonTouchManager(), app.getScreen().getGameObjectManager());
+        ToolGameObjectManager toolGameObjectManager = new ToolGameObjectManager(app.getGameObjectFactory(), app.getScreen().getGameObjectManager(), app.getGameObjectGridSelectionManager(), app.getLeftMouseButtonTouchManager());
         app.addProjectChangeListener(toolGameObjectManager);
 
 

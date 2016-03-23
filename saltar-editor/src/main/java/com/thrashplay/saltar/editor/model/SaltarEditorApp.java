@@ -12,7 +12,10 @@ import com.thrashplay.luna.engine.LegacyGameObjectAdapter;
 import com.thrashplay.luna.engine.loop.FixedFpsMainLoop;
 import com.thrashplay.luna.input.DefaultInputManager;
 import com.thrashplay.luna.renderable.ClearScreen;
+import com.thrashplay.saltar.editor.io.SaveAndLoadManager;
 import com.thrashplay.saltar.editor.screen.MutableScreen;
+import com.thrashplay.saltar.editor.swing.SaltarEditorWindow;
+import com.thrashplay.saltar.editor.ui.GameObjectGridSelectionManager;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -28,6 +31,8 @@ public class SaltarEditorApp {
 
     private List<ProjectChangeListener> projectChangeListeners = new LinkedList<>();
 
+    private SaltarEditorWindow window;
+
     private Project project;
     private IdGenerator idGenerator;
 
@@ -42,6 +47,9 @@ public class SaltarEditorApp {
     private MouseTouchManager middleMouseButtonTouchManager;
     private DesktopSpriteSheetConfigManager spriteSheetConfigManager;
     private DesktopImageManager imageManager;
+    private GameObjectFactory gameObjectFactory;
+    private GameObjectGridSelectionManager gameObjectGridSelectionManager;
+    private SaveAndLoadManager saveAndLoadManager;
 
     public void initialize() {
         lunaCanvas = new LunaCanvas(480, 320);
@@ -61,11 +69,22 @@ public class SaltarEditorApp {
         inputManager.addKeyboard(new DesktopKeyboard(lunaCanvas));
         spriteSheetConfigManager = new DesktopSpriteSheetConfigManager();
         imageManager = new DesktopImageManager(spriteSheetConfigManager);
+        gameObjectFactory = new GameObjectFactory(imageManager, 32);
+        gameObjectGridSelectionManager = new GameObjectGridSelectionManager(screen.getGameObjectManager(), 32, 32);
+        saveAndLoadManager = new SaveAndLoadManager(this);
 
         mainLoop = new FixedFpsMainLoop(screenManager, lunaCanvas);
 
         // create model objects
         idGenerator = new IdGenerator();
+    }
+
+    public SaltarEditorWindow getWindow() {
+        return window;
+    }
+
+    public void setWindow(SaltarEditorWindow window) {
+        this.window = window;
     }
 
     public LunaCanvas getLunaCanvas() {
@@ -82,6 +101,14 @@ public class SaltarEditorApp {
 
     public InputManager getInputManager() {
         return inputManager;
+    }
+
+    public GameObjectFactory getGameObjectFactory() {
+        return gameObjectFactory;
+    }
+
+    public GameObjectGridSelectionManager getGameObjectGridSelectionManager() {
+        return gameObjectGridSelectionManager;
     }
 
     public MouseTouchManager getLeftMouseButtonTouchManager() {
@@ -108,6 +135,10 @@ public class SaltarEditorApp {
         this.idGenerator = idGenerator;
     }
 
+    public SaveAndLoadManager getSaveAndLoadManager() {
+        return saveAndLoadManager;
+    }
+
     public Project getProject() {
         return project;
     }
@@ -115,7 +146,16 @@ public class SaltarEditorApp {
     public void setProject(Project project) {
         Project oldProject = this.project;
         this.project = project;
+
+        reinitializeScreen();
+
         fireProjectChangedEvent(oldProject, this.project);
+    }
+
+    // reinitialize the screen for a new project
+    public void reinitializeScreen() {
+        screen.getGameObjectManager().unregisterAll();
+        screen.register(new LegacyGameObjectAdapter(new ClearScreen(0xff000000)));
     }
 
     public void addProjectChangeListener(ProjectChangeListener listener) {

@@ -1,21 +1,14 @@
 package com.thrashplay.saltar.editor.model;
 
-import com.thrashplay.luna.api.component.Collider;
-import com.thrashplay.luna.api.component.ImageRenderer;
-import com.thrashplay.luna.api.component.Position;
-import com.thrashplay.luna.api.engine.GameObject;
-import com.thrashplay.luna.api.geom.Rectangle;
-import com.thrashplay.luna.api.graphics.LunaImage;
-import com.thrashplay.luna.api.graphics.SpriteSheet;
+import com.thrashplay.luna.api.LunaException;
 import com.thrashplay.luna.api.level.config.*;
 import com.thrashplay.saltar.editor.ui.ToolType;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Map;
+import java.util.List;
 
 /**
  * TODO: Add class documentation
@@ -46,21 +39,17 @@ public class Project {
     private int selectedTileX = 0;
     private int selectedTileY = 0;
 
-    private GameObject[][] gameObjects;
-    private Map<GameObject, GameObjectConfig> gameObjectConfigs = new HashMap<>();
+    private GameObjectConfig[][] gameObjectConfigs = new GameObjectConfig[0][];
 
     // todo: replace with me a settings dialog on projection creation / project settings from menu bar
     public Project(SaltarEditorApp app) {
         this.app = app;
 
-        gameObjects = new GameObject[0][];
-
         assetsRoot = "C:\\sandbox\\thrashplay-android-apps\\modules\\saltar\\saltar-app\\src\\main\\assets";
-        spriteSheet = "spritesheets\\level1_spritesheet.json";
+        spriteSheet = "spritesheets/level01_spritesheet.json";
 
         //level = new Level(240, 26);  <- mario maker dimensions
         level = new Level(80, 26);
-
         resizeGameObjectGrid();
     }
 
@@ -133,17 +122,7 @@ public class Project {
         pcs.firePropertyChange("selectedTileY", oldValue, selectedTileY);
     }
 
-    /**
-     * Retrieves the game object at the specified tile grid coordinates.
-     * @param tileX the x coordinate of the tile
-     * @param tileY the y coordinate of the tile
-     * @return the matching game object, or null if an empty tile is referenced
-     */
-    public GameObject getGameObject(int tileX, int tileY) {
-        return gameObjects[tileY][tileX];
-    }
-
-    public GameObject createGameObject() {
+    public GameObjectConfig createGameObjectConfig() {
         if (selectedTemplate == -1) {
             return null;
         }
@@ -160,22 +139,17 @@ public class Project {
         config.setPosition(position);
         config.setRenderer(renderer);
 
-        SpriteSheet spriteSheet = app.getImageManager().createSpriteSheet(assetsRoot, this.spriteSheet);
-        LunaImage image = spriteSheet.getImage(renderer.getImageId());
+        gameObjectConfigs[selectedTileY][selectedTileX] = config;
 
-        GameObject gameObject = new GameObject();
-        gameObject.addComponent(new Position(position.getX(), position.getY()));
-        gameObject.addComponent(new ImageRenderer(image, true));
-        gameObject.addComponent(new Collider(2, false, new Rectangle(0, 0, level.getTileSize(), level.getTileSize())));
-
-        gameObjectConfigs.put(gameObject, config);
-        gameObjects[selectedTileY][selectedTileX] = gameObject;
-        return gameObject;
+        return config;
     }
 
-    public void eraseGameObject(int tileX, int tileY) {
-        gameObjectConfigs.remove(gameObjects[tileY][tileX]);
-        gameObjects[tileY][tileX] = null;
+    public GameObjectConfig getGameObjectConfig(int tileX, int tileY) {
+        return gameObjectConfigs[tileY][tileX];
+    }
+
+    public void removeTileConfig(int tileX, int tileY) {
+        gameObjectConfigs[tileY][tileX] = null;
     }
 
     public LevelConfig getLevelConfig() {
@@ -184,9 +158,36 @@ public class Project {
         tileMapConfig.setResource(spriteSheet);
 
         LevelConfig level = new LevelConfig();
-        level.setObjects(new LinkedList<GameObjectConfig>(gameObjectConfigs.values()));
+        List<GameObjectConfig> gameObjectConfigList = new LinkedList<>();
+        for (int y = 0; y < gameObjectConfigs.length; y++) {
+            for (int x = 0; x < gameObjectConfigs[0].length; x++) {
+                GameObjectConfig gameObjectConfig = gameObjectConfigs[y][x];
+                if (gameObjectConfig != null) {
+                    gameObjectConfigList.add(gameObjectConfig);
+                }
+            }
+        }
+        level.setObjects(gameObjectConfigList);
         level.setTileMaps(Arrays.asList(tileMapConfig));
         return level;
+    }
+
+    public void loadFrom(LevelConfig levelConfig) {
+        if (levelConfig.getTileMaps().size() > 1) {
+            throw new LunaException("Multiple tilemaps are not supported in this version of the editor.");
+        }
+
+        spriteSheet = levelConfig.getTileMaps().get(0).getResource();
+        resizeGameObjectGrid();
+
+        int tileWidth = level.getTileSize();
+        int tileHeight = level.getTileSize();
+        for (GameObjectConfig gameObjectConfig : levelConfig.getObjects()) {
+            PositionConfig position = gameObjectConfig.getPosition();
+            int tileX = position.getX() / tileWidth;
+            int tileY = position.getY() / tileHeight;
+            gameObjectConfigs[tileY][tileX] = gameObjectConfig;
+        }
     }
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
@@ -201,19 +202,19 @@ public class Project {
         int tileCountX = level.getGridSizeX();
         int tileCountY = level.getGridSizeY();
 
-        GameObject[][] newGrid = new GameObject[tileCountY][];
+        GameObjectConfig[][] newGrid = new GameObjectConfig[tileCountY][];
         for (int y = 0; y < tileCountY; y++) {
-            newGrid[y] = new GameObject[tileCountX];
+            newGrid[y] = new GameObjectConfig[tileCountX];
         }
 
-        for (int y = 0; y < gameObjects.length; y++) {
-            for (int x = 0; x < gameObjects[0].length; x++) {
+        for (int y = 0; y < gameObjectConfigs.length; y++) {
+            for (int x = 0; x < gameObjectConfigs[0].length; x++) {
                 if (y < tileCountY && x < tileCountX) {
-                    newGrid[y][x] = gameObjects[y][x];
+                    newGrid[y][x] = gameObjectConfigs[y][x];
                 }
             }
         }
 
-        gameObjects = newGrid;
+        gameObjectConfigs = newGrid;
     }
 }

@@ -1,7 +1,5 @@
 package com.thrashplay.saltar.editor.swing;
 
-import com.google.gson.Gson;
-import com.thrashplay.luna.api.LunaException;
 import com.thrashplay.saltar.editor.model.Project;
 import com.thrashplay.saltar.editor.model.ProjectChangeListener;
 import com.thrashplay.saltar.editor.model.SaltarEditorApp;
@@ -13,8 +11,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.net.URL;
 
 /**
@@ -66,7 +62,7 @@ public class SaltarEditorWindow extends JFrame {
             public void propertyChange(PropertyChangeEvent event) {
                 if ("selectedTileX".equals(event.getPropertyName()) || "selectedTileY".equals(event.getPropertyName())) {
                     Project project = (Project) event.getSource();
-                    result.setGameObject(project.getGameObject(project.getSelectedTileX(), project.getSelectedTileY()));
+                    //result.setGameObject(project.getGameObject(project.getSelectedTileX(), project.getSelectedTileY()));
                 }
             }
         };
@@ -94,7 +90,9 @@ public class SaltarEditorWindow extends JFrame {
 //        menubar.add(settings);
 
         MenuItem newProject = new MenuItem("New Project");
-        MenuItem exportMap = new MenuItem("Export Map");
+        MenuItem openProject = new MenuItem("Open Project...");
+        MenuItem saveProject = new MenuItem("Save Project...");
+        MenuItem exportLevel = new MenuItem("Export Level...");
         final MenuItem projectSettings = new MenuItem("Project...");
         MenuItem applicationSettings = new MenuItem("Application...");
 
@@ -107,28 +105,22 @@ public class SaltarEditorWindow extends JFrame {
             }
         });
 
-        exportMap.addActionListener(new ActionListener() {
+        exportLevel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Gson gson = new Gson();
-                JFileChooser fileChooser = new JFileChooser();
-                int result = fileChooser.showSaveDialog(SaltarEditorWindow.this);
-                if (result == JFileChooser.APPROVE_OPTION) {
-                    FileWriter writer = null;
-                    try {
-                        writer = new FileWriter(fileChooser.getSelectedFile().getAbsolutePath());
-                        gson.toJson(app.getProject().getLevelConfig(), writer);
-                    } catch (IOException e1) {
-                        throw new LunaException("Failed to write to file '" + fileChooser.getSelectedFile() + "': " + e1.toString(), e1);
-                    } finally {
-                        if (writer != null) {
-                            try {
-                                writer.close();
-                            } catch (IOException e1) { }
-                        }
-                    }
-                }
-                System.out.println(new Gson().toJson(app.getProject().getLevelConfig()));
+                app.getSaveAndLoadManager().exportLevel(app.getProject());
+            }
+        });
+        openProject.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                app.getSaveAndLoadManager().loadProject();
+            }
+        });
+        saveProject.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                app.getSaveAndLoadManager().saveProject(app.getProject());
             }
         });
 
@@ -141,9 +133,15 @@ public class SaltarEditorWindow extends JFrame {
         });
 
         file.add(newProject);
-        file.add(exportMap);
+        file.add(openProject);
+        file.addSeparator();
+        file.add(saveProject);
+        file.addSeparator();
+        file.add(exportLevel);
+
 //        settings.add(projectSettings);
 //        settings.add(applicationSettings);
+
         return menubar;
     }
 
