@@ -30,6 +30,9 @@ public class Project {
     // the level associated with this project, in the future we would like to support multiple levels per project
     private Level level;
 
+    private int startX = 0;
+    private int startY = 0;
+
     // the currently selected tool from the toolbar
     private ToolType selectedTool;
 
@@ -80,6 +83,22 @@ public class Project {
     public void setLevel(Level level) {
         this.level = level;
         resizeGameObjectGrid();
+    }
+
+    public int getStartX() {
+        return startX;
+    }
+
+    public void setStartX(int startX) {
+        this.startX = startX;
+    }
+
+    public int getStartY() {
+        return startY;
+    }
+
+    public void setStartY(int startY) {
+        this.startY = startY;
     }
 
     public int getSelectedTemplate() {
@@ -169,6 +188,8 @@ public class Project {
         }
         level.setObjects(gameObjectConfigList);
         level.setTileMaps(Arrays.asList(tileMapConfig));
+        level.setStartX(startX);
+        level.setStartY(startY);
         return level;
     }
 
@@ -176,6 +197,9 @@ public class Project {
         if (levelConfig.getTileMaps().size() > 1) {
             throw new LunaException("Multiple tilemaps are not supported in this version of the editor.");
         }
+
+        startX = levelConfig.getStartX();
+        startY = levelConfig.getStartY();
 
         spriteSheet = levelConfig.getTileMaps().get(0).getResource();
         resizeGameObjectGrid();

@@ -155,7 +155,7 @@ public class SaltarEditorWindow extends JFrame {
         toolbar.add(selectToolButton);
         toolbar.add(createButton(app, buttonGroup, ToolType.Paint, "/icons/paint.png"));
         toolbar.add(createButton(app, buttonGroup, ToolType.Erase, "/icons/delete.png"));
-        toolbar.add(createButton(app, buttonGroup, ToolType.PlacePlayer, "/icons/player.png"));
+        toolbar.add(createButton(app, buttonGroup, ToolType.StartPosition, "/icons/player.png"));
 
         // when a new project is created or loaded, change back to the select tool
         app.addProjectChangeListener(new ProjectChangeListener() {

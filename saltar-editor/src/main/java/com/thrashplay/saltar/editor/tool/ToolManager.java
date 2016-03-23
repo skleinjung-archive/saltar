@@ -1,4 +1,4 @@
-package com.thrashplay.saltar.editor.ui;
+package com.thrashplay.saltar.editor.tool;
 
 import com.thrashplay.luna.api.engine.GameObject;
 import com.thrashplay.luna.api.engine.GameObjectManager;
@@ -6,9 +6,9 @@ import com.thrashplay.luna.desktop.input.MouseTouchManager;
 import com.thrashplay.saltar.editor.model.GameObjectFactory;
 import com.thrashplay.saltar.editor.model.Project;
 import com.thrashplay.saltar.editor.model.ProjectChangeListener;
-import com.thrashplay.saltar.editor.tool.EraseToolComponent;
-import com.thrashplay.saltar.editor.tool.PaintbrushToolComponent;
-import com.thrashplay.saltar.editor.tool.SelectionToolComponent;
+import com.thrashplay.saltar.editor.ui.GameObjectGridSelectionManager;
+import com.thrashplay.saltar.editor.ui.StartPositionToolComponent;
+import com.thrashplay.saltar.editor.ui.ToolType;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -51,7 +51,7 @@ public class ToolManager implements ProjectChangeListener {
                         tool.removeComponent(SelectionToolComponent.class);
                         tool.removeComponent(PaintbrushToolComponent.class);
                         tool.removeComponent(EraseToolComponent.class);
-                        // todo: remove other components
+                        tool.removeComponent(StartPositionToolComponent.class);
 
                         ToolType toolType = (ToolType) event.getNewValue();
                         switch (toolType) {
@@ -64,7 +64,9 @@ public class ToolManager implements ProjectChangeListener {
                             case Erase:
                                 tool.addComponent(new EraseToolComponent(project, gameObjectGridSelectionManager, leftMouseTouchManager, gameObjectManager));
                                 break;
-
+                            case StartPosition:
+                                tool.addComponent(new StartPositionToolComponent(project, leftMouseTouchManager, gameObjectManager));
+                                break;
                         }
                     }
                 }

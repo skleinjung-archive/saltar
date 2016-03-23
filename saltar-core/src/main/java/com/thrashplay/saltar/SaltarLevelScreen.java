@@ -13,6 +13,7 @@ import com.thrashplay.luna.api.input.InputManager;
 import com.thrashplay.luna.api.input.KeyCode;
 import com.thrashplay.luna.api.input.MultiTouchManager;
 import com.thrashplay.luna.api.level.LevelManager;
+import com.thrashplay.luna.api.level.config.LevelConfig;
 import com.thrashplay.luna.api.physics.CrossCollisionDetector;
 import com.thrashplay.luna.api.ui.Button;
 import com.thrashplay.luna.engine.LegacyGameObjectAdapter;
@@ -50,12 +51,13 @@ public class SaltarLevelScreen extends DefaultScreen {
 
         gameObjectManager.register(new LegacyGameObjectAdapter("clear screen", new ClearScreen(0x7EC0EE)));
 
-        List<GameObject> levelObjects = levelManager.createLevelObjects("levels/level01.json");
+        LevelConfig levelConfig = levelManager.createLevelConfig("levels/test.json");
+        List<GameObject> levelObjects = levelManager.createLevelObjects(levelConfig);
         for (GameObject object : levelObjects) {
             gameObjectManager.register(object);
         }
 
-        GameObject player = createPlayer();
+        GameObject player = createPlayer(levelConfig.getStartX(), levelConfig.getStartY());
 
         Rectangle screenBounds = new Rectangle(0, 0, Saltar.SCENE_WIDTH, Saltar.SCENE_HEIGHT);
         Button leftButton = new TextButton(multiTouchManager, "<", 16, screenBounds.getBottom() - 56, 48, 48);
@@ -83,7 +85,7 @@ public class SaltarLevelScreen extends DefaultScreen {
         gameObjectManager.register(new LegacyGameObjectAdapter("collision detector", new CrossCollisionDetector(gameObjectManager)));
     }
 
-    private GameObject createPlayer() {
+    private GameObject createPlayer(int startX, int startY) {
         AnimationConfig walkAnimation = animationConfigManager.getAnimationConfig("animations/player/walk.json");
         AnimationConfig jumpAnimationConfig = animationConfigManager.getAnimationConfig("animations/player/jump.json");
         SpriteSheet playerAnimationSpriteSheet = imageManager.createSpriteSheet(walkAnimation.getSpriteSheet());
@@ -107,7 +109,7 @@ public class SaltarLevelScreen extends DefaultScreen {
 
         int maxPlayerVelocity = 8;
         GameObject player = new GameObject("player");
-        player.addComponent(new Position(32, 0));
+        player.addComponent(new Position(startX, startY));
         player.addComponent(new Movement());
         player.addComponent(new Gravity(3));
         player.addComponent(new Player());

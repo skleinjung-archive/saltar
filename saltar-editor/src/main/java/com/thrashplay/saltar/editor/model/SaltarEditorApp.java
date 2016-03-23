@@ -1,5 +1,8 @@
 package com.thrashplay.saltar.editor.model;
 
+import com.thrashplay.luna.api.component.ImageRenderer;
+import com.thrashplay.luna.api.component.Position;
+import com.thrashplay.luna.api.engine.GameObject;
 import com.thrashplay.luna.api.engine.ScreenManager;
 import com.thrashplay.luna.api.input.InputManager;
 import com.thrashplay.luna.desktop.LunaCanvas;
@@ -147,15 +150,20 @@ public class SaltarEditorApp {
         Project oldProject = this.project;
         this.project = project;
 
-        reinitializeScreen();
+        reinitializeScreen(project);
 
         fireProjectChangedEvent(oldProject, this.project);
     }
 
     // reinitialize the screen for a new project
-    public void reinitializeScreen() {
+    public void reinitializeScreen(Project project) {
         screen.getGameObjectManager().unregisterAll();
         screen.register(new LegacyGameObjectAdapter(new ClearScreen(0xff000000)));
+
+        GameObject playerStartPosition = new GameObject("saltar-editor-playerStartMarker");
+        playerStartPosition.addComponent(new Position(project.getStartX(), project.getStartY()));
+        playerStartPosition.addComponent(new ImageRenderer(imageManager.createSpriteSheet(project.getAssetsRoot(), "spritesheets/player_spritesheet.json").getImage(1), true));
+        screen.register(playerStartPosition);
     }
 
     public void addProjectChangeListener(ProjectChangeListener listener) {

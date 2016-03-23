@@ -60,9 +60,9 @@ public class SaveAndLoadManager {
                 LevelConfig config = gson.fromJson(reader, LevelConfig.class);
 
                 Project newProject = new Project(app);
-                app.setProject(newProject);
-
                 newProject.loadFrom(config);
+
+                app.setProject(newProject);
 
                 for (GameObjectConfig gameObjectConfig : config.getObjects()) {
                     GameObject newGameObject = app.getGameObjectFactory().createGameObject(newProject, gameObjectConfig);

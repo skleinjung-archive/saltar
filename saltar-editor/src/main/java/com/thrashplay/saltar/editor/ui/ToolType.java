@@ -9,5 +9,5 @@ public enum ToolType {
     Select,
     Paint,
     Erase,
-    PlacePlayer
+    StartPosition
 }

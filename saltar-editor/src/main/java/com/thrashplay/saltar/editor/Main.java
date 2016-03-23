@@ -1,7 +1,7 @@
 package com.thrashplay.saltar.editor;
 
 import com.thrashplay.saltar.editor.model.SaltarEditorApp;
-import com.thrashplay.saltar.editor.ui.ToolManager;
+import com.thrashplay.saltar.editor.tool.ToolManager;
 import com.thrashplay.saltar.editor.ui.UiGameObjectManager;
 import com.thrashplay.saltar.editor.swing.SaltarEditorWindow;
 
