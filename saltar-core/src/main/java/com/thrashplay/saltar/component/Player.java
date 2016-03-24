@@ -3,7 +3,7 @@ package com.thrashplay.saltar.component;
 import com.thrashplay.luna.api.component.Movement;
 import com.thrashplay.luna.api.component.UpdateableComponent;
 import com.thrashplay.luna.api.engine.GameObject;
-import com.thrashplay.luna.renderable.AnimationState;
+import com.thrashplay.luna.animation.AnimationState;
 
 /**
  * TODO: Add class documentation

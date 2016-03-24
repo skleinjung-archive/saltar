@@ -5,8 +5,8 @@
       "isDefault": true,
       "flip": false
     },
-    "die": {
-      "file": "animations/enemies/blob_die.json"
+    "dead": {
+      "file": "animations/enemies/blob_dead.json"
     }
   },
   "defaultAnimation":"walk",

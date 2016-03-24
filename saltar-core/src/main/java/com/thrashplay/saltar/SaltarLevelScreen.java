@@ -2,6 +2,7 @@ package com.thrashplay.saltar;
 
 import com.thrashplay.luna.api.actor.ActorManager;
 import com.thrashplay.luna.api.actor.config.ActorConfig;
+import com.thrashplay.luna.api.animation.AnimationRenderer;
 import com.thrashplay.luna.api.collision.CollisionHandler;
 import com.thrashplay.luna.api.component.*;
 import com.thrashplay.luna.api.engine.DefaultScreen;
@@ -11,7 +12,7 @@ import com.thrashplay.luna.api.geom.Rectangle;
 import com.thrashplay.luna.api.graphics.AnimationConfigManager;
 import com.thrashplay.luna.api.graphics.ImageManager;
 import com.thrashplay.luna.api.graphics.SpriteSheet;
-import com.thrashplay.luna.api.graphics.config.AnimationConfig;
+import com.thrashplay.luna.api.animation.AnimationConfig;
 import com.thrashplay.luna.api.input.InputManager;
 import com.thrashplay.luna.api.input.KeyCode;
 import com.thrashplay.luna.api.input.MultiTouchManager;
@@ -21,7 +22,7 @@ import com.thrashplay.luna.api.collision.CrossCollisionDetector;
 import com.thrashplay.luna.api.ui.Button;
 import com.thrashplay.luna.engine.LegacyGameObjectAdapter;
 import com.thrashplay.luna.input.VirtualKeyboard;
-import com.thrashplay.luna.renderable.AnimationStateBasedRenderer;
+import com.thrashplay.luna.animation.AnimationStateBasedRenderer;
 import com.thrashplay.luna.renderable.ClearScreen;
 import com.thrashplay.luna.renderable.FpsDisplay;
 import com.thrashplay.luna.ui.TextButton;
@@ -75,7 +76,7 @@ public class SaltarLevelScreen extends DefaultScreen {
 
         GameObject blob1 = actorManager.createActorObject(blobConfig);
         blob1.setId("blob");
-        blob1.getComponent(Position.class).setRect(playerPosition.getX() + 150, playerPosition.getY(), 0, 0);
+        blob1.getComponent(Position.class).setRect(playerPosition.getX() + 475, playerPosition.getY(), 0, 0);
         gameObjectManager.register(blob1);
 
 //        GameObject blob2 = actorManager.createActorObject(blobConfig);

@@ -1,5 +1,6 @@
 {
   "spriteSheet":"spritesheets/enemy_blob_spritesheet.json",
+  "loop": "none",
   "frames":[
     {
       "imageId": 3,
