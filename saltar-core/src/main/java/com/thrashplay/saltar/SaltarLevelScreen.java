@@ -21,6 +21,7 @@ import com.thrashplay.luna.api.collision.CrossCollisionDetector;
 import com.thrashplay.luna.api.ui.Button;
 import com.thrashplay.luna.engine.LegacyGameObjectAdapter;
 import com.thrashplay.luna.input.VirtualKeyboard;
+import com.thrashplay.luna.renderable.AnimationStateBasedRenderer;
 import com.thrashplay.luna.renderable.ClearScreen;
 import com.thrashplay.luna.renderable.FpsDisplay;
 import com.thrashplay.luna.ui.TextButton;
@@ -127,11 +128,12 @@ public class SaltarLevelScreen extends DefaultScreen {
         AnimationRenderer jumpingAnimation = new AnimationRenderer(jumpAnimationConfig, playerAnimationSpriteSheet);
 
         AnimationStateBasedRenderer playerRenderer = new AnimationStateBasedRenderer();
-        playerRenderer.addRenderer(Player.AnimationState.IdleFacingLeft, idleLeftImage);
-        playerRenderer.addRenderer(Player.AnimationState.IdleFacingRight, idleRightImage);
-        playerRenderer.addRenderer(Player.AnimationState.WalkingLeft, walkingLeftAnimation);
-        playerRenderer.addRenderer(Player.AnimationState.WalkingRight, walkingRightAnimation);
-        playerRenderer.addRenderer(Player.AnimationState.JumpingRight, jumpingAnimation);
+        playerRenderer.addRenderer("IdleFacingLeft", idleLeftImage);
+        playerRenderer.addRenderer("IdleFacingRight", idleRightImage);
+        playerRenderer.addRenderer("WalkingLeft", walkingLeftAnimation);
+        playerRenderer.addRenderer("WalkingRight", walkingRightAnimation);
+        playerRenderer.addRenderer("JumpingRight", jumpingAnimation);
+        playerRenderer.setCurrentState("IdleFacingRight");
 
 //        final LunaImage image = imageManager.createSpriteSheet("spritesheets/player_spritesheet.json").getImage(1); // createImage("graphics/daxbotsheet.png");
 

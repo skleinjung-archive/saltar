@@ -1,5 +1,15 @@
 {
-  "animation": "animations/enemies/blob_walk.json",
+  "animations": {
+    "walk": {
+      "file": "animations/enemies/blob_walk.json",
+      "isDefault": true,
+      "flip": false
+    },
+    "die": {
+      "file": "animations/enemies/blob_die.json"
+    }
+  },
+  "defaultAnimation":"walk",
   "gravity": 3,
   "collider": {
     "category": 3,
@@ -23,5 +33,5 @@
     "com.thrashplay.saltar.collision.DefaultResolutionCollisionHandler",
     "com.thrashplay.luna.collision.ListenerNotifyingCollisionHandler"
   ],
-  "controller":"com.thrashplay.saltar.ai.WalkLeftController"
+  "controller":"com.thrashplay.saltar.ai.BumpIntoThingsAndTurnAroundController"
 }

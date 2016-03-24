@@ -1,0 +1,13 @@
+{
+  "spriteSheet":"spritesheets/enemy_blob_spritesheet.json",
+  "frames":[
+    {
+      "imageId": 3,
+      "duration": 100
+    },
+    {
+      "imageId": 4,
+      "duration": 500
+    }
+  ]
+}

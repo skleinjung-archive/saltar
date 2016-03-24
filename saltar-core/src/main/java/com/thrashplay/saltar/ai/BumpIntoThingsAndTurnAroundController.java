@@ -11,7 +11,7 @@ import com.thrashplay.luna.collision.CollisionListener;
  *
  * @author Sean Kleinjung
  */
-public class WalkLeftController implements UpdateableComponent, CollisionListener {
+public class BumpIntoThingsAndTurnAroundController implements UpdateableComponent, CollisionListener {
 
     boolean isFacingLeft = true;
 

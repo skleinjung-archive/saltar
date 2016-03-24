@@ -3,6 +3,7 @@ package com.thrashplay.saltar.component;
 import com.thrashplay.luna.api.component.Movement;
 import com.thrashplay.luna.api.component.UpdateableComponent;
 import com.thrashplay.luna.api.engine.GameObject;
+import com.thrashplay.luna.renderable.AnimationState;
 
 /**
  * TODO: Add class documentation
@@ -10,7 +11,7 @@ import com.thrashplay.luna.api.engine.GameObject;
  * @author Sean Kleinjung
  */
 public class Player implements UpdateableComponent {
-    public enum AnimationState {
+    public enum PlayerAnimationState {
         IdleFacingLeft,
         IdleFacingRight,
         WalkingLeft,
@@ -31,16 +32,16 @@ public class Player implements UpdateableComponent {
         Idle
     }
 
-    private AnimationState animationState = AnimationState.IdleFacingRight;
+    private PlayerAnimationState animationState = PlayerAnimationState.IdleFacingRight;
     private VerticalDirection verticalDirection = VerticalDirection.Idle;
     private HorizontalDirection horizontalDirection = HorizontalDirection.Right;
     boolean isWalking = false;
 
-    public AnimationState getAnimationState() {
+    public PlayerAnimationState getAnimationState() {
         return animationState;
     }
 
-    public void setAnimationState(AnimationState animationState) {
+    public void setAnimationState(PlayerAnimationState animationState) {
         this.animationState = animationState;
     }
 
@@ -61,33 +62,33 @@ public class Player implements UpdateableComponent {
     }
 
     public void onLeftPressed() {
-        animationState = AnimationState.WalkingLeft;
+        animationState = PlayerAnimationState.WalkingLeft;
     }
 
     public void onHorizontalKeyRelased() {
         switch (animationState) {
             case WalkingLeft:
-                animationState = AnimationState.IdleFacingLeft;
+                animationState = PlayerAnimationState.IdleFacingLeft;
                 break;
 
             case WalkingRight:
-                animationState = AnimationState.IdleFacingRight;
+                animationState = PlayerAnimationState.IdleFacingRight;
                 break;
         }
     }
 
     public void onRightPressed() {
-        animationState = AnimationState.WalkingRight;
+        animationState = PlayerAnimationState.WalkingRight;
     }
 
     public void onWallCollision() {
         switch (animationState) {
             case WalkingLeft:
-                animationState = AnimationState.IdleFacingLeft;
+                animationState = PlayerAnimationState.IdleFacingLeft;
                 break;
 
             case WalkingRight:
-                animationState = AnimationState.IdleFacingRight;
+                animationState = PlayerAnimationState.IdleFacingRight;
                 break;
         }
     }
@@ -96,6 +97,9 @@ public class Player implements UpdateableComponent {
     public void update(GameObject gameObject, long delta) {
         Movement movement = gameObject.getComponent(Movement.class);
         Player player = gameObject.getComponent(Player.class);
+
+        AnimationState animationState = gameObject.getComponent(AnimationState.class);
+        animationState.setCurrentState(this.animationState.name());
 
         /*
 
@@ -152,20 +156,20 @@ public class Player implements UpdateableComponent {
 
         /*
         if (movement.getVelocityY() < 0) {
-            player.setAnimationState(AnimationState.Jumping);
+            player.setCurrentState(AnimationState.Jumping);
         } else if (movement.getVelocityY() > 0) {
             // falling, really
-            player.setAnimationState(AnimationState.Jumping);
+            player.setCurrentState(AnimationState.Jumping);
         } else if (movement.getVelocityX() < 0) {
-            player.setAnimationState(AnimationState.WalkingLeft);
+            player.setCurrentState(AnimationState.WalkingLeft);
             facingLeft = true;
         } else if (movement.getVelocityX() > 0) {
-            player.setAnimationState(AnimationState.WalkingRight);
+            player.setCurrentState(AnimationState.WalkingRight);
             facingLeft = false;
         } else if (facingLeft) {
-            player.setAnimationState(AnimationState.IdleFacingLeft);
+            player.setCurrentState(AnimationState.IdleFacingLeft);
         } else {
-            player.setAnimationState(AnimationState.IdleFacingRight);
+            player.setCurrentState(AnimationState.IdleFacingRight);
         }
         */
     }
