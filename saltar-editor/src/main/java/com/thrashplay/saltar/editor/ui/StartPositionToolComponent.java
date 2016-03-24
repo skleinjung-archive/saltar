@@ -34,7 +34,7 @@ public class StartPositionToolComponent extends AbstractTileSelectingTool implem
 
             int tileSize = project.getLevel().getTileSize();
             int x = project.getSelectedTileX() * tileSize;
-            int y = project.getSelectedTileY() * tileSize + 9; // is how much shorter the sprite is than the whole two tiles
+            int y = project.getSelectedTileY() * tileSize + 9; // 9 is how much shorter the sprite is than the whole two tiles
             project.setStartX(x);
             project.setStartY(y);
 

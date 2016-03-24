@@ -1,7 +1,7 @@
 package com.thrashplay.saltar.component;
 
 import com.thrashplay.luna.api.Config;
-import com.thrashplay.luna.api.component.CollisionHandler;
+import com.thrashplay.luna.api.collision.CollisionHandler;
 import com.thrashplay.luna.api.component.Movement;
 import com.thrashplay.luna.api.component.Position;
 import com.thrashplay.luna.api.component.RenderableComponent;

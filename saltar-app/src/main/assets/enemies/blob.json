@@ -1,0 +1,27 @@
+{
+  "animation": "animations/enemies/blob_walk.json",
+  "gravity": 3,
+  "collider": {
+    "category": 3,
+    "active": true,
+    "verticalBoundingBox":
+      {
+        "left": 4,
+        "top": 0,
+        "width": 24,
+        "height": 25
+      },
+    "horizontalBoundingBox":
+    {
+      "left": 0,
+      "top": 4,
+      "width": 32,
+      "height": 18
+    }
+  },
+  "collisionHandlers": [
+    "com.thrashplay.saltar.collision.DefaultResolutionCollisionHandler",
+    "com.thrashplay.luna.collision.ListenerNotifyingCollisionHandler"
+  ],
+  "controller":"com.thrashplay.saltar.ai.WalkLeftController"
+}

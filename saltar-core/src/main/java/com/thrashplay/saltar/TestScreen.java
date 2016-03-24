@@ -1,5 +1,6 @@
 package com.thrashplay.saltar;
 
+import com.thrashplay.luna.api.collision.CollisionHandler;
 import com.thrashplay.luna.api.component.*;
 import com.thrashplay.luna.api.engine.DefaultScreen;
 import com.thrashplay.luna.api.engine.GameObject;
@@ -14,7 +15,7 @@ import com.thrashplay.luna.api.input.InputManager;
 import com.thrashplay.luna.api.input.KeyCode;
 import com.thrashplay.luna.api.input.MultiTouchManager;
 import com.thrashplay.luna.api.math.Random;
-import com.thrashplay.luna.api.physics.CrossCollisionDetector;
+import com.thrashplay.luna.api.collision.CrossCollisionDetector;
 import com.thrashplay.luna.api.ui.Button;
 import com.thrashplay.luna.engine.LegacyGameObjectAdapter;
 import com.thrashplay.luna.input.VirtualKeyboard;

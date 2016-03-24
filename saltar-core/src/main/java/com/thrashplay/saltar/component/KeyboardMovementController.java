@@ -55,7 +55,7 @@ public class KeyboardMovementController implements UpdateableComponent {
 
         if (inputManager.isKeyDown(KeyCode.KEY_SPACE)) {
             if (jumpFrames < 5) {
-                movement.setVelocityY(-20 + (2 * jumpFrames++));
+                movement.setVelocityY(-20 + (1.0f * jumpFrames++));
             }
         } else {
             jumpFrames = 0;

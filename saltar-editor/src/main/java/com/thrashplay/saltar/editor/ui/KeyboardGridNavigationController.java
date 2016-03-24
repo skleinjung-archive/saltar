@@ -15,7 +15,7 @@ import java.util.Map;
  * @author Sean Kleinjung
  */
 public class KeyboardGridNavigationController implements UpdateableComponent {
-    private int KEY_REPEAT_DELAY = 33;
+    private int KEY_REPEAT_DELAY = 66;
 
     private Project project;
     private InputManager inputManager;

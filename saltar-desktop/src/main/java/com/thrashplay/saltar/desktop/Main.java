@@ -24,6 +24,7 @@ public class Main {
                 gameConfig.setSceneDimensions(Saltar.SCENE_WIDTH, Saltar.SCENE_HEIGHT);
                 gameConfig.setScreenManager(new SaltarScreenManager(
                         luna.getLevelManager(),
+                        luna.getActorManager(),
                         luna.getImageManager(),
                         luna.getAnimationConfigManager(),
                         luna.getMultiTouchManager(),
