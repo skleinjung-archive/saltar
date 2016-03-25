@@ -1,0 +1,18 @@
+{
+  "spriteSheet":"spritesheets/sara_spritesheet.json",
+  "loop":"none",
+  "frames":[
+    {
+      "imageId": 4,
+      "duration": 50
+    },
+    {
+      "imageId": 5,
+      "duration": 250
+    },
+    {
+      "imageId": 6,
+      "duration": 1
+    }
+  ]
+}

@@ -4,11 +4,11 @@
   "frames":[
     {
       "imageId": 3,
-      "duration": 100
+      "duration": 25
     },
     {
       "imageId": 4,
-      "duration": 500
+      "duration": 1
     }
   ]
 }

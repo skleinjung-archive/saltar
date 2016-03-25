@@ -22,7 +22,7 @@ public class KeyboardMovementController implements UpdateableComponent {
     }
 
     @Override
-    public void update(GameObject gameObject, long delta) {
+    public void update(GameObject gameObject, float delta) {
         Player player = gameObject.getComponent(Player.class);
         Position position = gameObject.getComponent(Position.class);
         Movement movement = gameObject.getComponent(Movement.class);

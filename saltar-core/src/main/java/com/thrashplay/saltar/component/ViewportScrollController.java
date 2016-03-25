@@ -18,7 +18,7 @@ public class ViewportScrollController implements UpdateableComponent {
     }
 
     @Override
-    public void update(GameObject gameObject, long delta) {
+    public void update(GameObject gameObject, float delta) {
         Position playerPosition = player.getComponent(Position.class);
         Position viewportPosition = gameObject.getComponent(Position.class);
 

@@ -17,7 +17,9 @@ public class Player implements UpdateableComponent {
         WalkingLeft,
         WalkingRight,
         JumpingLeft,
-        JumpingRight
+        JumpingRight,
+        DyingLeft,
+        DyingRight
     }
 
     public enum VerticalDirection {
@@ -93,13 +95,20 @@ public class Player implements UpdateableComponent {
         }
     }
 
+    public void onDeath() {
+        System.out.println("player is dead");
+        animationState = PlayerAnimationState.DyingRight;
+    }
+
     @Override
-    public void update(GameObject gameObject, long delta) {
+    public void update(GameObject gameObject, float delta) {
         Movement movement = gameObject.getComponent(Movement.class);
         Player player = gameObject.getComponent(Player.class);
 
         AnimationState animationState = gameObject.getComponent(AnimationState.class);
-        animationState.setCurrentState(this.animationState.name());
+//        if (!animationState.getCurrentState().equals("DyingRight")) { // don't un-dead us
+            animationState.setCurrentState(this.animationState.name());
+//        }
 
         /*
 

@@ -58,7 +58,7 @@ public class SaltarLevelScreen extends DefaultScreen {
 
         gameObjectManager.register(new LegacyGameObjectAdapter("clear screen", new ClearScreen(0x7EC0EE)));
 
-        LevelConfig levelConfig = levelManager.createLevelConfig("levels/test.json");
+        LevelConfig levelConfig = levelManager.createLevelConfig("levels/level01.json");
         List<GameObject> levelObjects = levelManager.createLevelObjects(levelConfig);
         for (GameObject object : levelObjects) {
             gameObjectManager.register(object);
@@ -76,7 +76,7 @@ public class SaltarLevelScreen extends DefaultScreen {
 
         GameObject blob1 = actorManager.createActorObject(blobConfig);
         blob1.setId("blob");
-        blob1.getComponent(Position.class).setRect(playerPosition.getX() + 475, playerPosition.getY(), 0, 0);
+        blob1.getComponent(Position.class).setRect(playerPosition.getX() + 600, playerPosition.getY(), 0, 0);
         gameObjectManager.register(blob1);
 
 //        GameObject blob2 = actorManager.createActorObject(blobConfig);
@@ -118,6 +118,7 @@ public class SaltarLevelScreen extends DefaultScreen {
     private GameObject createPlayer(int startX, int startY) {
         AnimationConfig walkAnimation = animationConfigManager.getAnimationConfig("animations/player/sara_walk.json");
         AnimationConfig jumpAnimationConfig = animationConfigManager.getAnimationConfig("animations/player/jump.json");
+        AnimationConfig deathAnimation = animationConfigManager.getAnimationConfig("animations/player/sara_death.json");
         SpriteSheet playerAnimationSpriteSheet = imageManager.createSpriteSheet(walkAnimation.getSpriteSheet());
 
         ImageRenderer idleLeftImage = new ImageRenderer(playerAnimationSpriteSheet.getImage(1), true);
@@ -127,6 +128,9 @@ public class SaltarLevelScreen extends DefaultScreen {
         walkingLeftAnimation.setFlipHorizontally(true);
         AnimationRenderer walkingRightAnimation = new AnimationRenderer(walkAnimation, playerAnimationSpriteSheet);
         AnimationRenderer jumpingAnimation = new AnimationRenderer(jumpAnimationConfig, playerAnimationSpriteSheet);
+        AnimationRenderer dyingRightAnimatino = new AnimationRenderer(deathAnimation, playerAnimationSpriteSheet);
+        AnimationRenderer dyingLeftAnimation = new AnimationRenderer(deathAnimation, playerAnimationSpriteSheet);
+        dyingLeftAnimation.setFlipHorizontally(true);
 
         AnimationStateBasedRenderer playerRenderer = new AnimationStateBasedRenderer();
         playerRenderer.addRenderer("IdleFacingLeft", idleLeftImage);
@@ -134,6 +138,8 @@ public class SaltarLevelScreen extends DefaultScreen {
         playerRenderer.addRenderer("WalkingLeft", walkingLeftAnimation);
         playerRenderer.addRenderer("WalkingRight", walkingRightAnimation);
         playerRenderer.addRenderer("JumpingRight", jumpingAnimation);
+        playerRenderer.addRenderer("DyingRight", dyingRightAnimatino);
+        playerRenderer.addRenderer("DyingLeft", dyingLeftAnimation);
         playerRenderer.setCurrentState("IdleFacingRight");
 
 //        final LunaImage image = imageManager.createSpriteSheet("spritesheets/player_spritesheet.json").getImage(1); // createImage("graphics/daxbotsheet.png");

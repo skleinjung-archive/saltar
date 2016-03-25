@@ -2,12 +2,14 @@ package com.thrashplay.saltar.component;
 
 import com.thrashplay.luna.api.Config;
 import com.thrashplay.luna.api.collision.CollisionHandler;
+import com.thrashplay.luna.api.component.Collider;
 import com.thrashplay.luna.api.component.Movement;
 import com.thrashplay.luna.api.component.Position;
 import com.thrashplay.luna.api.component.RenderableComponent;
 import com.thrashplay.luna.api.engine.GameObject;
 import com.thrashplay.luna.api.geom.Rectangle;
 import com.thrashplay.luna.api.graphics.Graphics;
+import com.thrashplay.luna.collision.CollisionCategoryIds;
 
 /**
  * TODO: Add class documentation
@@ -35,6 +37,11 @@ public class PlayerCollisionHandler implements CollisionHandler, RenderableCompo
                     movement.setVelocityX(0);
                 }
                 player.onWallCollision();
+
+                if (isEnemy(otherObject)) {
+                    player.onDeath();
+                }
+
                 break;
 
             case CollisionHandler.DIRECTION_TOP:
@@ -43,6 +50,11 @@ public class PlayerCollisionHandler implements CollisionHandler, RenderableCompo
                 if (movement.getVelocityY() < 0) {
                     movement.setVelocityY(0);
                 }
+
+                if (isEnemy(otherObject)) {
+                    player.onDeath();
+                }
+
                 break;
 
             case CollisionHandler.DIRECTION_RIGHT:
@@ -52,6 +64,11 @@ public class PlayerCollisionHandler implements CollisionHandler, RenderableCompo
                     movement.setVelocityX(0);
                 }
                 player.onWallCollision();
+
+                if (isEnemy(otherObject)) {
+                    player.onDeath();
+                }
+
                 break;
 
             case CollisionHandler.DIRECTION_BOTTOM:
@@ -60,11 +77,19 @@ public class PlayerCollisionHandler implements CollisionHandler, RenderableCompo
                 if (movement.getVelocityY() > 0) {
                     movement.setVelocityY(0);
                 }
+
+                // todo: determine if we need to die when jumping on this enemy
+
                 break;
 
             case CollisionHandler.DIRECTION_UNKNOWN:   // default to treating it as if we are standing on top of the block    case Bottom:
                 unknownCollision = true;
         }
+    }
+
+    private boolean isEnemy(GameObject otherObject) {
+        Collider collider = otherObject.getComponent(Collider.class);
+        return collider.getCategory() == CollisionCategoryIds.ENEMY;
     }
 
     private int getCollidingDirectionWithShortestResolutionDistance(Rectangle ourBoundingBox, Rectangle otherBoundingBox, Position position, boolean[] collisionDirections) {

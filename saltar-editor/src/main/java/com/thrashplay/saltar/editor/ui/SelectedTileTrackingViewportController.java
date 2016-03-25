@@ -25,7 +25,7 @@ public class SelectedTileTrackingViewportController implements UpdateableCompone
     }
 
     @Override
-    public void update(GameObject gameObject, long delta) {
+    public void update(GameObject gameObject, float delta) {
         // only update if the selection has changed, which allows the mouse to override the keyboard navigation
         if (oldSelectedTileX != project.getSelectedTileX() || oldSelectedTileY != project.getSelectedTileY()) {
             GameObject viewport = gameObjectManager.getGameObject(GameObjectIds.ID_VIEWPORT);

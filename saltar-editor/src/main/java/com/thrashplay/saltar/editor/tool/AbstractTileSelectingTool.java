@@ -26,7 +26,7 @@ public class AbstractTileSelectingTool implements UpdateableComponent {
     }
 
     @Override
-    public void update(GameObject gameObject, long delta) {
+    public void update(GameObject gameObject, float delta) {
         if (mouseTouchManager.isDown()) {
             GameObject viewport = gameObjectManager.getGameObject(GameObjectIds.ID_VIEWPORT);
             if (viewport != null) {

@@ -24,7 +24,7 @@ public class MouseViewportController implements UpdateableComponent {
     }
 
     @Override
-    public void update(GameObject gameObject, long delta) {
+    public void update(GameObject gameObject, float delta) {
         if (mouseTouchManager.isDown()) {
             if (mouseTouchManager.isDragging() && oldX != Integer.MIN_VALUE && oldY != Integer.MIN_VALUE) {
                 int deltaX = mouseTouchManager.getX() - oldX;

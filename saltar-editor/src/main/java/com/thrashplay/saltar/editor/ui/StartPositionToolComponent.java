@@ -27,7 +27,7 @@ public class StartPositionToolComponent extends AbstractTileSelectingTool implem
     }
 
     @Override
-    public void update(GameObject gameObject, long delta) {
+    public void update(GameObject gameObject, float delta) {
         super.update(gameObject, delta);
 
         if (leftMouseTouchManager.isDown()) {

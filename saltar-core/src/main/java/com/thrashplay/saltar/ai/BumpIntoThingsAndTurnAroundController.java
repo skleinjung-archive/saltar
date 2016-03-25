@@ -35,7 +35,7 @@ public class BumpIntoThingsAndTurnAroundController implements UpdateableComponen
     }
 
     @Override
-    public void update(GameObject gameObject, long delta) {
+    public void update(GameObject gameObject, float delta) {
         Movement movement = gameObject.getComponent(Movement.class);
 
         if (!dead) {

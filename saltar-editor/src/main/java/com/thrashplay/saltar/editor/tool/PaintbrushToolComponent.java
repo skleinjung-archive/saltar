@@ -29,7 +29,7 @@ public class PaintbrushToolComponent extends AbstractTileSelectingTool implement
     }
 
     @Override
-    public void update(GameObject gameObject, long delta) {
+    public void update(GameObject gameObject, float delta) {
         super.update(gameObject, delta);
 
         if (leftMouseButtonTouchManager.isDown() && project.getSelectedTemplate() != -1) {

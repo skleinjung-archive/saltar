@@ -38,7 +38,7 @@ public class KeyboardGridNavigationController implements UpdateableComponent {
     }
 
     @Override
-    public void update(GameObject gameObject, long delta) {
+    public void update(GameObject gameObject, float delta) {
         processInput(KeyCode.KEY_RIGHT_ARROW, RightMovementHandler);
         processInput(KeyCode.KEY_F, RightMovementHandler);
 

@@ -26,7 +26,7 @@ public class EraseToolComponent extends AbstractTileSelectingTool {
     }
 
     @Override
-    public void update(GameObject gameObject, long delta) {
+    public void update(GameObject gameObject, float delta) {
         super.update(gameObject, delta);
 
         if (leftMouseButtonTouchManager.isDown()) {
