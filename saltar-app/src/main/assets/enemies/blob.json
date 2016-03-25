@@ -13,21 +13,7 @@
   "gravity": 3,
   "collider": {
     "category": 3,
-    "active": true,
-    "verticalBoundingBox":
-      {
-        "left": 4,
-        "top": 0,
-        "width": 24,
-        "height": 25
-      },
-    "horizontalBoundingBox":
-    {
-      "left": 0,
-      "top": 4,
-      "width": 32,
-      "height": 18
-    }
+    "active": true
   },
   "collisionHandlers": [
     "com.thrashplay.saltar.collision.DefaultResolutionCollisionHandler",
