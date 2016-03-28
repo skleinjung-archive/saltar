@@ -93,9 +93,9 @@ public class PlayerCollisionHandler implements CollisionHandler, RenderableCompo
     }
 
     private int getCollidingDirectionWithShortestResolutionDistance(Rectangle ourBoundingBox, Rectangle otherBoundingBox, Position position, boolean[] collisionDirections) {
-        int shortestDistance = Integer.MAX_VALUE;
+        float shortestDistance = Integer.MAX_VALUE;
         int direction = CollisionHandler.DIRECTION_UNKNOWN;
-        int distance;
+        float distance;
 
         // check left
         if (collisionDirections[CollisionHandler.DIRECTION_LEFT]) {
@@ -142,16 +142,16 @@ public class PlayerCollisionHandler implements CollisionHandler, RenderableCompo
             Position position = gameObject.getComponent(Position.class);
 
             if (collisionDirections[CollisionHandler.DIRECTION_LEFT]) {
-                graphics.fillCircle(position.getX(), position.getCenterY(), 9, 0xffff0000);
+                graphics.fillCircle((int) position.getX(), (int) position.getCenterY(), 9, 0xffff0000);
             }
             if (collisionDirections[CollisionHandler.DIRECTION_RIGHT]) {
-                graphics.fillCircle(position.getRight(), position.getCenterY(), 9, 0xffff0000);
+                graphics.fillCircle((int) position.getRight(), (int) position.getCenterY(), 9, 0xffff0000);
             }
             if (collisionDirections[CollisionHandler.DIRECTION_TOP]) {
-                graphics.fillCircle(position.getCenterX(), position.getTop(), 9, 0xffff0000);
+                graphics.fillCircle((int) position.getCenterX(), (int) position.getTop(), 9, 0xffff0000);
             }
             if (collisionDirections[CollisionHandler.DIRECTION_BOTTOM]) {
-                graphics.fillCircle(position.getCenterX(), position.getBottom(), 9, 0xffff0000);
+                graphics.fillCircle((int) position.getCenterX(), (int) position.getBottom(), 9, 0xffff0000);
             }
         }
 

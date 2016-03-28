@@ -4,7 +4,6 @@ import com.thrashplay.luna.api.component.Collider;
 import com.thrashplay.luna.api.component.ImageRenderer;
 import com.thrashplay.luna.api.component.Position;
 import com.thrashplay.luna.api.engine.GameObject;
-import com.thrashplay.luna.api.geom.Rectangle;
 import com.thrashplay.luna.api.graphics.LunaImage;
 import com.thrashplay.luna.api.graphics.SpriteSheet;
 import com.thrashplay.luna.api.level.config.GameObjectConfig;
@@ -31,7 +30,7 @@ public class GameObjectFactory {
         GameObject gameObject = new GameObject();
         gameObject.addComponent(new Position(gameObjectConfig.getPosition().getX(), gameObjectConfig.getPosition().getY()));
         gameObject.addComponent(new ImageRenderer(image, true));
-        gameObject.addComponent(new Collider(2, false, new Rectangle(0, 0, tileSize, tileSize)));
+        gameObject.addComponent(new Collider(2, false));
 
         return gameObject;
     }

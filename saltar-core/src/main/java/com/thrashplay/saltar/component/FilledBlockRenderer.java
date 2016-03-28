@@ -14,6 +14,6 @@ public class FilledBlockRenderer implements RenderableComponent {
     @Override
     public void render(Graphics graphics, GameObject gameObject) {
         Position position = gameObject.getComponent(Position.class);
-        graphics.fillCircle(position.getX(), position.getY(), 50, 0xffff0000);
+        graphics.fillCircle((int) position.getX(), (int) position.getY(), 50, 0xffff0000);
     }
 }
