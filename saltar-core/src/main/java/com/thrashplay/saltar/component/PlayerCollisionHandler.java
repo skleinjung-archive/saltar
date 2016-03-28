@@ -76,6 +76,7 @@ public class PlayerCollisionHandler implements CollisionHandler, RenderableCompo
                 position.setY(otherBoundingBox.getY() - ourBoundingBox.getHeight());
                 if (movement.getVelocityY() > 0) {
                     movement.setVelocityY(0);
+                    movement.setAccelerationY(0);
                 }
 
                 // todo: determine if we need to die when jumping on this enemy
