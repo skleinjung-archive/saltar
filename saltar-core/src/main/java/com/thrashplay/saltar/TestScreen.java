@@ -198,7 +198,7 @@ public class TestScreen extends DefaultScreen {
         LegacyGameObjectAdapter fpsDisplay = new LegacyGameObjectAdapter("fps display", new FpsDisplay(18));
         fpsDisplay.setRenderLayer(GameObject.RenderLayer.Overlay);
         gameObjectManager.register(fpsDisplay);
-        gameObjectManager.register(new LegacyGameObjectAdapter("collision detector", new CrossCollisionDetector(gameObjectManager)));
+        gameObjectManager.register(new LegacyGameObjectAdapter("collision detector", new CrossCollisionDetector()));
 
         /*
         entityManager.addEntity(new Renderable() {

@@ -1,5 +1,6 @@
 package com.thrashplay.saltar.component;
 
+import com.thrashplay.luna.api.Config;
 import com.thrashplay.luna.api.component.RenderableComponent;
 import com.thrashplay.luna.api.engine.GameObject;
 import com.thrashplay.luna.api.engine.GameObjectManager;
@@ -25,14 +26,20 @@ public class DebugStringRenderer implements RenderableComponent{
 
     @Override
     public void render(Graphics graphics, GameObject gameObject) {
+        if (!Config.renderDebugStatusBlock) {
+            return;
+        }
+
         int fontSize = 12;
         int y = 20;
 
         for (DebugStringProvider provider : gameObject.getComponents(DebugStringProvider.class, new LinkedList<DebugStringProvider>())) {
             String[] strings = provider.getDebugStrings(gameObjectManager);
-            for (int i = 0; i < strings.length; i++) {
-                graphics.drawString(strings[i], 20, y, 0xffffffff, fontSize, Graphics.HorizontalAlignment.Left, Graphics.VerticalAlignment.Top);
-                y += 15;
+            if (strings != null) {
+                for (int i = 0; i < strings.length; i++) {
+                    graphics.drawString(strings[i], 20, y, 0xffffffff, fontSize, Graphics.HorizontalAlignment.Left, Graphics.VerticalAlignment.Top);
+                    y += 15;
+                }
             }
         }
     }

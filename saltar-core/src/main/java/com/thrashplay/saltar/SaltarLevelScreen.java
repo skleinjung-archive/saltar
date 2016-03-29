@@ -6,6 +6,7 @@ import com.thrashplay.luna.api.actor.config.ActorConfig;
 import com.thrashplay.luna.api.animation.AnimationConfig;
 import com.thrashplay.luna.api.animation.AnimationRenderer;
 import com.thrashplay.luna.api.collision.CrossCollisionDetector;
+import com.thrashplay.luna.api.collision.GridPartitioningBroadPhaseCollisionDetector;
 import com.thrashplay.luna.api.component.*;
 import com.thrashplay.luna.api.engine.DefaultScreen;
 import com.thrashplay.luna.api.engine.GameObject;
@@ -113,11 +114,14 @@ public class SaltarLevelScreen extends DefaultScreen {
         fpsDisplay.setRenderLayer(GameObject.RenderLayer.Overlay);
         gameObjectManager.register(fpsDisplay);
 
-        gameObjectManager.register(new LegacyGameObjectAdapter("collision detector", new CrossCollisionDetector(gameObjectManager)));
+        GameObject collisionDetection = new GameObject("collision detection");
+        collisionDetection.addComponent(new GridPartitioningBroadPhaseCollisionDetector(gameObjectManager, new CrossCollisionDetector(), 40, 15));
+        gameObjectManager.register(collisionDetection);
 
         GameObject debugScene = new GameObject("debug-scene");
         debugScene.setRenderLayer(GameObject.RenderLayer.Foreground);
         debugScene.addComponent(new BoundingBoxesDebugRenderer(gameObjectManager));
+        debugScene.addComponent(new GridPartitioningDebugRenderer(gameObjectManager));
         gameObjectManager.register(debugScene);
 
         GameObject debugOverlay = new GameObject("debug-overlay");
@@ -125,6 +129,7 @@ public class SaltarLevelScreen extends DefaultScreen {
         debugOverlay.addComponent(new DebugStringRenderer(gameObjectManager));
         debugOverlay.addComponent(new FrameCountDebugStringProvider());
         debugOverlay.addComponent(new PlayerMovementStatsDebugStringProvider());
+        debugOverlay.addComponent(new CollisionStatsDebugStringProvider());
         gameObjectManager.register(debugOverlay);
     }
 
