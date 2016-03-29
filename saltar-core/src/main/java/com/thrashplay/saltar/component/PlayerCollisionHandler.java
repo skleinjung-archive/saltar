@@ -59,7 +59,7 @@ public class PlayerCollisionHandler implements CollisionHandler, RenderableCompo
 
             case CollisionHandler.DIRECTION_RIGHT:
                 collisionDirections[DIRECTION_RIGHT] = true;
-                position.setX(otherBoundingBox.getLeft() - ourBoundingBox.getWidth() - (ourBoundingBox.getX() - position.getX()) - 1);
+                position.setX(otherBoundingBox.getLeft() - ourBoundingBox.getWidth() - (ourBoundingBox.getX() - position.getX()));
                 if (movement.getVelocityX() > 0) {
                     movement.setVelocityX(0);
                 }
@@ -73,7 +73,7 @@ public class PlayerCollisionHandler implements CollisionHandler, RenderableCompo
 
             case CollisionHandler.DIRECTION_BOTTOM:
                 collisionDirections[DIRECTION_BOTTOM] = true;
-                position.setY(otherBoundingBox.getY() - ourBoundingBox.getHeight() - (ourBoundingBox.getY() - position.getY()) - 1);
+                position.setY(otherBoundingBox.getY() - ourBoundingBox.getHeight() - (ourBoundingBox.getY() - position.getY()));
                 if (movement.getVelocityY() > 0) {
                     movement.setVelocityY(0);
                     movement.setAccelerationY(0);

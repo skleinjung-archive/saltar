@@ -38,13 +38,16 @@ public class MrBlasterMovementController implements UpdateableComponent, Collisi
         if (onGround && !holdingJumpDown) {
             if (inputManager.isKeyDown(KeyCode.KEY_SPACE)) {
                 movement.setVelocityY(-10);
-                movement.setAccelerationY(0.5f);
+//                movement.setAccelerationY(0.5f);  // we have a gravity set instead
                 onGround = false;
                 holdingJumpDown = true;
             }
         }
 
         if (!inputManager.isKeyDown(KeyCode.KEY_SPACE)) {
+            if (movement.getVelocityY() < -4.125) {
+                movement.setVelocityY(-2);
+            }
             holdingJumpDown = false;
         }
     }

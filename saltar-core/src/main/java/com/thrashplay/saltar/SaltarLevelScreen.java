@@ -161,7 +161,7 @@ public class SaltarLevelScreen extends DefaultScreen {
         GameObject player = new GameObject("player");
         player.addComponent(new Position(startX, startY));
         player.addComponent(new Movement());
-//        player.addComponent(new Gravity(3));
+        player.addComponent(new Gravity(0.5f, 12));
         player.addComponent(new Player());
         player.addComponent(new Collider(1, true));
         player.addComponent(new CrossBoundingBoxes(new RendererBasedBoundingBoxes(), maxPlayerVelocity + 1, maxPlayerVelocity + 1));

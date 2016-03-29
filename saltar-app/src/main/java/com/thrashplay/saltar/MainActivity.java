@@ -19,7 +19,7 @@ public class MainActivity extends LunaGame {
     protected LunaGameConfig getGameConfig(Luna luna) {
         LunaGameConfig gameConfig = new LunaGameConfig();
         gameConfig.setSceneDimensions(480, 320);
-        gameConfig.setScreenManager(new SaltarScreenManager(luna.getLevelManager(), luna.getImageManager(), luna.getAnimationConfigManager(), luna.getMultiTouchManager(), luna.getInputManager()));
+        gameConfig.setScreenManager(new SaltarScreenManager(luna.getLevelManager(), luna.getActorManager(), luna.getImageManager(), luna.getAnimationConfigManager(), luna.getMultiTouchManager(), luna.getInputManager()));
         gameConfig.setDefaultScreen("test");
         return gameConfig;
     }
