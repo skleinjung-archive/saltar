@@ -20,9 +20,7 @@ import com.thrashplay.luna.api.input.MultiTouchManager;
 import com.thrashplay.luna.api.level.LevelManager;
 import com.thrashplay.luna.api.level.config.LevelConfig;
 import com.thrashplay.luna.api.ui.Button;
-import com.thrashplay.luna.collision.BoundingBoxesDebugRenderer;
-import com.thrashplay.luna.collision.CrossBoundingBoxes;
-import com.thrashplay.luna.collision.RendererBasedBoundingBoxes;
+import com.thrashplay.luna.collision.*;
 import com.thrashplay.luna.engine.LegacyGameObjectAdapter;
 import com.thrashplay.luna.input.VirtualKeyboard;
 import com.thrashplay.luna.renderable.ClearScreen;
@@ -60,7 +58,7 @@ public class SaltarLevelScreen extends DefaultScreen {
 
         gameObjectManager.register(new LegacyGameObjectAdapter("clear screen", new ClearScreen(0x7EC0EE)));
 
-        LevelConfig levelConfig = levelManager.createLevelConfig("levels/test.json");
+        LevelConfig levelConfig = levelManager.createLevelConfig("levels/level01.json");
         List<GameObject> levelObjects = levelManager.createLevelObjects(levelConfig);
         for (GameObject object : levelObjects) {
             gameObjectManager.register(object);
@@ -79,7 +77,7 @@ public class SaltarLevelScreen extends DefaultScreen {
         GameObject blob1 = actorManager.createActorObject(blobConfig);
         blob1.setId("blob");
         blob1.getComponent(Position.class).setRect(playerPosition.getX() + 600, playerPosition.getY(), 0, 0);
-//        gameObjectManager.register(blob1);
+        gameObjectManager.register(blob1);
 
 //        GameObject blob2 = actorManager.createActorObject(blobConfig);
 //        blob2.getComponent(Position.class).setRect(playerPosition.getX() + 250, playerPosition.getY(), 0, 0);
@@ -124,7 +122,9 @@ public class SaltarLevelScreen extends DefaultScreen {
 
         GameObject debugOverlay = new GameObject("debug-overlay");
         debugOverlay.setRenderLayer(GameObject.RenderLayer.Overlay);
-        debugOverlay.addComponent(new PlayerMovementStatsRenderer(gameObjectManager));
+        debugOverlay.addComponent(new DebugStringRenderer(gameObjectManager));
+        debugOverlay.addComponent(new FrameCountDebugStringProvider());
+        debugOverlay.addComponent(new PlayerMovementStatsDebugStringProvider());
         gameObjectManager.register(debugOverlay);
     }
 
@@ -165,8 +165,8 @@ public class SaltarLevelScreen extends DefaultScreen {
         player.addComponent(new Player());
         player.addComponent(new Collider(1, true));
         player.addComponent(new CrossBoundingBoxes(new RendererBasedBoundingBoxes(), maxPlayerVelocity + 1, maxPlayerVelocity + 1));
-        player.addComponent(new PlayerCollisionHandler());
-        player.addComponent(new KeyboardMovementController(inputManager));
+        player.addComponent(new DelegatingCollisionHandler(new PlayerCollisionHandler(), new ListenerNotifyingCollisionHandler()));
+        player.addComponent(new MrBlasterMovementController(inputManager));
         player.addComponent(playerRenderer);
 
         return player;

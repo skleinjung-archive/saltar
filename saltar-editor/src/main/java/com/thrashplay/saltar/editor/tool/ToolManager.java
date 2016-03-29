@@ -7,7 +7,6 @@ import com.thrashplay.saltar.editor.model.GameObjectFactory;
 import com.thrashplay.saltar.editor.model.Project;
 import com.thrashplay.saltar.editor.model.ProjectChangeListener;
 import com.thrashplay.saltar.editor.ui.GameObjectGridSelectionManager;
-import com.thrashplay.saltar.editor.ui.StartPositionToolComponent;
 import com.thrashplay.saltar.editor.ui.ToolType;
 
 import java.beans.PropertyChangeEvent;

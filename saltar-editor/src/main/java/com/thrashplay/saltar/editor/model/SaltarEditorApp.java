@@ -162,7 +162,7 @@ public class SaltarEditorApp {
 
         GameObject playerStartPosition = new GameObject("saltar-editor-playerStartMarker");
         playerStartPosition.addComponent(new Position(project.getStartX(), project.getStartY()));
-        playerStartPosition.addComponent(new ImageRenderer(imageManager.createSpriteSheet(project.getAssetsRoot(), "spritesheets/player_spritesheet.json").getImage(1), true));
+        playerStartPosition.addComponent(new ImageRenderer(imageManager.createSpriteSheet(project.getAssetsRoot(), "spritesheets/sara_spritesheet.json").getImage(1), true));
         screen.register(playerStartPosition);
     }
 

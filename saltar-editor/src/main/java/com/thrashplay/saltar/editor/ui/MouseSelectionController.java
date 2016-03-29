@@ -32,8 +32,8 @@ public class MouseSelectionController implements UpdateableComponent {
                 Position viewportPosition = viewport.getComponent(Position.class);
 
                 // map screen coordinates
-                int xCoordinate = mouseTouchManager.getX() + viewportPosition.getX();
-                int yCoordinate = mouseTouchManager.getY() + viewportPosition.getY();
+                int xCoordinate = mouseTouchManager.getX() + (int) viewportPosition.getX();
+                int yCoordinate = mouseTouchManager.getY() + (int) viewportPosition.getY();
 
                 int tileSize = project.getLevel().getTileSize();
                 int tileX = xCoordinate / tileSize;

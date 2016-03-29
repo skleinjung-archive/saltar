@@ -32,7 +32,7 @@ public class PlayerCollisionHandler implements CollisionHandler, RenderableCompo
         switch (direction) {
             case CollisionHandler.DIRECTION_LEFT:
                 collisionDirections[DIRECTION_LEFT] = true;
-                position.setX(otherBoundingBox.getRight() + 1);
+                position.setX(otherBoundingBox.getRight() + 1 - (ourBoundingBox.getX() - position.getX()));
                 if (movement.getVelocityX() < 0) {
                     movement.setVelocityX(0);
                 }
@@ -46,7 +46,7 @@ public class PlayerCollisionHandler implements CollisionHandler, RenderableCompo
 
             case CollisionHandler.DIRECTION_TOP:
                 collisionDirections[DIRECTION_TOP] = true;
-                position.setY(otherBoundingBox.getBottom() + 1);
+                position.setY(otherBoundingBox.getBottom() + 1 - (ourBoundingBox.getY() - position.getY()));
                 if (movement.getVelocityY() < 0) {
                     movement.setVelocityY(0);
                 }
@@ -59,7 +59,7 @@ public class PlayerCollisionHandler implements CollisionHandler, RenderableCompo
 
             case CollisionHandler.DIRECTION_RIGHT:
                 collisionDirections[DIRECTION_RIGHT] = true;
-                position.setX(otherBoundingBox.getLeft() - ourBoundingBox.getWidth() - 1);
+                position.setX(otherBoundingBox.getLeft() - ourBoundingBox.getWidth() - (ourBoundingBox.getX() - position.getX()) - 1);
                 if (movement.getVelocityX() > 0) {
                     movement.setVelocityX(0);
                 }
@@ -73,7 +73,7 @@ public class PlayerCollisionHandler implements CollisionHandler, RenderableCompo
 
             case CollisionHandler.DIRECTION_BOTTOM:
                 collisionDirections[DIRECTION_BOTTOM] = true;
-                position.setY(otherBoundingBox.getY() - ourBoundingBox.getHeight());
+                position.setY(otherBoundingBox.getY() - ourBoundingBox.getHeight() - (ourBoundingBox.getY() - position.getY()) - 1);
                 if (movement.getVelocityY() > 0) {
                     movement.setVelocityY(0);
                     movement.setAccelerationY(0);

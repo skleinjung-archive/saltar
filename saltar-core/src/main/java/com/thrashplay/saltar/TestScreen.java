@@ -25,7 +25,7 @@ import com.thrashplay.luna.input.VirtualKeyboard;
 import com.thrashplay.luna.renderable.ClearScreen;
 import com.thrashplay.luna.renderable.FpsDisplay;
 import com.thrashplay.luna.ui.TextButton;
-import com.thrashplay.saltar.component.KeyboardMovementController;
+import com.thrashplay.saltar.component.Jdaster64MovementController;
 import com.thrashplay.saltar.component.Player;
 import com.thrashplay.saltar.component.PlayerCollisionHandler;
 import com.thrashplay.saltar.component.ViewportScrollController;
@@ -83,7 +83,7 @@ public class TestScreen extends DefaultScreen {
         player.addComponent(new Collider(1, true));
         player.addComponent(new CrossBoundingBoxes(new StaticBoundingBoxes(new Rectangle(0, 0, 26, 48)), maxPlayerVelocity + 1, maxPlayerVelocity + 1));
         player.addComponent(new PlayerCollisionHandler());
-        player.addComponent(new KeyboardMovementController(inputManager));
+        player.addComponent(new Jdaster64MovementController(inputManager));
         player.addComponent(playerRenderer);
         gameObjectManager.register(player);
 
