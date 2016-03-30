@@ -33,21 +33,6 @@ public class MrBlasterMovementController implements UpdateableComponent, Collisi
 
         boolean movingHorizontally = false;
 
-        // preserve keyboard controller for the desktop version
-        if (inputManager.isKeyDown(KeyCode.KEY_LEFT_ARROW) || inputManager.isKeyDown(KeyCode.KEY_S)) {
-            movement.setVelocityX(-3f);
-
-            player.onLeftPressed();
-            movingHorizontally = true;
-        } else if (inputManager.isKeyDown(KeyCode.KEY_RIGHT_ARROW) || inputManager.isKeyDown(KeyCode.KEY_F)) {
-            movement.setVelocityX(3f);
-
-            player.onRightPressed();
-            movingHorizontally = true;
-        } else {
-            movement.setVelocityX(0);
-        }
-
         if (joystick.getTiltX() < 0) {
             movement.setVelocityX(Math.max(-3f, joystick.getTiltX() / 12f));
 
@@ -55,6 +40,17 @@ public class MrBlasterMovementController implements UpdateableComponent, Collisi
             movingHorizontally = true;
         } else if (joystick.getTiltX() > 0) {
             movement.setVelocityX(Math.min(3f, joystick.getTiltX() / 12f));
+
+            player.onRightPressed();
+            movingHorizontally = true;
+        } else if (inputManager.isKeyDown(KeyCode.KEY_LEFT_ARROW) || inputManager.isKeyDown(KeyCode.KEY_S)) {
+            // preserve keyboard controller for the desktop version
+            movement.setVelocityX(-3f);
+
+            player.onLeftPressed();
+            movingHorizontally = true;
+        } else if (inputManager.isKeyDown(KeyCode.KEY_RIGHT_ARROW) || inputManager.isKeyDown(KeyCode.KEY_F)) {
+            movement.setVelocityX(3f);
 
             player.onRightPressed();
             movingHorizontally = true;
