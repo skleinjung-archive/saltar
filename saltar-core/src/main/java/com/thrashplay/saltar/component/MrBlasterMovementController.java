@@ -28,22 +28,36 @@ public class MrBlasterMovementController implements UpdateableComponent, Collisi
 
     @Override
     public void update(GameObject gameObject, float delta) {
+        Player player = gameObject.getComponent(Player.class);
         Movement movement = gameObject.getComponent(Movement.class);
 
-        /*
+        boolean movingHorizontally = false;
+
+        // preserve keyboard controller for the desktop version
         if (inputManager.isKeyDown(KeyCode.KEY_LEFT_ARROW) || inputManager.isKeyDown(KeyCode.KEY_S)) {
             movement.setVelocityX(-3f);
+
+            player.onLeftPressed();
+            movingHorizontally = true;
         } else if (inputManager.isKeyDown(KeyCode.KEY_RIGHT_ARROW) || inputManager.isKeyDown(KeyCode.KEY_F)) {
             movement.setVelocityX(3f);
+
+            player.onRightPressed();
+            movingHorizontally = true;
         } else {
             movement.setVelocityX(0);
         }
-        */
 
         if (joystick.getTiltX() < 0) {
             movement.setVelocityX(Math.max(-3f, joystick.getTiltX() / 12f));
+
+            player.onLeftPressed();
+            movingHorizontally = true;
         } else if (joystick.getTiltX() > 0) {
             movement.setVelocityX(Math.min(3f, joystick.getTiltX() / 12f));
+
+            player.onRightPressed();
+            movingHorizontally = true;
         } else {
             movement.setVelocityX(0);
         }
@@ -62,6 +76,10 @@ public class MrBlasterMovementController implements UpdateableComponent, Collisi
                 movement.setVelocityY(-2);
             }
             holdingJumpDown = false;
+        }
+
+        if (!movingHorizontally) {
+            player.onHorizontalKeyRelased();
         }
     }
 
