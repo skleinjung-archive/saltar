@@ -18,15 +18,17 @@ import com.thrashplay.luna.api.graphics.SpriteSheet;
 import com.thrashplay.luna.api.input.InputManager;
 import com.thrashplay.luna.api.input.KeyCode;
 import com.thrashplay.luna.api.input.MultiTouchManager;
+import com.thrashplay.luna.api.input.TouchManager;
 import com.thrashplay.luna.api.level.LevelManager;
 import com.thrashplay.luna.api.level.config.LevelConfig;
 import com.thrashplay.luna.api.ui.Button;
 import com.thrashplay.luna.collision.*;
 import com.thrashplay.luna.engine.LegacyGameObjectAdapter;
+import com.thrashplay.luna.input.VirtualJoystick;
 import com.thrashplay.luna.input.VirtualKeyboard;
 import com.thrashplay.luna.renderable.ClearScreen;
 import com.thrashplay.luna.renderable.FpsDisplay;
-import com.thrashplay.luna.ui.TextButton;
+import com.thrashplay.luna.ui.InvisibleButton;
 import com.thrashplay.saltar.component.*;
 
 import java.util.List;
@@ -42,14 +44,16 @@ public class SaltarLevelScreen extends DefaultScreen {
     private ImageManager imageManager;
     private AnimationConfigManager animationConfigManager;
     private MultiTouchManager multiTouchManager;
+    private TouchManager touchManager;
     private InputManager inputManager;
 
-    public SaltarLevelScreen(LevelManager levelManager, ActorManager actorManager, ImageManager imageManager, AnimationConfigManager animationConfigManager, MultiTouchManager multiTouchManager, InputManager inputManager) {
+    public SaltarLevelScreen(LevelManager levelManager, ActorManager actorManager, ImageManager imageManager, AnimationConfigManager animationConfigManager, MultiTouchManager multiTouchManager, TouchManager touchManager, InputManager inputManager) {
         this.levelManager = levelManager;
         this.actorManager = actorManager;
         this.imageManager = imageManager;
         this.animationConfigManager = animationConfigManager;
         this.multiTouchManager = multiTouchManager;
+        this.touchManager = touchManager;
         this.inputManager = inputManager;
     }
 
@@ -65,7 +69,13 @@ public class SaltarLevelScreen extends DefaultScreen {
             gameObjectManager.register(object);
         }
 
-        GameObject player = createPlayer(levelConfig.getStartX(), levelConfig.getStartY());
+        VirtualJoystick joystick = new VirtualJoystick(multiTouchManager);
+        GameObject virtualJoystickGameObject = new GameObject("virtual joystick");
+        virtualJoystickGameObject.setRenderLayer(GameObject.RenderLayer.Overlay);
+        virtualJoystickGameObject.addComponent(joystick);
+        gameObjectManager.register(virtualJoystickGameObject);
+
+        GameObject player = createPlayer(joystick, levelConfig.getStartX(), levelConfig.getStartY());
         gameObjectManager.register(player);
 
         Position playerPosition = player.getComponent(Position.class);
@@ -91,17 +101,19 @@ public class SaltarLevelScreen extends DefaultScreen {
 //        final LunaImage image = imageManager.createSpriteSheet("spritesheets/player_spritesheet.json").getImage(1); // createImage("graphics/daxbotsheet.png");
 
         Rectangle screenBounds = new Rectangle(0, 0, Saltar.SCENE_WIDTH, Saltar.SCENE_HEIGHT);
-        Button leftButton = new TextButton(multiTouchManager, "<", 16, screenBounds.getBottom() - 56, 48, 48);
-        Button rightButton = new TextButton(multiTouchManager, ">", 80, screenBounds.getBottom() - 56, 48, 48);
-        Button jumpButton = new TextButton(multiTouchManager, "^", screenBounds.getRight() - 64, screenBounds.getBottom() - 56, 48, 48);
+//        Button leftButton = new InvisibleButton(multiTouchManager, 0, screenBounds.getHeight() / 2, screenBounds.getWidth() / 3, screenBounds.getHeight() / 2);
+//        Button rightButton = new InvisibleButton(multiTouchManager, screenBounds.getRight() - (screenBounds.getWidth() / 3), screenBounds.getHeight() / 2, screenBounds.getWidth() / 3, screenBounds.getHeight() / 2);
+        Button jumpButton = new InvisibleButton(multiTouchManager, screenBounds.getWidth() - (screenBounds.getWidth() / 3), 0, screenBounds.getWidth() / 3, screenBounds.getHeight());
+//        Button leftButton = new TextButton(multiTouchManager, "<", 16, screenBounds.getBottom() - 56, 48, 48);
+//        Button rightButton = new TextButton(multiTouchManager, ">", 80, screenBounds.getBottom() - 56, 48, 48);
+//        Button jumpButton = new TextButton(multiTouchManager, "^", screenBounds.getRight() - 64, screenBounds.getBottom() - 56, 48, 48);
         VirtualKeyboard virtualKeyboard = new VirtualKeyboard();
-        virtualKeyboard.registerButtonForKey(leftButton, KeyCode.KEY_LEFT_ARROW);
-        virtualKeyboard.registerButtonForKey(rightButton, KeyCode.KEY_RIGHT_ARROW);
+//        virtualKeyboard.registerButtonForKey(leftButton, KeyCode.KEY_LEFT_ARROW);
+//        virtualKeyboard.registerButtonForKey(rightButton, KeyCode.KEY_RIGHT_ARROW);
         virtualKeyboard.registerButtonForKey(jumpButton, KeyCode.KEY_SPACE);
         LegacyGameObjectAdapter virtualKeyboardGameObject = new LegacyGameObjectAdapter("virtual keyboard", virtualKeyboard);
         virtualKeyboardGameObject.setRenderLayer(GameObject.RenderLayer.Overlay);
         gameObjectManager.register(virtualKeyboardGameObject);
-
         inputManager.addKeyboard(virtualKeyboard);
 
         // create the viewport
@@ -130,10 +142,11 @@ public class SaltarLevelScreen extends DefaultScreen {
         debugOverlay.addComponent(new FrameCountDebugStringProvider());
         debugOverlay.addComponent(new PlayerMovementStatsDebugStringProvider());
         debugOverlay.addComponent(new CollisionStatsDebugStringProvider());
+        debugOverlay.addComponent(new MultiTouchManagerDebugStringProvider(multiTouchManager));
         gameObjectManager.register(debugOverlay);
     }
 
-    private GameObject createPlayer(int startX, int startY) {
+    private GameObject createPlayer(VirtualJoystick joystick, int startX, int startY) {
         AnimationConfig walkAnimation = animationConfigManager.getAnimationConfig("animations/player/sara_walk.json");
         AnimationConfig jumpAnimationConfig = animationConfigManager.getAnimationConfig("animations/player/jump.json");
         AnimationConfig deathAnimation = animationConfigManager.getAnimationConfig("animations/player/sara_death.json");
@@ -171,7 +184,7 @@ public class SaltarLevelScreen extends DefaultScreen {
         player.addComponent(new Collider(1, true));
         player.addComponent(new CrossBoundingBoxes(new RendererBasedBoundingBoxes(), maxPlayerVelocity + 1, maxPlayerVelocity + 1));
         player.addComponent(new DelegatingCollisionHandler(new PlayerCollisionHandler(), new ListenerNotifyingCollisionHandler()));
-        player.addComponent(new MrBlasterMovementController(inputManager));
+        player.addComponent(new MrBlasterMovementController(inputManager, joystick));
         player.addComponent(playerRenderer);
 
         return player;

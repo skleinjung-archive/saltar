@@ -28,6 +28,7 @@ public class Main {
                         luna.getImageManager(),
                         luna.getAnimationConfigManager(),
                         luna.getMultiTouchManager(),
+                        luna.getTouchManager(),
                         luna.getInputManager()));
                 gameConfig.setDefaultScreen("test");
                 return gameConfig;
