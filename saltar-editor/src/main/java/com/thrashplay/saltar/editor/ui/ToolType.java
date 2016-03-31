@@ -9,5 +9,6 @@ public enum ToolType {
     Select,
     Paint,
     Erase,
+    Monster,
     StartPosition
 }

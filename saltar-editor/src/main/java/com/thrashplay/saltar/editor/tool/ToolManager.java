@@ -49,6 +49,7 @@ public class ToolManager implements ProjectChangeListener {
                     if ("selectedTool".equals(event.getPropertyName()) && tool != null) {
                         tool.removeComponent(SelectionToolComponent.class);
                         tool.removeComponent(PaintbrushToolComponent.class);
+                        tool.removeComponent(PlaceMonsterToolComponent.class);
                         tool.removeComponent(EraseToolComponent.class);
                         tool.removeComponent(StartPositionToolComponent.class);
 
@@ -62,6 +63,9 @@ public class ToolManager implements ProjectChangeListener {
                                 break;
                             case Erase:
                                 tool.addComponent(new EraseToolComponent(project, gameObjectGridSelectionManager, leftMouseTouchManager, gameObjectManager));
+                                break;
+                            case Monster:
+                                tool.addComponent(new PlaceMonsterToolComponent(project, leftMouseTouchManager, gameObjectManager, gameObjectFactory));
                                 break;
                             case StartPosition:
                                 tool.addComponent(new StartPositionToolComponent(project, leftMouseTouchManager, gameObjectManager));

@@ -3,7 +3,8 @@ package com.thrashplay.saltar.editor.io;
 import com.google.gson.Gson;
 import com.thrashplay.luna.api.LunaException;
 import com.thrashplay.luna.api.engine.GameObject;
-import com.thrashplay.luna.api.level.config.GameObjectConfig;
+import com.thrashplay.luna.api.level.config.EnemyConfig;
+import com.thrashplay.luna.api.level.config.TileConfig;
 import com.thrashplay.luna.api.level.config.LevelConfig;
 import com.thrashplay.saltar.editor.model.Project;
 import com.thrashplay.saltar.editor.model.SaltarEditorApp;
@@ -64,8 +65,12 @@ public class SaveAndLoadManager {
 
                 app.setProject(newProject);
 
-                for (GameObjectConfig gameObjectConfig : config.getObjects()) {
-                    GameObject newGameObject = app.getGameObjectFactory().createGameObject(newProject, gameObjectConfig);
+                for (TileConfig tileConfig : config.getTiles()) {
+                    GameObject newGameObject = app.getGameObjectFactory().createTile(newProject, tileConfig);
+                    app.getScreen().getGameObjectManager().register(newGameObject);
+                }
+                for (EnemyConfig enemyConfig : config.getEnemies()) {
+                    GameObject newGameObject = app.getGameObjectFactory().createEnemy(newProject, enemyConfig);
                     app.getScreen().getGameObjectManager().register(newGameObject);
                 }
             } catch (IOException e1) {

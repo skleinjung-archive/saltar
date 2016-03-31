@@ -45,7 +45,7 @@ public class SaltarEditorWindow extends JFrame {
 
         getContentPane().setLayout(new BorderLayout());
         getContentPane().add(splitPane, BorderLayout.CENTER);
-        getContentPane().add(new JScrollPane(new TileTemplateToolbar(app)), BorderLayout.LINE_START);
+        getContentPane().add(new JScrollPane(new TemplateToolbar(app)), BorderLayout.LINE_START);
         getContentPane().add(createToolbar(app), BorderLayout.PAGE_START);
 
         MenuBar menubar = createMenu(app);
@@ -155,6 +155,7 @@ public class SaltarEditorWindow extends JFrame {
         toolbar.add(selectToolButton);
         toolbar.add(createButton(app, buttonGroup, ToolType.Paint, "/icons/paint.png"));
         toolbar.add(createButton(app, buttonGroup, ToolType.Erase, "/icons/delete.png"));
+        toolbar.add(createButton(app, buttonGroup, ToolType.Monster, "/icons/monster.png"));
         toolbar.add(createButton(app, buttonGroup, ToolType.StartPosition, "/icons/player.png"));
 
         // when a new project is created or loaded, change back to the select tool
@@ -184,7 +185,9 @@ public class SaltarEditorWindow extends JFrame {
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                app.getProject().setSelectedTool(toolType);
+                if (app.getProject() != null) {
+                    app.getProject().setSelectedTool(toolType);
+                }
             }
         });
         buttonGroup.add(button);

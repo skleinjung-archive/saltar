@@ -36,13 +36,16 @@ public class Project {
     // the currently selected tool from the toolbar
     private ToolType selectedTool;
 
-    // the currently selected sprite template
-    private int selectedTemplate = -1;
+    // the currently selected tile template
+    private int selectedTileTemplate = -1;
+
+    // the currently selected monster template
+    private String selectedMonsterTemplate = null;
 
     private int selectedTileX = 0;
     private int selectedTileY = 0;
 
-    private GameObjectConfig[][] gameObjectConfigs = new GameObjectConfig[0][];
+    private GameObjectConfig[][] gameObjects = new TileConfig[0][];
 
     // todo: replace with me a settings dialog on projection creation / project settings from menu bar
     public Project(SaltarEditorApp app) {
@@ -85,6 +88,14 @@ public class Project {
         resizeGameObjectGrid();
     }
 
+    public List<String> getEnemyConfigFiles() {
+        return Arrays.asList("enemies/blob.json");
+    }
+
+    public String getEnemyConfigFileById(int id) {
+        return getEnemyConfigFiles().get(id - 1);
+    }
+
     public int getStartX() {
         return startX;
     }
@@ -101,14 +112,24 @@ public class Project {
         this.startY = startY;
     }
 
-    public int getSelectedTemplate() {
-        return selectedTemplate;
+    public int getSelectedTileTemplate() {
+        return selectedTileTemplate;
     }
 
-    public void setSelectedTemplate(int selectedTemplate) {
-        int oldValue = this.selectedTemplate;
-        this.selectedTemplate = selectedTemplate;
-        pcs.firePropertyChange("selectedTemplate", oldValue, selectedTemplate);
+    public void setSelectedTileTemplate(int selectedTileTemplate) {
+        int oldValue = this.selectedTileTemplate;
+        this.selectedTileTemplate = selectedTileTemplate;
+        pcs.firePropertyChange("selectedTileTemplate", oldValue, selectedTileTemplate);
+    }
+
+    public String getSelectedMonsterTemplate() {
+        return selectedMonsterTemplate;
+    }
+
+    public void setSelectedMonsterTemplate(String selectedMonsterTemplate) {
+        String oldValue = this.selectedMonsterTemplate;
+        this.selectedMonsterTemplate = selectedMonsterTemplate;
+        pcs.firePropertyChange("selectedMonsterTemplate", oldValue, selectedMonsterTemplate);
     }
 
     public ToolType getSelectedTool() {
@@ -141,8 +162,8 @@ public class Project {
         pcs.firePropertyChange("selectedTileY", oldValue, selectedTileY);
     }
 
-    public GameObjectConfig createGameObjectConfig() {
-        if (selectedTemplate == -1) {
+    public TileConfig createTileConfig() {
+        if (selectedTileTemplate == -1) {
             return null;
         }
 
@@ -152,23 +173,51 @@ public class Project {
 
         RendererConfig renderer = new RendererConfig();
         renderer.setTileMapId(1);
-        renderer.setImageId(selectedTemplate);
+        renderer.setImageId(selectedTileTemplate);
 
-        GameObjectConfig config = new GameObjectConfig();
+        TileConfig config = new TileConfig();
         config.setPosition(position);
         config.setRenderer(renderer);
 
-        gameObjectConfigs[selectedTileY][selectedTileX] = config;
+        gameObjects[selectedTileY][selectedTileX] = config;
 
         return config;
     }
 
-    public GameObjectConfig getGameObjectConfig(int tileX, int tileY) {
-        return gameObjectConfigs[tileY][tileX];
+    public EnemyConfig createEnemyConfig() {
+        if (selectedMonsterTemplate == null) {
+            return null;
+        }
+
+        PositionConfig position = new PositionConfig();
+        position.setX(selectedTileX * level.getTileSize());
+        position.setY(selectedTileY * level.getTileSize());
+
+        EnemyConfig config = new EnemyConfig();
+        config.setFileId(getEnemyFileId(selectedMonsterTemplate));
+        config.setPosition(position);
+
+        gameObjects[selectedTileY][selectedTileX] = config;
+
+        return config;
     }
 
-    public void removeTileConfig(int tileX, int tileY) {
-        gameObjectConfigs[tileY][tileX] = null;
+    private int getEnemyFileId(String selectedMonsterTemplate) {
+        List<String> enemyConfigs = getEnemyConfigFiles();
+        for (int i = 0; i < enemyConfigs.size(); i++) {
+            if (selectedMonsterTemplate.equals(enemyConfigs.get(i))) {
+                return i + 1;
+            }
+        }
+        return -1;
+    }
+
+    public GameObjectConfig getGameObjectConfig(int tileX, int tileY) {
+        return gameObjects[tileY][tileX];
+    }
+
+    public void removeGameObjectConfig(int tileX, int tileY) {
+        gameObjects[tileY][tileX] = null;
     }
 
     public LevelConfig getLevelConfig() {
@@ -176,18 +225,32 @@ public class Project {
         tileMapConfig.setId(1);
         tileMapConfig.setResource(spriteSheet);
 
+        List<EnemyFileConfig> enemyFiles = new LinkedList<>();
+        List<String> enemyConfigs = getEnemyConfigFiles();
+        for (int i = 0; i < enemyConfigs.size(); i++) {
+            EnemyFileConfig enemyFileConfig = new EnemyFileConfig();
+            enemyFileConfig.setId(i + 1);
+            enemyFileConfig.setResource(enemyConfigs.get(i));
+            enemyFiles.add(enemyFileConfig);
+        }
+
         LevelConfig level = new LevelConfig();
-        List<GameObjectConfig> gameObjectConfigList = new LinkedList<>();
-        for (int y = 0; y < gameObjectConfigs.length; y++) {
-            for (int x = 0; x < gameObjectConfigs[0].length; x++) {
-                GameObjectConfig gameObjectConfig = gameObjectConfigs[y][x];
-                if (gameObjectConfig != null) {
-                    gameObjectConfigList.add(gameObjectConfig);
+        List<TileConfig> tileConfigList = new LinkedList<>();
+        List<EnemyConfig> enemyConfigList = new LinkedList<>();
+        for (int y = 0; y < gameObjects.length; y++) {
+            for (int x = 0; x < gameObjects[0].length; x++) {
+                GameObjectConfig config = gameObjects[y][x];
+                if (config != null && config instanceof TileConfig) {
+                    tileConfigList.add((TileConfig) config);
+                } else if (config != null && config instanceof EnemyConfig) {
+                    enemyConfigList.add((EnemyConfig) config);
                 }
             }
         }
-        level.setObjects(gameObjectConfigList);
+        level.setTiles(tileConfigList);
         level.setTileMaps(Arrays.asList(tileMapConfig));
+        level.setEnemyFiles(enemyFiles);
+        level.setEnemies(enemyConfigList);
         level.setStartX(startX);
         level.setStartY(startY);
         return level;
@@ -206,11 +269,18 @@ public class Project {
 
         int tileWidth = level.getTileSize();
         int tileHeight = level.getTileSize();
-        for (GameObjectConfig gameObjectConfig : levelConfig.getObjects()) {
-            PositionConfig position = gameObjectConfig.getPosition();
+        for (TileConfig tileConfig : levelConfig.getTiles()) {
+            PositionConfig position = tileConfig.getPosition();
             int tileX = position.getX() / tileWidth;
             int tileY = position.getY() / tileHeight;
-            gameObjectConfigs[tileY][tileX] = gameObjectConfig;
+            gameObjects[tileY][tileX] = tileConfig;
+        }
+
+        for (EnemyConfig enemyConfig : levelConfig.getEnemies()) {
+            PositionConfig position = enemyConfig.getPosition();
+            int tileX = position.getX() / tileWidth;
+            int tileY = position.getY() / tileHeight;
+            gameObjects[tileY][tileX] = enemyConfig;
         }
     }
 
@@ -231,14 +301,14 @@ public class Project {
             newGrid[y] = new GameObjectConfig[tileCountX];
         }
 
-        for (int y = 0; y < gameObjectConfigs.length; y++) {
-            for (int x = 0; x < gameObjectConfigs[0].length; x++) {
+        for (int y = 0; y < gameObjects.length; y++) {
+            for (int x = 0; x < gameObjects[0].length; x++) {
                 if (y < tileCountY && x < tileCountX) {
-                    newGrid[y][x] = gameObjectConfigs[y][x];
+                    newGrid[y][x] = gameObjects[y][x];
                 }
             }
         }
 
-        gameObjectConfigs = newGrid;
+        gameObjects = newGrid;
     }
 }

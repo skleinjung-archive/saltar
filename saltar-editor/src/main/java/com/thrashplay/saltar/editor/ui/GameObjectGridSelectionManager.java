@@ -23,8 +23,10 @@ public class GameObjectGridSelectionManager {
     }
 
     public GameObject getGameObject(int tileX, int tileY) {
-        int x = tileX * tileWidth;
-        int y = tileY * tileHeight;
+        int left = tileX * tileWidth;
+        int top = tileY * tileHeight;
+        int right = tileX + tileWidth - 1;
+        int bottom = tileY + tileHeight - 1;
 
         List<GameObject> gameObjects = gameObjectManager.getGameObjects();
         for (int i = 0; i < gameObjects.size(); i++) {
@@ -35,7 +37,11 @@ public class GameObjectGridSelectionManager {
                 continue;
             }
 
-            if (x == position.getX() && y == position.getY()) {
+            int x = (int) position.getX();
+            int y = (int) position.getY();
+
+            // our origin point is inside the tile
+            if (x >= left && x <= right && y >= top && y <= bottom) {
                 return gameObject;
             }
         }

@@ -6,6 +6,8 @@ import com.thrashplay.luna.api.engine.GameObject;
 import com.thrashplay.luna.api.engine.ScreenManager;
 import com.thrashplay.luna.api.input.InputManager;
 import com.thrashplay.luna.desktop.LunaCanvas;
+import com.thrashplay.luna.desktop.actor.DesktopActorManager;
+import com.thrashplay.luna.desktop.graphics.DesktopAnimationConfigManager;
 import com.thrashplay.luna.desktop.graphics.DesktopImageManager;
 import com.thrashplay.luna.desktop.graphics.DesktopSpriteSheetConfigManager;
 import com.thrashplay.luna.desktop.input.DesktopKeyboard;
@@ -53,6 +55,8 @@ public class SaltarEditorApp {
     private GameObjectFactory gameObjectFactory;
     private GameObjectGridSelectionManager gameObjectGridSelectionManager;
     private SaveAndLoadManager saveAndLoadManager;
+    private DesktopActorManager actorManager;
+    private DesktopAnimationConfigManager animationConfigManager;
 
     public void initialize() {
         lunaCanvas = new LunaCanvas(480, 320);
@@ -72,9 +76,11 @@ public class SaltarEditorApp {
         inputManager.addKeyboard(new DesktopKeyboard(lunaCanvas));
         spriteSheetConfigManager = new DesktopSpriteSheetConfigManager();
         imageManager = new DesktopImageManager(spriteSheetConfigManager);
-        gameObjectFactory = new GameObjectFactory(imageManager, 32);
         gameObjectGridSelectionManager = new GameObjectGridSelectionManager(screen.getGameObjectManager(), 32, 32);
         saveAndLoadManager = new SaveAndLoadManager(this);
+        animationConfigManager = new DesktopAnimationConfigManager();
+        actorManager = new DesktopActorManager(imageManager, animationConfigManager);
+        gameObjectFactory = new GameObjectFactory(actorManager, imageManager, animationConfigManager);
 
         mainLoop = new FixedFpsMainLoop(screenManager, lunaCanvas);
 
@@ -140,6 +146,14 @@ public class SaltarEditorApp {
 
     public SaveAndLoadManager getSaveAndLoadManager() {
         return saveAndLoadManager;
+    }
+
+    public DesktopAnimationConfigManager getAnimationConfigManager() {
+        return animationConfigManager;
+    }
+
+    public DesktopActorManager getActorManager() {
+        return actorManager;
     }
 
     public Project getProject() {

@@ -42,7 +42,7 @@ public class BumpIntoThingsAndTurnAroundController implements UpdateableComponen
             if (facingLeft) {
                 movement.setVelocityX(-1.5f);
             } else {
-                movement.setVelocityX(2.5f);
+                movement.setVelocityX(1.5f);
             }
         } else {
             movement.setVelocityX(0);

@@ -9,7 +9,6 @@
       "file": "animations/enemies/blob_dead.json"
     }
   },
-  "defaultAnimation":"walk",
   "gravity": 3,
   "collider": {
     "category": 3,

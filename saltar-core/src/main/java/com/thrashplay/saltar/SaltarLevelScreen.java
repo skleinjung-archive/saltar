@@ -46,8 +46,9 @@ public class SaltarLevelScreen extends DefaultScreen {
     private MultiTouchManager multiTouchManager;
     private TouchManager touchManager;
     private InputManager inputManager;
+    private String levelName;
 
-    public SaltarLevelScreen(LevelManager levelManager, ActorManager actorManager, ImageManager imageManager, AnimationConfigManager animationConfigManager, MultiTouchManager multiTouchManager, TouchManager touchManager, InputManager inputManager) {
+    public SaltarLevelScreen(LevelManager levelManager, ActorManager actorManager, ImageManager imageManager, AnimationConfigManager animationConfigManager, MultiTouchManager multiTouchManager, TouchManager touchManager, InputManager inputManager, String levelName) {
         this.levelManager = levelManager;
         this.actorManager = actorManager;
         this.imageManager = imageManager;
@@ -55,6 +56,7 @@ public class SaltarLevelScreen extends DefaultScreen {
         this.multiTouchManager = multiTouchManager;
         this.touchManager = touchManager;
         this.inputManager = inputManager;
+        this.levelName = levelName;
     }
 
     @Override
@@ -63,7 +65,7 @@ public class SaltarLevelScreen extends DefaultScreen {
 
         gameObjectManager.register(new LegacyGameObjectAdapter("clear screen", new ClearScreen(0x7EC0EE)));
 
-        LevelConfig levelConfig = levelManager.createLevelConfig("levels/level01.json");
+        LevelConfig levelConfig = levelManager.createLevelConfig("levels/" + levelName + ".json");
         List<GameObject> levelObjects = levelManager.createLevelObjects(levelConfig);
         for (GameObject object : levelObjects) {
             gameObjectManager.register(object);
@@ -79,16 +81,6 @@ public class SaltarLevelScreen extends DefaultScreen {
         gameObjectManager.register(player);
 
         Position playerPosition = player.getComponent(Position.class);
-        AnimationConfig walkAnimation = animationConfigManager.getAnimationConfig("animations/enemies/blob_walk.json");
-        SpriteSheet blobAnimationSpriteSheet = imageManager.createSpriteSheet(walkAnimation.getSpriteSheet());
-        AnimationRenderer walkingLeftAnimation = new AnimationRenderer(walkAnimation, blobAnimationSpriteSheet);
-
-        ActorConfig blobConfig = actorManager.createActorConfig("enemies/blob.json");
-
-        GameObject blob1 = actorManager.createActorObject(blobConfig);
-        blob1.setId("blob");
-        blob1.getComponent(Position.class).setRect(playerPosition.getX() + 600, playerPosition.getY(), 0, 0);
-        gameObjectManager.register(blob1);
 
 //        GameObject blob2 = actorManager.createActorObject(blobConfig);
 //        blob2.getComponent(Position.class).setRect(playerPosition.getX() + 250, playerPosition.getY(), 0, 0);
