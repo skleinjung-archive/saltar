@@ -25,8 +25,8 @@ public class GameObjectGridSelectionManager {
     public GameObject getGameObject(int tileX, int tileY) {
         int left = tileX * tileWidth;
         int top = tileY * tileHeight;
-        int right = tileX + tileWidth - 1;
-        int bottom = tileY + tileHeight - 1;
+        int right = left + tileWidth - 1;
+        int bottom = top + tileHeight - 1;
 
         List<GameObject> gameObjects = gameObjectManager.getGameObjects();
         for (int i = 0; i < gameObjects.size(); i++) {
