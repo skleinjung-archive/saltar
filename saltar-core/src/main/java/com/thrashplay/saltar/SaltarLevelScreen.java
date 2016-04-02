@@ -2,7 +2,6 @@ package com.thrashplay.saltar;
 
 import com.thrashplay.luna.animation.AnimationStateBasedRenderer;
 import com.thrashplay.luna.api.actor.ActorManager;
-import com.thrashplay.luna.api.actor.config.ActorConfig;
 import com.thrashplay.luna.api.animation.AnimationConfig;
 import com.thrashplay.luna.api.animation.AnimationRenderer;
 import com.thrashplay.luna.api.collision.CrossCollisionDetector;
@@ -21,6 +20,7 @@ import com.thrashplay.luna.api.input.MultiTouchManager;
 import com.thrashplay.luna.api.input.TouchManager;
 import com.thrashplay.luna.api.level.LevelManager;
 import com.thrashplay.luna.api.level.config.LevelConfig;
+import com.thrashplay.luna.api.sound.SoundManager;
 import com.thrashplay.luna.api.ui.Button;
 import com.thrashplay.luna.collision.*;
 import com.thrashplay.luna.engine.LegacyGameObjectAdapter;
@@ -42,16 +42,18 @@ public class SaltarLevelScreen extends DefaultScreen {
     private LevelManager levelManager;
     private ActorManager actorManager;
     private ImageManager imageManager;
+    private SoundManager soundManager;
     private AnimationConfigManager animationConfigManager;
     private MultiTouchManager multiTouchManager;
     private TouchManager touchManager;
     private InputManager inputManager;
     private String levelName;
 
-    public SaltarLevelScreen(LevelManager levelManager, ActorManager actorManager, ImageManager imageManager, AnimationConfigManager animationConfigManager, MultiTouchManager multiTouchManager, TouchManager touchManager, InputManager inputManager, String levelName) {
+    public SaltarLevelScreen(LevelManager levelManager, ActorManager actorManager, ImageManager imageManager, SoundManager soundManager, AnimationConfigManager animationConfigManager, MultiTouchManager multiTouchManager, TouchManager touchManager, InputManager inputManager, String levelName) {
         this.levelManager = levelManager;
         this.actorManager = actorManager;
         this.imageManager = imageManager;
+        this.soundManager = soundManager;
         this.animationConfigManager = animationConfigManager;
         this.multiTouchManager = multiTouchManager;
         this.touchManager = touchManager;
@@ -77,7 +79,7 @@ public class SaltarLevelScreen extends DefaultScreen {
         virtualJoystickGameObject.addComponent(joystick);
         gameObjectManager.register(virtualJoystickGameObject);
 
-        GameObject player = createPlayer(joystick, levelConfig.getStartX(), levelConfig.getStartY());
+        GameObject player = createPlayer(soundManager, joystick, levelConfig.getStartX(), levelConfig.getStartY());
         gameObjectManager.register(player);
 
         Position playerPosition = player.getComponent(Position.class);
@@ -138,7 +140,7 @@ public class SaltarLevelScreen extends DefaultScreen {
         gameObjectManager.register(debugOverlay);
     }
 
-    private GameObject createPlayer(VirtualJoystick joystick, int startX, int startY) {
+    private GameObject createPlayer(SoundManager soundManager, VirtualJoystick joystick, int startX, int startY) {
         AnimationConfig walkAnimation = animationConfigManager.getAnimationConfig("animations/player/sara_walk.json");
         AnimationConfig jumpAnimationConfig = animationConfigManager.getAnimationConfig("animations/player/jump.json");
         AnimationConfig deathAnimation = animationConfigManager.getAnimationConfig("animations/player/sara_death.json");
@@ -176,7 +178,7 @@ public class SaltarLevelScreen extends DefaultScreen {
         player.addComponent(new Collider(1, true));
         player.addComponent(new CrossBoundingBoxes(new RendererBasedBoundingBoxes(), maxPlayerVelocity + 1, maxPlayerVelocity + 1));
         player.addComponent(new DelegatingCollisionHandler(new PlayerCollisionHandler(), new ListenerNotifyingCollisionHandler()));
-        player.addComponent(new MrBlasterMovementController(inputManager, joystick));
+        player.addComponent(new MrBlasterMovementController(soundManager, inputManager, joystick));
         player.addComponent(playerRenderer);
 
         return player;

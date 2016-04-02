@@ -7,6 +7,8 @@ import com.thrashplay.luna.api.engine.GameObject;
 import com.thrashplay.luna.api.input.InputManager;
 import com.thrashplay.luna.api.input.Joystick;
 import com.thrashplay.luna.api.input.KeyCode;
+import com.thrashplay.luna.api.sound.SoundEffect;
+import com.thrashplay.luna.api.sound.SoundManager;
 import com.thrashplay.luna.collision.CollisionListener;
 
 /**
@@ -15,12 +17,18 @@ import com.thrashplay.luna.collision.CollisionListener;
  * @author Sean Kleinjung
  */
 public class MrBlasterMovementController implements UpdateableComponent, CollisionListener {
+    private SoundManager soundManager;
     private InputManager inputManager;
     private Joystick joystick;
 
-    public MrBlasterMovementController(InputManager inputManager, Joystick joystick) {
+    private SoundEffect jumpSound;
+
+    public MrBlasterMovementController(SoundManager soundManager, InputManager inputManager, Joystick joystick) {
+        this.soundManager = soundManager;
         this.inputManager = inputManager;
         this.joystick = joystick;
+
+        jumpSound = soundManager.createSoundEffect("sfx/jump.mp3");
     }
 
     boolean onGround = true;
@@ -64,6 +72,8 @@ public class MrBlasterMovementController implements UpdateableComponent, Collisi
 //                movement.setAccelerationY(0.5f);  // we have a gravity set instead
                 onGround = false;
                 holdingJumpDown = true;
+
+                jumpSound.play(0.1f);
             }
         }
 

@@ -26,6 +26,7 @@ public class Main {
                         luna.getLevelManager(),
                         luna.getActorManager(),
                         luna.getImageManager(),
+                        luna.getSoundManager(),
                         luna.getAnimationConfigManager(),
                         luna.getMultiTouchManager(),
                         luna.getTouchManager(),
