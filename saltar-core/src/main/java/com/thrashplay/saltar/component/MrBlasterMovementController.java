@@ -73,7 +73,7 @@ public class MrBlasterMovementController implements UpdateableComponent, Collisi
                 onGround = false;
                 holdingJumpDown = true;
 
-                jumpSound.play(0.1f);
+                //jumpSound.play(0.1f);
             }
         }
 

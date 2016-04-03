@@ -33,7 +33,7 @@ public class DefaultResolutionCollisionHandler implements CollisionHandler {
                 movement.setVelocityX(0);
             }
         } else if (directions[CollisionHandler.DIRECTION_BOTTOM]) {
-            position.setY(otherBoundingBox.getY() - ourBoundingBox.getHeight() - 1);// TODO: - ourRelativeBoundingBox.getY() and not 5
+            position.setY(otherBoundingBox.getY() - ourBoundingBox.getHeight() + 1);
             if (movement.getVelocityY() > 0) {
                 movement.setVelocityY(0);
             }

@@ -1,8 +1,9 @@
-package com.thrashplay.saltar.component;
+package com.thrashplay.saltar.debug;
 
 import com.thrashplay.luna.api.component.Movement;
 import com.thrashplay.luna.api.engine.GameObject;
 import com.thrashplay.luna.api.engine.GameObjectManager;
+import com.thrashplay.saltar.component.DebugStringRenderer;
 
 /**
  * TODO: Add class documentation

@@ -5,7 +5,7 @@ import com.thrashplay.luna.api.actor.ActorManager;
 import com.thrashplay.luna.api.animation.AnimationConfig;
 import com.thrashplay.luna.api.animation.AnimationRenderer;
 import com.thrashplay.luna.api.collision.CrossCollisionDetector;
-import com.thrashplay.luna.api.collision.GridPartitioningBroadPhaseCollisionDetector;
+import com.thrashplay.luna.api.collision.NoOpBroadPhaseCollisionDetector;
 import com.thrashplay.luna.api.component.*;
 import com.thrashplay.luna.api.engine.DefaultScreen;
 import com.thrashplay.luna.api.engine.GameObject;
@@ -23,6 +23,7 @@ import com.thrashplay.luna.api.level.config.LevelConfig;
 import com.thrashplay.luna.api.sound.SoundManager;
 import com.thrashplay.luna.api.ui.Button;
 import com.thrashplay.luna.collision.*;
+import com.thrashplay.luna.component.GameObjectActivationManager;
 import com.thrashplay.luna.engine.LegacyGameObjectAdapter;
 import com.thrashplay.luna.input.VirtualJoystick;
 import com.thrashplay.luna.input.VirtualKeyboard;
@@ -30,6 +31,7 @@ import com.thrashplay.luna.renderable.ClearScreen;
 import com.thrashplay.luna.renderable.FpsDisplay;
 import com.thrashplay.luna.ui.InvisibleButton;
 import com.thrashplay.saltar.component.*;
+import com.thrashplay.saltar.debug.*;
 
 import java.util.List;
 
@@ -72,6 +74,11 @@ public class SaltarLevelScreen extends DefaultScreen {
         for (GameObject object : levelObjects) {
             gameObjectManager.register(object);
         }
+
+        GameObject spawnerObject = new GameObject("enemy spawner");
+        spawnerObject.addComponent(new Position(350, 0, 0, 0));
+        spawnerObject.addComponent(new EnemySpawnerComponent(gameObjectManager, actorManager, "enemies/blob.json", 10000));
+        gameObjectManager.register(spawnerObject);
 
         VirtualJoystick joystick = new VirtualJoystick(multiTouchManager);
         GameObject virtualJoystickGameObject = new GameObject("virtual joystick");
@@ -120,9 +127,11 @@ public class SaltarLevelScreen extends DefaultScreen {
         fpsDisplay.setRenderLayer(GameObject.RenderLayer.Overlay);
         gameObjectManager.register(fpsDisplay);
 
-        GameObject collisionDetection = new GameObject("collision detection");
-        collisionDetection.addComponent(new GridPartitioningBroadPhaseCollisionDetector(gameObjectManager, new CrossCollisionDetector(), 40, 15));
-        gameObjectManager.register(collisionDetection);
+        GameObject system = new GameObject("system");
+//        system.addComponent(new GridPartitioningBroadPhaseCollisionDetector(gameObjectManager, new CrossCollisionDetector(), 40, 15));
+        system.addComponent(new NoOpBroadPhaseCollisionDetector(gameObjectManager, new CrossCollisionDetector()));
+        system.addComponent(new GameObjectActivationManager(gameObjectManager, 150));
+        gameObjectManager.register(system);
 
         GameObject debugScene = new GameObject("debug-scene");
         debugScene.setRenderLayer(GameObject.RenderLayer.Foreground);
@@ -137,6 +146,7 @@ public class SaltarLevelScreen extends DefaultScreen {
         debugOverlay.addComponent(new PlayerMovementStatsDebugStringProvider());
         debugOverlay.addComponent(new CollisionStatsDebugStringProvider());
         debugOverlay.addComponent(new MultiTouchManagerDebugStringProvider(multiTouchManager));
+        debugOverlay.addComponent(new ActiveGameObjectCountDebugStringProvider());
         gameObjectManager.register(debugOverlay);
     }
 
@@ -169,7 +179,7 @@ public class SaltarLevelScreen extends DefaultScreen {
 
 //        final LunaImage image = imageManager.createSpriteSheet("spritesheets/player_spritesheet.json").getImage(1); // createImage("graphics/daxbotsheet.png");
 
-        int maxPlayerVelocity = 3;
+        int maxPlayerVelocity = 5;
         GameObject player = new GameObject("player");
         player.addComponent(new Position(startX, startY));
         player.addComponent(new Movement());

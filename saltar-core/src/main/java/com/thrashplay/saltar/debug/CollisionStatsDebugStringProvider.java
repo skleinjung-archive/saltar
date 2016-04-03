@@ -1,9 +1,10 @@
-package com.thrashplay.saltar.component;
+package com.thrashplay.saltar.debug;
 
 import com.thrashplay.luna.api.collision.GridPartitioningBroadPhaseCollisionDetector;
 import com.thrashplay.luna.api.collision.NarrowPhaseCollisionDetector;
 import com.thrashplay.luna.api.engine.GameObject;
 import com.thrashplay.luna.api.engine.GameObjectManager;
+import com.thrashplay.saltar.component.DebugStringRenderer;
 
 /**
  * TODO: Add class documentation
