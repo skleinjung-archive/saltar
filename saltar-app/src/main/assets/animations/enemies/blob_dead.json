@@ -3,12 +3,8 @@
   "loop": "none",
   "frames":[
     {
-      "imageId": 3,
-      "duration": 25
-    },
-    {
       "imageId": 4,
-      "duration": 1
+      "duration": 350
     }
   ]
 }

@@ -5,7 +5,7 @@ import com.thrashplay.luna.api.actor.ActorManager;
 import com.thrashplay.luna.api.animation.AnimationConfig;
 import com.thrashplay.luna.api.animation.AnimationRenderer;
 import com.thrashplay.luna.api.collision.CrossCollisionDetector;
-import com.thrashplay.luna.api.collision.NoOpBroadPhaseCollisionDetector;
+import com.thrashplay.luna.api.collision.GridPartitioningBroadPhaseCollisionDetector;
 import com.thrashplay.luna.api.component.*;
 import com.thrashplay.luna.api.engine.DefaultScreen;
 import com.thrashplay.luna.api.engine.GameObject;
@@ -30,6 +30,7 @@ import com.thrashplay.luna.input.VirtualKeyboard;
 import com.thrashplay.luna.renderable.ClearScreen;
 import com.thrashplay.luna.renderable.FpsDisplay;
 import com.thrashplay.luna.ui.InvisibleButton;
+import com.thrashplay.saltar.collision.DefaultResolutionCollisionHandler;
 import com.thrashplay.saltar.component.*;
 import com.thrashplay.saltar.debug.*;
 
@@ -128,9 +129,8 @@ public class SaltarLevelScreen extends DefaultScreen {
         gameObjectManager.register(fpsDisplay);
 
         GameObject system = new GameObject("system");
-//        system.addComponent(new GridPartitioningBroadPhaseCollisionDetector(gameObjectManager, new CrossCollisionDetector(), 40, 15));
-        system.addComponent(new NoOpBroadPhaseCollisionDetector(gameObjectManager, new CrossCollisionDetector()));
-        system.addComponent(new GameObjectActivationManager(gameObjectManager, 150));
+        system.addComponent(new GridPartitioningBroadPhaseCollisionDetector(gameObjectManager, new CrossCollisionDetector(), 40, 15));
+        system.addComponent(new GameObjectActivationManager(gameObjectManager, 350));
         gameObjectManager.register(system);
 
         GameObject debugScene = new GameObject("debug-scene");
@@ -187,7 +187,7 @@ public class SaltarLevelScreen extends DefaultScreen {
         player.addComponent(new Player());
         player.addComponent(new Collider(1, true));
         player.addComponent(new CrossBoundingBoxes(new RendererBasedBoundingBoxes(), maxPlayerVelocity + 1, maxPlayerVelocity + 1));
-        player.addComponent(new DelegatingCollisionHandler(new PlayerCollisionHandler(), new ListenerNotifyingCollisionHandler()));
+        player.addComponent(new DelegatingCollisionHandler(new DefaultResolutionCollisionHandler(), new PlayerCollisionHandler(), new ListenerNotifyingCollisionHandler()));
         player.addComponent(new MrBlasterMovementController(soundManager, inputManager, joystick));
         player.addComponent(playerRenderer);
 

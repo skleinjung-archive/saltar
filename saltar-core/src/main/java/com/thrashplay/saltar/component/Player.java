@@ -3,7 +3,7 @@ package com.thrashplay.saltar.component;
 import com.thrashplay.luna.api.component.Movement;
 import com.thrashplay.luna.api.component.UpdateableComponent;
 import com.thrashplay.luna.api.engine.GameObject;
-import com.thrashplay.luna.animation.AnimationState;
+import com.thrashplay.luna.api.animation.AnimationController;
 
 /**
  * TODO: Add class documentation
@@ -105,9 +105,9 @@ public class Player implements UpdateableComponent {
         Movement movement = gameObject.getComponent(Movement.class);
         Player player = gameObject.getComponent(Player.class);
 
-        AnimationState animationState = gameObject.getComponent(AnimationState.class);
+        AnimationController animationController = gameObject.getComponent(AnimationController.class);
 //        if (!animationState.getCurrentState().equals("DyingRight")) { // don't un-dead us
-            animationState.setCurrentState(this.animationState.name());
+            animationController.setCurrentState(this.animationState.name());
 //        }
 
         /*

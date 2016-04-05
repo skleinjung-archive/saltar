@@ -1,5 +1,6 @@
 package com.thrashplay.saltar.ai;
 
+import com.thrashplay.luna.api.animation.AnimationListener;
 import com.thrashplay.luna.api.collision.CollisionHandler;
 import com.thrashplay.luna.api.component.Collider;
 import com.thrashplay.luna.api.component.Movement;
@@ -7,7 +8,7 @@ import com.thrashplay.luna.api.component.UpdateableComponent;
 import com.thrashplay.luna.api.engine.GameObject;
 import com.thrashplay.luna.collision.CollisionCategoryIds;
 import com.thrashplay.luna.collision.CollisionListener;
-import com.thrashplay.luna.animation.AnimationState;
+import com.thrashplay.luna.api.animation.AnimationController;
 
 /**
  * TODO: Add class documentation
@@ -49,10 +50,29 @@ public class BumpIntoThingsAndTurnAroundController implements UpdateableComponen
         }
     }
 
-    private void die(GameObject gameObject) {
-        dead = true;
-        AnimationState animationState = gameObject.getComponent(AnimationState.class);
-        animationState.setCurrentState("dead");
+    private void die(final GameObject gameObject) {
+        if (!dead) {
+            dead = true;
+            final AnimationController animationController = gameObject.getComponent(AnimationController.class);
+            animationController.setCurrentState("dead");
+            animationController.addAnimationListener(new AnimationListener() {
+                @Override
+                public void onAnimationStarted(String animationState) {
+                    // no op
+                }
+
+                @Override
+                public void onAnimationComplete(String animationState) {
+                    if ("dead".equals(animationState)) {
+                        animationController.removeAnimationListener(this);
+                        gameObject.setDead(true);
+                    }
+                }
+            });
+
+            Collider collider = gameObject.getComponent(Collider.class);
+            collider.setCategory(CollisionCategoryIds.DEAD_ENEMY);
+        }
     }
 
     private boolean isPlayer(GameObject otherObject) {
