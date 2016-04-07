@@ -55,7 +55,7 @@ public class Project {
         spriteSheet = "spritesheets/level01_spritesheet.json";
 
         //level = new Level(240, 26);  <- mario maker dimensions
-        level = new Level(80, 26);
+        level = new Level(240, 26);
         resizeGameObjectGrid();
     }
 

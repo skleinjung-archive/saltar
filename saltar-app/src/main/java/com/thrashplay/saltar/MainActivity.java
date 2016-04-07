@@ -3,6 +3,7 @@ package com.thrashplay.saltar;
 import com.thrashplay.luna.android.engine.LunaGame;
 import com.thrashplay.luna.api.engine.Luna;
 import com.thrashplay.luna.engine.LunaGameConfig;
+import com.thrashplay.saltar.screen.SaltarScreenManager;
 
 /**
  * TODO: Add class documentation
@@ -20,7 +21,7 @@ public class MainActivity extends LunaGame {
         LunaGameConfig gameConfig = new LunaGameConfig();
         gameConfig.setSceneDimensions(480, 320);
         gameConfig.setScreenManager(new SaltarScreenManager(luna.getLevelManager(), luna.getActorManager(), luna.getImageManager(), luna.getSoundManager(), luna.getAnimationConfigManager(), luna.getMultiTouchManager(), luna.getTouchManager(), luna.getInputManager()));
-        gameConfig.setDefaultScreen("test");
+        gameConfig.setDefaultScreen("level01Intro");
         return gameConfig;
     }
 

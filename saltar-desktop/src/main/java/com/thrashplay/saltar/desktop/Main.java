@@ -5,7 +5,7 @@ import com.thrashplay.luna.desktop.LunaCanvas;
 import com.thrashplay.luna.desktop.LunaWindow;
 import com.thrashplay.luna.engine.LunaGameConfig;
 import com.thrashplay.saltar.Saltar;
-import com.thrashplay.saltar.SaltarScreenManager;
+import com.thrashplay.saltar.screen.SaltarScreenManager;
 
 /**
  * TODO: Add class documentation
@@ -31,7 +31,7 @@ public class Main {
                         luna.getMultiTouchManager(),
                         luna.getTouchManager(),
                         luna.getInputManager()));
-                gameConfig.setDefaultScreen("test");
+                gameConfig.setDefaultScreen("level01Intro");
                 return gameConfig;
             }
         };

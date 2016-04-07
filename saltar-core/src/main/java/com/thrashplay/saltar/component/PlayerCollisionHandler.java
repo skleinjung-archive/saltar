@@ -48,7 +48,7 @@ public class PlayerCollisionHandler implements CollisionHandler, RenderableCompo
         if (category == CollisionCategoryIds.LIVE_ENEMY) {
             if (directions[CollisionHandler.DIRECTION_LEFT] || directions[CollisionHandler.DIRECTION_TOP] || directions[CollisionHandler.DIRECTION_RIGHT]) {
                 if (isEnemy(otherObject)) {
-                    player.onDeath();
+                    player.onDeath(ourObject);
                 }
             }
         }

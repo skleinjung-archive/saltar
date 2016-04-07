@@ -39,6 +39,11 @@ public class MrBlasterMovementController implements UpdateableComponent, Collisi
         Player player = gameObject.getComponent(Player.class);
         Movement movement = gameObject.getComponent(Movement.class);
 
+        // don't allow any movement actions if we are in our death animation
+        if (player.isDying()) {
+            return;
+        }
+
         boolean movingHorizontally = false;
 
         if (joystick.getTiltX() < 0) {

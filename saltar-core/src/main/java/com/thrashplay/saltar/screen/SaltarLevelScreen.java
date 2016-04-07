@@ -1,4 +1,4 @@
-package com.thrashplay.saltar;
+package com.thrashplay.saltar.screen;
 
 import com.thrashplay.luna.animation.AnimationStateBasedRenderer;
 import com.thrashplay.luna.api.actor.ActorManager;
@@ -30,6 +30,7 @@ import com.thrashplay.luna.input.VirtualKeyboard;
 import com.thrashplay.luna.renderable.ClearScreen;
 import com.thrashplay.luna.renderable.FpsDisplay;
 import com.thrashplay.luna.ui.InvisibleButton;
+import com.thrashplay.saltar.Saltar;
 import com.thrashplay.saltar.collision.DefaultResolutionCollisionHandler;
 import com.thrashplay.saltar.component.*;
 import com.thrashplay.saltar.debug.*;
@@ -90,18 +91,6 @@ public class SaltarLevelScreen extends DefaultScreen {
         GameObject player = createPlayer(soundManager, joystick, levelConfig.getStartX(), levelConfig.getStartY());
         gameObjectManager.register(player);
 
-        Position playerPosition = player.getComponent(Position.class);
-
-//        GameObject blob2 = actorManager.createActorObject(blobConfig);
-//        blob2.getComponent(Position.class).setRect(playerPosition.getX() + 250, playerPosition.getY(), 0, 0);
-//        gameObjectManager.register(blob2);
-//
-//        GameObject blob3 = actorManager.createActorObject(blobConfig);
-//        blob3.getComponent(Position.class).setRect(playerPosition.getX() + 350, playerPosition.getY(), 0, 0);
-//        gameObjectManager.register(blob3);
-
-//        final LunaImage image = imageManager.createSpriteSheet("spritesheets/player_spritesheet.json").getImage(1); // createImage("graphics/daxbotsheet.png");
-
         Rectangle screenBounds = new Rectangle(0, 0, Saltar.SCENE_WIDTH, Saltar.SCENE_HEIGHT);
 //        Button leftButton = new InvisibleButton(multiTouchManager, 0, screenBounds.getHeight() / 2, screenBounds.getWidth() / 3, screenBounds.getHeight() / 2);
 //        Button rightButton = new InvisibleButton(multiTouchManager, screenBounds.getRight() - (screenBounds.getWidth() / 3), screenBounds.getHeight() / 2, screenBounds.getWidth() / 3, screenBounds.getHeight() / 2);
@@ -147,7 +136,10 @@ public class SaltarLevelScreen extends DefaultScreen {
         debugOverlay.addComponent(new CollisionStatsDebugStringProvider());
         debugOverlay.addComponent(new MultiTouchManagerDebugStringProvider(multiTouchManager));
         debugOverlay.addComponent(new ActiveGameObjectCountDebugStringProvider());
+        debugOverlay.addComponent(new PlayerAnimationStateDebugStringProvider());
         gameObjectManager.register(debugOverlay);
+
+
     }
 
     private GameObject createPlayer(SoundManager soundManager, VirtualJoystick joystick, int startX, int startY) {
@@ -163,7 +155,7 @@ public class SaltarLevelScreen extends DefaultScreen {
         walkingLeftAnimation.setFlipHorizontally(true);
         AnimationRenderer walkingRightAnimation = new AnimationRenderer(walkAnimation, playerAnimationSpriteSheet);
         AnimationRenderer jumpingAnimation = new AnimationRenderer(jumpAnimationConfig, playerAnimationSpriteSheet);
-        AnimationRenderer dyingRightAnimatino = new AnimationRenderer(deathAnimation, playerAnimationSpriteSheet);
+        AnimationRenderer dyingRightAnimation = new AnimationRenderer(deathAnimation, playerAnimationSpriteSheet);
         AnimationRenderer dyingLeftAnimation = new AnimationRenderer(deathAnimation, playerAnimationSpriteSheet);
         dyingLeftAnimation.setFlipHorizontally(true);
 
@@ -173,7 +165,7 @@ public class SaltarLevelScreen extends DefaultScreen {
         playerRenderer.addRenderer("WalkingLeft", walkingLeftAnimation);
         playerRenderer.addRenderer("WalkingRight", walkingRightAnimation);
         playerRenderer.addRenderer("JumpingRight", jumpingAnimation);
-        playerRenderer.addRenderer("DyingRight", dyingRightAnimatino);
+        playerRenderer.addRenderer("DyingRight", dyingRightAnimation);
         playerRenderer.addRenderer("DyingLeft", dyingLeftAnimation);
         playerRenderer.setCurrentState("IdleFacingRight");
 
@@ -184,7 +176,7 @@ public class SaltarLevelScreen extends DefaultScreen {
         player.addComponent(new Position(startX, startY));
         player.addComponent(new Movement());
         player.addComponent(new Gravity(0.5f, 12));
-        player.addComponent(new Player());
+        player.addComponent(new Player(gameObjectManager));
         player.addComponent(new Collider(1, true));
         player.addComponent(new CrossBoundingBoxes(new RendererBasedBoundingBoxes(), maxPlayerVelocity + 1, maxPlayerVelocity + 1));
         player.addComponent(new DelegatingCollisionHandler(new DefaultResolutionCollisionHandler(), new PlayerCollisionHandler(), new ListenerNotifyingCollisionHandler()));
@@ -192,5 +184,21 @@ public class SaltarLevelScreen extends DefaultScreen {
         player.addComponent(playerRenderer);
 
         return player;
+    }
+
+    @Override
+    public void shutdown() {
+        super.shutdown();
+        gameObjectManager.unregisterAll();
+    }
+
+    @Override
+    public String getNextScreen() {
+        GameObject player = gameObjectManager.getGameObject("player");
+        if (player.isDead()) {
+            return levelName + "Intro";
+        } else {
+            return super.getNextScreen();
+        }
     }
 }
