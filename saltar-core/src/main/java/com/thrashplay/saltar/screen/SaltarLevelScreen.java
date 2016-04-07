@@ -1,6 +1,5 @@
 package com.thrashplay.saltar.screen;
 
-import com.thrashplay.luna.animation.AnimationStateBasedRenderer;
 import com.thrashplay.luna.api.actor.ActorManager;
 import com.thrashplay.luna.api.animation.AnimationConfig;
 import com.thrashplay.luna.api.animation.AnimationRenderer;
@@ -113,6 +112,12 @@ public class SaltarLevelScreen extends DefaultScreen {
         viewport.addComponent(new ViewportScrollController(player));
         gameObjectManager.register(viewport);
 
+        // the player's HUD
+        GameObject hud = new GameObject("hud");
+        hud.setRenderLayer(GameObject.RenderLayer.Overlay);
+        hud.addComponent(new Hud(gameObjectManager, imageManager));
+        gameObjectManager.register(hud);
+
         LegacyGameObjectAdapter fpsDisplay = new LegacyGameObjectAdapter("fps display", new FpsDisplay(18));
         fpsDisplay.setRenderLayer(GameObject.RenderLayer.Overlay);
         gameObjectManager.register(fpsDisplay);
@@ -138,8 +143,6 @@ public class SaltarLevelScreen extends DefaultScreen {
         debugOverlay.addComponent(new ActiveGameObjectCountDebugStringProvider());
         debugOverlay.addComponent(new PlayerAnimationStateDebugStringProvider());
         gameObjectManager.register(debugOverlay);
-
-
     }
 
     private GameObject createPlayer(SoundManager soundManager, VirtualJoystick joystick, int startX, int startY) {
@@ -159,7 +162,7 @@ public class SaltarLevelScreen extends DefaultScreen {
         AnimationRenderer dyingLeftAnimation = new AnimationRenderer(deathAnimation, playerAnimationSpriteSheet);
         dyingLeftAnimation.setFlipHorizontally(true);
 
-        AnimationStateBasedRenderer playerRenderer = new AnimationStateBasedRenderer();
+        PlayerRenderer playerRenderer = new PlayerRenderer(250, 100);
         playerRenderer.addRenderer("IdleFacingLeft", idleLeftImage);
         playerRenderer.addRenderer("IdleFacingRight", idleRightImage);
         playerRenderer.addRenderer("WalkingLeft", walkingLeftAnimation);
@@ -179,7 +182,7 @@ public class SaltarLevelScreen extends DefaultScreen {
         player.addComponent(new Player(gameObjectManager));
         player.addComponent(new Collider(1, true));
         player.addComponent(new CrossBoundingBoxes(new RendererBasedBoundingBoxes(), maxPlayerVelocity + 1, maxPlayerVelocity + 1));
-        player.addComponent(new DelegatingCollisionHandler(new DefaultResolutionCollisionHandler(), new PlayerCollisionHandler(), new ListenerNotifyingCollisionHandler()));
+        player.addComponent(new DelegatingCollisionHandler(new DefaultResolutionCollisionHandler(), new ListenerNotifyingCollisionHandler()));
         player.addComponent(new MrBlasterMovementController(soundManager, inputManager, joystick));
         player.addComponent(playerRenderer);
 

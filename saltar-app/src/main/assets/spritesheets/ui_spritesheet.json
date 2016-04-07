@@ -1,0 +1,48 @@
+{
+    "image":"graphics/ui_sprites.png",
+    "sprites":[
+        {
+            "id": 1,
+            "x": 0,
+            "y": 0,
+            "width": 8,
+            "height": 8
+        },
+        {
+            "id": 2,
+            "x": 0,
+            "y": 8,
+            "width": 8,
+            "height": 8
+        },
+        {
+            "id": 3,
+            "x": 8,
+            "y": 0,
+            "width": 3,
+            "height": 8
+        },
+        {
+            "id": 4,
+            "x": 11,
+            "y": 0,
+            "width": 3,
+            "height": 8
+        },
+        {
+            "id": 5,
+            "x": 8,
+            "y": 8,
+            "width": 3,
+            "height": 8
+        },
+        {
+            "id": 6,
+            "x": 11,
+            "y": 8,
+            "width": 5,
+            "height": 8
+        }
+
+    ]
+}
