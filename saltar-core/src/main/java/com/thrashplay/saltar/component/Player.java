@@ -1,10 +1,12 @@
 package com.thrashplay.saltar.component;
 
+import com.thrashplay.luna.api.animation.AnimationController;
 import com.thrashplay.luna.api.animation.AnimationListener;
 import com.thrashplay.luna.api.component.Movement;
+import com.thrashplay.luna.api.component.Position;
 import com.thrashplay.luna.api.component.UpdateableComponent;
 import com.thrashplay.luna.api.engine.GameObject;
-import com.thrashplay.luna.api.animation.AnimationController;
+import com.thrashplay.luna.api.engine.GameObjectIds;
 import com.thrashplay.luna.api.engine.GameObjectManager;
 
 /**
@@ -107,7 +109,15 @@ public class Player implements UpdateableComponent {
 
     @Override
     public void update(GameObject gameObject, float delta) {
+        Position position = gameObject.getComponent(Position.class);
         Movement movement = gameObject.getComponent(Movement.class);
+
+        GameObject viewport = gameObjectManager.getGameObject(GameObjectIds.ID_VIEWPORT);
+        Position viewportPosition = viewport.getComponent(Position.class);
+
+        if (position.getTop() > viewportPosition.getBottom()) {
+            onDeath(gameObject);
+        }
 
         AnimationController animationController = gameObject.getComponent(AnimationController.class);
         if (!animationController.getCurrentState().equals("DyingRight") && !animationController.getCurrentState().equals("DyingLeft")) {
