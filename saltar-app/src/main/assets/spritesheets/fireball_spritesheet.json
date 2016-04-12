@@ -1,0 +1,65 @@
+{
+  "image":"graphics/spells/fireball.png",
+  "sprites":[
+    {
+      "id": 1,
+      "x": 0,
+      "y": 3,
+      "width": 16,
+      "height": 13,
+      "boundingBoxes": [
+        {
+          "x": 3,
+          "y": 1,
+          "width": 13,
+          "height": 9
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "x": 16,
+      "y": 3,
+      "width": 16,
+      "height": 13,
+      "boundingBoxes": [
+        {
+          "x": 2,
+          "y": 1,
+          "width": 14,
+          "height": 9
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "x": 32,
+      "y": 3,
+      "width": 16,
+      "height": 13,
+      "boundingBoxes": [
+        {
+          "x": 1,
+          "y": 1,
+          "width": 15,
+          "height": 9
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "x": 48,
+      "y": 3,
+      "width": 16,
+      "height": 13,
+      "boundingBoxes": [
+        {
+          "x": 1,
+          "y": 1,
+          "width": 15,
+          "height": 9
+        }
+      ]
+    }
+  ]
+}

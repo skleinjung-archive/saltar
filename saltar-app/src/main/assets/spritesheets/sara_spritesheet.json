@@ -90,6 +90,21 @@
           "height": 17
         }
       ]
+    },
+    {
+      "id": 7,
+      "x": 296,
+      "y": 8,
+      "width": 35,
+      "height": 48,
+      "boundingBoxes": [
+        {
+          "x": 5,
+          "y": 1,
+          "width": 30,
+          "height": 47
+        }
+      ]
     }
   ]
 }

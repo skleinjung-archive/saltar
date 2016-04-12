@@ -28,7 +28,7 @@ public class MrBlasterMovementController implements UpdateableComponent, Collisi
         this.inputManager = inputManager;
         this.joystick = joystick;
 
-        jumpSound = soundManager.createSoundEffect("sfx/jump.mp3");
+        jumpSound = soundManager.createSoundEffect("sfx/jump_quiet.mp3");
     }
 
     boolean onGround = true;
@@ -71,6 +71,10 @@ public class MrBlasterMovementController implements UpdateableComponent, Collisi
             movement.setVelocityX(0);
         }
 
+        if (inputManager.isKeyDown(KeyCode.KEY_G)) {
+            player.onCastSpell(gameObject);
+        }
+
         if (onGround && !holdingJumpDown) {
             if (inputManager.isKeyDown(KeyCode.KEY_SPACE)) {
                 movement.setVelocityY(-10);
@@ -78,7 +82,7 @@ public class MrBlasterMovementController implements UpdateableComponent, Collisi
                 onGround = false;
                 holdingJumpDown = true;
 
-                //jumpSound.play(0.1f);
+//                jumpSound.play(1.0f);
             }
         }
 

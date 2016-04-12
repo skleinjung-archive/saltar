@@ -154,6 +154,9 @@ public class SaltarLevelScreen extends DefaultScreen {
         ImageRenderer idleLeftImage = new SpriteSheetImageRenderer(playerAnimationSpriteSheet, 1, true);
         idleLeftImage.setFlipHorizontally(true);
         ImageRenderer idleRightImage = new SpriteSheetImageRenderer(playerAnimationSpriteSheet, 1, true);
+        ImageRenderer castLeftImage = new SpriteSheetImageRenderer(playerAnimationSpriteSheet, 7, true);
+        castLeftImage.setFlipHorizontally(true);
+        ImageRenderer castRightImage = new SpriteSheetImageRenderer(playerAnimationSpriteSheet, 7, true);
         AnimationRenderer walkingLeftAnimation = new AnimationRenderer(walkAnimation, playerAnimationSpriteSheet);
         walkingLeftAnimation.setFlipHorizontally(true);
         AnimationRenderer walkingRightAnimation = new AnimationRenderer(walkAnimation, playerAnimationSpriteSheet);
@@ -167,6 +170,8 @@ public class SaltarLevelScreen extends DefaultScreen {
         playerRenderer.addRenderer("IdleFacingRight", idleRightImage);
         playerRenderer.addRenderer("WalkingLeft", walkingLeftAnimation);
         playerRenderer.addRenderer("WalkingRight", walkingRightAnimation);
+        playerRenderer.addRenderer("CastingLeft", castLeftImage);
+        playerRenderer.addRenderer("CastingRight", castRightImage);
         playerRenderer.addRenderer("JumpingRight", jumpingAnimation);
         playerRenderer.addRenderer("DyingRight", dyingRightAnimation);
         playerRenderer.addRenderer("DyingLeft", dyingLeftAnimation);
@@ -179,7 +184,7 @@ public class SaltarLevelScreen extends DefaultScreen {
         player.addComponent(new Position(startX, startY));
         player.addComponent(new Movement());
         player.addComponent(new Gravity(0.5f, 12));
-        player.addComponent(new Player(gameObjectManager));
+        player.addComponent(new Player(gameObjectManager, soundManager, imageManager, animationConfigManager));
         player.addComponent(new Collider(1, true));
         player.addComponent(new CrossBoundingBoxes(new RendererBasedBoundingBoxes(), maxPlayerVelocity + 1, maxPlayerVelocity + 1));
         player.addComponent(new DelegatingCollisionHandler(new DefaultResolutionCollisionHandler(), new ListenerNotifyingCollisionHandler()));

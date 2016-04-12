@@ -1,7 +1,9 @@
 package com.thrashplay.saltar.component;
 
+import com.thrashplay.luna.api.animation.AnimationConfig;
 import com.thrashplay.luna.api.animation.AnimationController;
 import com.thrashplay.luna.api.animation.AnimationListener;
+import com.thrashplay.luna.api.animation.AnimationRenderer;
 import com.thrashplay.luna.api.collision.CollisionHandler;
 import com.thrashplay.luna.api.component.Collider;
 import com.thrashplay.luna.api.component.Movement;
@@ -10,8 +12,15 @@ import com.thrashplay.luna.api.component.UpdateableComponent;
 import com.thrashplay.luna.api.engine.GameObject;
 import com.thrashplay.luna.api.engine.GameObjectIds;
 import com.thrashplay.luna.api.engine.GameObjectManager;
+import com.thrashplay.luna.api.graphics.AnimationConfigManager;
+import com.thrashplay.luna.api.graphics.ImageManager;
+import com.thrashplay.luna.api.graphics.SpriteSheet;
+import com.thrashplay.luna.api.sound.SoundEffect;
+import com.thrashplay.luna.api.sound.SoundManager;
 import com.thrashplay.luna.collision.CollisionCategoryIds;
 import com.thrashplay.luna.collision.CollisionListener;
+import com.thrashplay.luna.collision.RendererBasedBoundingBoxes;
+import com.thrashplay.saltar.collision.FireballCollisionHandler;
 
 /**
  * TODO: Add class documentation
@@ -24,6 +33,8 @@ public class Player implements UpdateableComponent, CollisionListener {
         IdleFacingRight,
         WalkingLeft,
         WalkingRight,
+        CastingLeft,
+        CastingRight,
         JumpingLeft,
         JumpingRight,
         DyingLeft,
@@ -31,17 +42,30 @@ public class Player implements UpdateableComponent, CollisionListener {
     }
 
     private static final int INVINCIBILITY_DURATION = 2000;
+    private static final int SPELL_COOLDOWN = 350;
 
     private GameObjectManager gameObjectManager;
+    private ImageManager imageManager;
+
     private PlayerAnimationState animationState = PlayerAnimationState.IdleFacingRight;
     private int currentHealth = 3;
     private int maximumHealth = 3;
     private long invincibleStartTime;
     private boolean invincible = false;
     private boolean dying = false;
+    private long lastSpellCastTime;
 
-    public Player(GameObjectManager gameObjectManager) {
+    private SoundEffect damageSound;
+    private AnimationConfig fireballAnimation;
+    private SpriteSheet fireballSpriteSheet;
+
+    public Player(GameObjectManager gameObjectManager, SoundManager soundManager, ImageManager imageManager, AnimationConfigManager animationConfigManager) {
         this.gameObjectManager = gameObjectManager;
+        this.imageManager = imageManager;
+        damageSound = soundManager.createSoundEffect("sfx/player_damage_2.mp3");
+
+        fireballAnimation = animationConfigManager.getAnimationConfig("animations/spells/fireball.json");
+        fireballSpriteSheet = imageManager.createSpriteSheet(fireballAnimation.getSpriteSheet());
     }
 
     public int getCurrentHealth() {
@@ -130,6 +154,8 @@ public class Player implements UpdateableComponent, CollisionListener {
             if (currentHealth < 1) {
                 onDeath(playerGameObject);
             } else {
+//                damageSound.play(0.5f);
+
                 invincible = true;
                 invincibleStartTime = System.currentTimeMillis();
             }
@@ -169,6 +195,28 @@ public class Player implements UpdateableComponent, CollisionListener {
         dying = true;
     }
 
+    public void onCastSpell(GameObject playerObject) {
+        if (System.currentTimeMillis() - lastSpellCastTime < SPELL_COOLDOWN) {
+            // we already have a spell cast
+            return;
+        }
+
+        animationState = PlayerAnimationState.CastingRight;
+        Position position = playerObject.getComponent(Position.class);
+
+        GameObject fireball = new GameObject("fireball");
+        fireball.addComponent(new Position(position.getX() + 25, position.getY() + 16));
+        fireball.addComponent(new Movement(5, 0));
+        fireball.addComponent(new LimitedDurationEnforcer(1000));
+        fireball.addComponent(new Collider(CollisionCategoryIds.PLAYER_SPELLS, true));
+        fireball.addComponent(new FireballCollisionHandler());
+        fireball.addComponent(new RendererBasedBoundingBoxes());
+        fireball.addComponent(new AnimationRenderer(fireballAnimation, fireballSpriteSheet));
+
+        lastSpellCastTime = System.currentTimeMillis();
+        gameObjectManager.register(fireball);
+    }
+
     @Override
     public void update(GameObject gameObject, float delta) {
         Position position = gameObject.getComponent(Position.class);
@@ -176,7 +224,6 @@ public class Player implements UpdateableComponent, CollisionListener {
 
         GameObject viewport = gameObjectManager.getGameObject(GameObjectIds.ID_VIEWPORT);
         Position viewportPosition = viewport.getComponent(Position.class);
-
         if (position.getTop() > viewportPosition.getBottom()) {
             onDeath(gameObject);
         }
